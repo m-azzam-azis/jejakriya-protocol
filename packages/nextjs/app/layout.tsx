@@ -5,8 +5,9 @@ import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 export const metadata = getMetadata({
-  title: "Scaffold-ETH 2 App",
-  description: "Built with 🏗 Scaffold-ETH 2",
+  title: "JejaKriya Protocol - Fundamental Protocol for Indonesian Creative Assets",
+  description:
+    "Protokol fundamental untuk membuka nilai ekonomi aset kreatif Indonesia melalui verifikasi terdesentralisasi, pembiayaan mikro DeFi, dan data transparan.",
 });
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
