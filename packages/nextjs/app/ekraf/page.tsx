@@ -19,7 +19,23 @@ import {
 
 const ShimmerPlaceholder = ({ className }: { className?: string }) => (
   <div className={`animate-pulse bg-white/10 rounded-md ${className}`} />
-);
+); // ...existing code...
+{
+  /* Overlay dari landing page */
+}
+<div
+  aria-hidden
+  className="pointer-events-none absolute inset-x-0 top-0 h-full"
+  style={{
+    backgroundImage: "url('/Overlay.png')",
+    backgroundRepeat: "repeat-y",
+    backgroundPosition: "top left",
+    backgroundSize: "100% auto",
+    zIndex: 0,
+    opacity: 0.7,
+  }}
+/>;
+// ...existing code...
 
 const EkrafDashboardPage: NextPage = () => {
   const [loading, setLoading] = useState(true);

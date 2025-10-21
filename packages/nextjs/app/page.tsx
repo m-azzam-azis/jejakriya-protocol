@@ -15,7 +15,6 @@ const Home: NextPage = () => {
     <>
       <style jsx global>{`
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
-        @import url("https://fonts.cdnfonts.com/css/aldo");
       `}</style>
 
       {/* Full Page Gradient Background */}
@@ -34,7 +33,8 @@ const Home: NextPage = () => {
             backgroundImage: "url('/Overlay.png')",
             backgroundRepeat: "repeat-y",
             backgroundPosition: "top left",
-            backgroundSize: "auto",
+            // force each tile to span full viewport width, then repeat vertically
+            backgroundSize: "100% auto",
             zIndex: 0,
             opacity: 0.7,
           }}

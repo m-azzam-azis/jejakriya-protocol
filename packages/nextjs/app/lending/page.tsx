@@ -70,7 +70,13 @@ const LendingPage: NextPage = () => {
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 h-full"
-        style={{ backgroundImage: "url('/Overlay.png')", backgroundRepeat: "repeat-y", zIndex: 0, opacity: 0.7 }}
+        style={{
+          backgroundImage: "url('/Overlay.png')",
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "100% auto",
+          zIndex: 0,
+          opacity: 0.7,
+        }}
       />
 
       <div className="relative z-10 w-full">
