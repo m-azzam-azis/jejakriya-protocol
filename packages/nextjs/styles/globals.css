@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Local Aldo font (SemiBold) served from public/fonts */
+@font-face {
+  font-family: 'Aldo';
+  src: url('/fonts/Aldo-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
