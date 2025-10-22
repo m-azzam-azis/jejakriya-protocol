@@ -36,7 +36,7 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
             light: "#FFFFFF",
           },
         },
-        error => {
+        (error: any) => {
           if (error) {
             console.error("QR Code generation error:", error);
           } else {

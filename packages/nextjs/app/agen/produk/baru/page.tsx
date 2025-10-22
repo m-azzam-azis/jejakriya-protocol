@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { NextPage } from "next";
 import { ArrowLeftIcon, CheckIcon, DocumentTextIcon, PhotoIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
@@ -327,7 +328,13 @@ const TambahProdukBaru: NextPage = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                       {previewUrls.photos.map((url, index) => (
                         <div key={index} className="relative group">
-                          <img src={url} alt={`Preview ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
+                          <Image
+                            src={url}
+                            alt={`Preview ${index + 1}`}
+                            className="w-full h-32 object-cover rounded-lg"
+                            width={128}
+                            height={128}
+                          />
                           <button
                             type="button"
                             onClick={() => removePhoto(index)}
@@ -444,11 +451,13 @@ const TambahProdukBaru: NextPage = () => {
                     <p className="text-sm text-base-content/70 mb-2">Foto ({previewUrls.photos.length})</p>
                     <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
                       {previewUrls.photos.map((url, index) => (
-                        <img
+                        <Image
                           key={index}
                           src={url}
                           alt={`Photo ${index + 1}`}
                           className="w-full h-20 object-cover rounded"
+                          width={80}
+                          height={80}
                         />
                       ))}
                     </div>

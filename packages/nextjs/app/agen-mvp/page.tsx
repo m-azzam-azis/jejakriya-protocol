@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { CheckCircleIcon, PhotoIcon } from "@heroicons/react/24/outline";
@@ -279,7 +280,13 @@ const AgenMVPPage: NextPage = () => {
               </label>
             ) : (
               <div className="relative">
-                <img src={imagePreview} alt="Product preview" className="w-full h-64 object-cover rounded-lg" />
+                <Image
+                  src={imagePreview}
+                  alt="Product preview"
+                  className="w-full h-64 object-cover rounded-lg"
+                  width={256}
+                  height={256}
+                />
                 <button
                   type="button"
                   onClick={() => {

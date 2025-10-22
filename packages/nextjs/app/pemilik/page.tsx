@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
@@ -218,10 +219,12 @@ const PemilikDashboard: NextPage = () => {
               >
                 {/* NFT Image */}
                 <figure className="relative aspect-square overflow-hidden">
-                  <img
+                  <Image
                     src={nft.image}
                     alt={nft.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    width={256}
+                    height={256}
                   />
 
                   {/* Overlay on Hover */}
@@ -374,7 +377,13 @@ const PemilikDashboard: NextPage = () => {
                   </div>
 
                   {/* Large Image */}
-                  <img src={nft.image} alt={nft.name} className="w-full aspect-square object-cover rounded-2xl mb-6" />
+                  <Image
+                    src={nft.image}
+                    alt={nft.name}
+                    className="w-full aspect-square object-cover rounded-2xl mb-6"
+                    height={256}
+                    width={256}
+                  />
 
                   {/* NFT Title */}
                   <h2 className="text-3xl font-bold mb-2" style={{ fontFamily: "Georgia, serif" }}>
