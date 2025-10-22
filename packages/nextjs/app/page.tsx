@@ -14,7 +14,8 @@ const Home: NextPage = () => {
   return (
     <>
       <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        @import url('https://fonts.cdnfonts.com/css/mileast');
       `}</style>
 
       {/* Full Page Gradient Background */}
@@ -47,7 +48,7 @@ const Home: NextPage = () => {
               <h1
                 className="text-5xl md:text-6xl font-bold"
                 style={{
-                  fontFamily: "'Aldo', sans-serif",
+                  fontFamily: "'Mileast', sans-serif",
                   background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -103,7 +104,7 @@ const Home: NextPage = () => {
             <h2
               className="text-3xl md:text-4xl font-bold text-center mb-12"
               style={{
-                fontFamily: "'Aldo', sans-serif",
+                fontFamily: "'Mileast', sans-serif",
                 background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -121,7 +122,7 @@ const Home: NextPage = () => {
                   <h3
                     className="text-2xl mb-3 font-bold"
                     style={{
-                      fontFamily: "'Aldo', sans-serif",
+                      fontFamily: "'Mileast', sans-serif",
                       background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
@@ -154,7 +155,7 @@ const Home: NextPage = () => {
                   <h3
                     className="text-2xl mb-3 font-bold"
                     style={{
-                      fontFamily: "'Aldo', sans-serif",
+                      fontFamily: "'Mileast', sans-serif",
                       background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
@@ -187,7 +188,7 @@ const Home: NextPage = () => {
                   <h3
                     className="text-2xl mb-3 font-bold"
                     style={{
-                      fontFamily: "'Aldo', sans-serif",
+                      fontFamily: "'Mileast', sans-serif",
                       background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
@@ -225,7 +226,7 @@ const Home: NextPage = () => {
                 <div
                   className="text-5xl font-bold mb-2"
                   style={{
-                    fontFamily: "'Aldo', sans-serif",
+                    fontFamily: "'Mileast', sans-serif",
                     background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -242,7 +243,7 @@ const Home: NextPage = () => {
                 <div
                   className="text-5xl font-bold mb-2"
                   style={{
-                    fontFamily: "'Aldo', sans-serif",
+                    fontFamily: "'Mileast', sans-serif",
                     background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -259,7 +260,7 @@ const Home: NextPage = () => {
                 <div
                   className="text-5xl font-bold mb-2"
                   style={{
-                    fontFamily: "'Aldo', sans-serif",
+                    fontFamily: "'Mileast', sans-serif",
                     background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -280,7 +281,7 @@ const Home: NextPage = () => {
             <h2
               className="text-3xl md:text-4xl font-bold mb-6"
               style={{
-                fontFamily: "'Aldo', sans-serif",
+                fontFamily: "'Mileast', sans-serif",
                 background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",

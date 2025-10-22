@@ -6,73 +6,26 @@ import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { CheckCircleIcon, ClockIcon, EyeIcon, ShieldCheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
+import { useProductStore } from "~~/services/store/productStore";
 
 const KuratorDashboard: NextPage = () => {
   const { address: connectedAddress } = useAccount();
   const [activeTab, setActiveTab] = useState<"pending" | "approved" | "rejected">("pending");
 
-  // Mock data - nanti diganti dengan data real dari smart contract
-  const pendingProducts = [
-    {
-      id: 1,
-      nama: "Kain Tenun Sumba Motif Mamuli",
-      pengrajin: "Ibu Lastri",
-      agen: "Doni",
-      tanggal: "2025-10-15",
-      region: "SUMBA-TIMUR",
-      harga: 850000,
-      photos: 4,
-      hasVideo: true,
-    },
-    {
-      id: 2,
-      nama: "Tas Anyaman Rotan Natural",
-      pengrajin: "Pak Wayan",
-      agen: "Doni",
-      tanggal: "2025-10-14",
-      region: "BALI-UBUD",
-      harga: 450000,
-      photos: 5,
-      hasVideo: false,
-    },
-    {
-      id: 3,
-      nama: "Keramik Gerabah Kasongan",
-      pengrajin: "Ibu Sari",
-      agen: "Andi",
-      tanggal: "2025-10-13",
-      region: "YOGYAKARTA",
-      harga: 320000,
-      photos: 6,
-      hasVideo: true,
-    },
-  ];
+  // Real data from product store
+  const products = useProductStore((s) => s.products);
+  const approveProduct = useProductStore((s) => s.approveProduct);
+  const rejectProduct = useProductStore((s) => s.rejectProduct);
 
-  const approvedProducts = [
-    {
-      id: 10,
-      nama: "Batik Tulis Jogja Motif Parang",
-      pengrajin: "Ibu Siti",
-      approved: "2025-10-13",
-      nftId: "ICAS-721-001",
-      txHash: "0x123...abc",
-    },
-  ];
-
-  const rejectedProducts = [
-    {
-      id: 20,
-      nama: "Keramik Kasongan",
-      pengrajin: "Pak Budi",
-      rejected: "2025-10-12",
-      reason: "Foto kurang jelas, perlu foto tambahan dari sudut berbeda",
-    },
-  ];
+  const pendingProducts = products.filter((p) => p.status === "pending");
+  const approvedProducts = products.filter((p) => p.status === "approved" || p.status === "minted");
+  const rejectedProducts = products.filter((p) => p.status === "rejected");
 
   return (
     <>
       <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        @import url('https://fonts.cdnfonts.com/css/mileast');
       `}</style>
 
       <div
@@ -104,7 +57,7 @@ const KuratorDashboard: NextPage = () => {
                 <h1
                   className="text-4xl font-bold mb-2"
                   style={{
-                    fontFamily: "'Aldo', sans-serif",
+                    fontFamily: "'Mileast', sans-serif",
                     background:
                       "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
                     WebkitBackgroundClip: "text",
@@ -138,7 +91,7 @@ const KuratorDashboard: NextPage = () => {
               <div
                 className="text-4xl font-bold mb-1"
                 style={{
-                  fontFamily: "'Aldo', sans-serif",
+                  fontFamily: "'Mileast', sans-serif",
                   background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -156,7 +109,7 @@ const KuratorDashboard: NextPage = () => {
               <div
                 className="text-4xl font-bold mb-1"
                 style={{
-                  fontFamily: "'Aldo', sans-serif",
+                  fontFamily: "'Mileast', sans-serif",
                   background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -174,7 +127,7 @@ const KuratorDashboard: NextPage = () => {
               <div
                 className="text-4xl font-bold mb-1"
                 style={{
-                  fontFamily: "'Aldo', sans-serif",
+                  fontFamily: "'Mileast', sans-serif",
                   background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -255,7 +208,7 @@ const KuratorDashboard: NextPage = () => {
                   <h3
                     className="text-2xl font-bold mb-2"
                     style={{
-                      fontFamily: "'Aldo', sans-serif",
+                      fontFamily: "'Mileast', sans-serif",
                       background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
@@ -285,17 +238,17 @@ const KuratorDashboard: NextPage = () => {
                     <h3
                       className="text-xl font-bold mb-3"
                       style={{
-                        fontFamily: "'Aldo', sans-serif",
+                        fontFamily: "'Mileast', sans-serif",
                         background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         backgroundClip: "text",
                       }}
                     >
-                      {product.nama}
+                      {product.name}
                     </h3>
 
-                    {/* Region Badge */}
+                    {/* Category Badge */}
                     <div className="mb-4">
                       <span
                         className="px-3 py-1 rounded-full text-xs font-semibold"
@@ -304,7 +257,7 @@ const KuratorDashboard: NextPage = () => {
                           color: "#060606",
                         }}
                       >
-                        {product.region}
+                        {product.category || "-"}
                       </span>
                     </div>
 
@@ -312,38 +265,35 @@ const KuratorDashboard: NextPage = () => {
                     <div className="space-y-2 mb-4">
                       <div>
                         <p className="text-white/60 text-sm">Pengrajin</p>
-                        <p className="text-white font-semibold">{product.pengrajin}</p>
+                        <p className="text-white font-semibold">{product.pengrajinName}</p>
                       </div>
                       <div>
-                        <p className="text-white/60 text-sm">Agen</p>
-                        <p className="text-white font-semibold">{product.agen}</p>
+                        <p className="text-white/60 text-sm">Diajukan oleh</p>
+                        <p className="text-white font-semibold">{product.submittedBy}</p>
                       </div>
                       <div>
-                        <p className="text-white/60 text-sm">Harga Estimasi</p>
-                        <p className="text-white font-semibold">Rp {product.harga.toLocaleString("id-ID")}</p>
+                        <p className="text-white/60 text-sm">Kategori</p>
+                        <p className="text-white font-semibold">{product.category}</p>
                       </div>
                       <div>
                         <p className="text-white/60 text-sm">Tanggal Submit</p>
-                        <p className="text-white font-semibold">
-                          {new Date(product.tanggal).toLocaleDateString("id-ID")}
-                        </p>
+                        <p className="text-white font-semibold">{new Date(product.submittedAt).toLocaleDateString("id-ID")}</p>
+                      </div>
+                      <div>
+                        <p className="text-white/60 text-sm">Status</p>
+                        <p className="text-white font-semibold">{product.status}</p>
                       </div>
                     </div>
 
                     {/* Media Badges */}
                     <div className="flex gap-2 mb-4">
-                      <div className="bg-blue-500/20 px-3 py-1 rounded-full text-blue-300 text-xs">
-                        {product.photos} Foto
-                      </div>
-                      {product.hasVideo && (
-                        <div className="bg-green-500/20 px-3 py-1 rounded-full text-green-300 text-xs">✓ Video</div>
-                      )}
+                      <div className="bg-blue-500/20 px-3 py-1 rounded-full text-blue-300 text-xs">{product.imageUrl ? "Foto" : "-"}</div>
                     </div>
 
                     {/* Actions */}
                     <div className="space-y-2">
                       <Link
-                        href={`/kurator/review/${product.id}`}
+                        href={`/kurator/produk/${product.id}`}
                         className="block w-full text-center px-4 py-2 rounded-lg font-semibold transition-all hover:scale-105"
                         style={{
                           background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
@@ -357,15 +307,19 @@ const KuratorDashboard: NextPage = () => {
                       <button
                         className="w-full px-4 py-2 rounded-lg font-semibold bg-white/5 text-white border border-green-400/50 hover:bg-green-500/20 transition-all disabled:opacity-50"
                         disabled={!connectedAddress}
+                        onClick={() => approveProduct(product.id, connectedAddress ?? "Kurator Demo")}
                       >
                         <CheckCircleIcon className="h-4 w-4 inline-block mr-2" />
                         Quick Approve
                       </button>
 
-                      <button className="w-full px-4 py-2 rounded-lg font-semibold bg-white/5 text-white border border-red-400/50 hover:bg-red-500/20 transition-all">
+                      <Link
+                        href={`/kurator/produk/${product.id}`}
+                        className="w-full px-4 py-2 rounded-lg font-semibold bg-white/5 text-white border border-red-400/50 hover:bg-red-500/20 transition-all text-center block"
+                      >
                         <XCircleIcon className="h-4 w-4 inline-block mr-2" />
-                        Reject
-                      </button>
+                        Review & Reject
+                      </Link>
                     </div>
                   </div>
                 ))
@@ -389,35 +343,35 @@ const KuratorDashboard: NextPage = () => {
                   <h3
                     className="text-xl font-bold mb-3"
                     style={{
-                      fontFamily: "'Aldo', sans-serif",
+                      fontFamily: "'Mileast', sans-serif",
                       background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       backgroundClip: "text",
                     }}
                   >
-                    {product.nama}
+                    {product.name}
                   </h3>
 
                   <div className="space-y-2 mb-4">
                     <div>
                       <p className="text-white/60 text-sm">Pengrajin</p>
-                      <p className="text-white font-semibold">{product.pengrajin}</p>
+                      <p className="text-white font-semibold">{product.pengrajinName}</p>
                     </div>
                     <div>
                       <p className="text-white/60 text-sm">NFT ID</p>
-                      <p className="text-white font-semibold">{product.nftId}</p>
+                      <p className="text-white font-semibold">{product.nftTokenId ?? "-"}</p>
                     </div>
                     <div>
                       <p className="text-white/60 text-sm">Approved on</p>
                       <p className="text-white font-semibold">
-                        {new Date(product.approved).toLocaleDateString("id-ID")}
+                        {product.reviewedAt ? new Date(product.reviewedAt).toLocaleDateString("id-ID") : "-"}
                       </p>
                     </div>
                   </div>
 
                   <a
-                    href={`https://sepolia.etherscan.io/tx/${product.txHash}`}
+                    href={product.nftContractAddress ? `https://sepolia.etherscan.io/address/${product.nftContractAddress}` : "#"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-400 hover:text-blue-300 text-sm font-semibold"
@@ -445,32 +399,32 @@ const KuratorDashboard: NextPage = () => {
                   <h3
                     className="text-xl font-bold mb-3"
                     style={{
-                      fontFamily: "'Aldo', sans-serif",
+                      fontFamily: "'Mileast', sans-serif",
                       background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       backgroundClip: "text",
                     }}
                   >
-                    {product.nama}
+                    {product.name}
                   </h3>
 
                   <div className="space-y-2 mb-4">
                     <div>
                       <p className="text-white/60 text-sm">Pengrajin</p>
-                      <p className="text-white font-semibold">{product.pengrajin}</p>
+                      <p className="text-white font-semibold">{product.pengrajinName}</p>
                     </div>
                     <div>
                       <p className="text-white/60 text-sm">Rejected on</p>
                       <p className="text-white font-semibold">
-                        {new Date(product.rejected).toLocaleDateString("id-ID")}
+                        {product.reviewedAt ? new Date(product.reviewedAt).toLocaleDateString("id-ID") : "-"}
                       </p>
                     </div>
                   </div>
 
                   <div className="bg-red-500/10 border border-red-400/30 rounded-lg p-3">
                     <p className="text-red-400 font-semibold text-sm mb-1">Alasan Penolakan:</p>
-                    <p className="text-white/80 text-sm">{product.reason}</p>
+                    <p className="text-white/80 text-sm">{product.rejectionReason ?? "-"}</p>
                   </div>
                 </div>
               ))}

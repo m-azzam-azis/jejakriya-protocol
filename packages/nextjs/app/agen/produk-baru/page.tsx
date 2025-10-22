@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { NextPage } from "next";
 import { ArrowLeftIcon, CheckIcon, DocumentTextIcon, PhotoIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
+import { useProductStore } from "~~/services/store/productStore";
 
 const TambahProdukBaru: NextPage = () => {
   const router = useRouter();
@@ -37,6 +38,15 @@ const TambahProdukBaru: NextPage = () => {
     photos: [],
     video: null,
   });
+
+  // Mock pengrajin list (UI uses these ids in the select)
+  const mockPengrajin = [
+    { id: "1", name: "Ibu Lastri", location: "Sumba Timur" },
+    { id: "2", name: "Pak Wayan", location: "Ubud, Bali" },
+    { id: "3", name: "Ibu Siti", location: "Yogyakarta" },
+  ];
+
+  const addProduct = useProductStore((s) => s.addProduct);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -86,10 +96,28 @@ const TambahProdukBaru: NextPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
-    console.log("Media Files:", mediaFiles);
-    alert("Produk berhasil disimpan sebagai draf!");
-    router.push("/agen");
+
+    // Find pengrajin info from mock list
+    const pengrajin = mockPengrajin.find((p) => p.id === formData.pengrajinId);
+    if (!pengrajin) {
+      alert("Pilih pengrajin terlebih dahulu");
+      return;
+    }
+
+    // Map form data to store shape
+    addProduct({
+      pengrajinId: formData.pengrajinId,
+      pengrajinName: pengrajin.name,
+      name: formData.namaProduk || "(Tanpa Nama)",
+      description: formData.deskripsi || formData.ceritaProduk || "",
+      category: formData.jenisProduk || "Lainnya",
+      imageUrl: previewUrls.photos[0] || "/logo.png",
+      submittedBy: "Agen Demo",
+    });
+
+    // Feedback and redirect to Agen dashboard
+    alert("Produk berhasil diajukan! Menunggu verifikasi kurator.");
+    router.push("/agen/dashboard");
   };
 
   const handleSaveDraft = () => {
