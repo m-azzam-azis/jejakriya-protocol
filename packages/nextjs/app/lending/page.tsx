@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import type { NextPage } from "next";
 import { BanknotesIcon, FunnelIcon, MagnifyingGlassIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
+
+// <-- 1. IMPORT DITAMBAHKAN
 
 // Komponen Shimmer Placeholder
 const ShimmerPlaceholder = ({ className }: { className?: string }) => (
@@ -31,32 +34,31 @@ const LendingPage: NextPage = () => {
     color: "#060606",
   };
 
-  // Contoh data NFT yang bisa dijaminkan
+  // --- 2. DATA ASET DIPERBARUI DENGAN URL GAMBAR ---
   const nftAssets = [
     {
       id: 1,
       name: "Keris Pusaka Naga Sasra",
-      image: "/keris-naga.jpg",
+      image: "/Keris-Nagasasra-Wahyu-Tumurun-Kinatah-Kamarogan-Silih-Asih-3.jpg",
       curator: "Museum Nasional",
       collateralValue: 5000,
     },
     {
       id: 2,
       name: "Batik Tulis Sido Asih",
-      image: "/batik-sidoasih.jpg",
+      image: "/Batik-Sido-Asih.jpg",
       curator: "Kriya Nusantara",
       collateralValue: 1200,
     },
-    { id: 3, name: "Wayang Golek Cepot", image: "/wayang-cepot.jpg", curator: "Galeri Warisan", collateralValue: 850 },
     {
-      id: 4,
-      name: 'Lukisan "Perburuan Banteng"',
-      image: "/lukisan-raden-saleh.jpg",
-      curator: "Museum Nasional",
-      collateralValue: 25000,
+      id: 3,
+      name: "Wayang Golek Cepot",
+      image: "/cepot.jpg",
+      curator: "Galeri Warisan",
+      collateralValue: 850,
     },
-    { id: 5, name: "Topeng Cirebon", image: "/topeng-cirebon.jpg", curator: "Kriya Nusantara", collateralValue: 600 },
   ];
+  // --------------------------------------------------
 
   return (
     <div
@@ -134,10 +136,18 @@ const LendingPage: NextPage = () => {
                     key={asset.id}
                     className="bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border border-white/10 transition-all duration-300 hover:bg-white/10 hover:border-white/20"
                   >
-                    {/* Ganti dengan <Image /> dari Next.js */}
-                    <div className="h-48 bg-black/20 flex items-center justify-center">
-                      <p className="text-white/30">Image Placeholder</p>
+                    {/* --- 3. BAGIAN INI DIGANTI DENGAN NEXT/IMAGE --- */}
+                    <div className="relative h-48 w-full">
+                      <Image
+                        src={asset.image}
+                        alt={asset.name}
+                        layout="fill"
+                        objectFit="cover"
+                        priority={asset.id <= 3} // Memprioritaskan gambar yang terlihat di awal
+                      />
                     </div>
+                    {/* ------------------------------------------- */}
+
                     <div className="p-4">
                       <h3 className="font-aldo text-2xl truncate" style={goldGradientText}>
                         {asset.name}
