@@ -36,7 +36,6 @@ export const useFetchBlocks = () => {
 
     try {
       const blockNumber = await testClient.getBlockNumber();
-      setTotalBlocks(blockNumber);
 
       const startingBlock = blockNumber - BigInt(currentPage * BLOCKS_PER_PAGE);
       const blockNumbersToFetch = Array.from(
@@ -74,6 +73,7 @@ export const useFetchBlocks = () => {
 
       setBlocks(fetchedBlocks);
       setTransactionReceipts(prevReceipts => ({ ...prevReceipts, ...Object.assign({}, ...txReceipts) }));
+      setTotalBlocks(blockNumber); // Only set totalBlocks after successful fetch
     } catch (err) {
       setError(err instanceof Error ? err : new Error("An error occurred."));
     }
@@ -111,7 +111,8 @@ export const useFetchBlocks = () => {
           setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, BLOCKS_PER_PAGE - 1)]);
           setTransactionReceipts(prevReceipts => ({ ...prevReceipts, ...Object.assign({}, ...receipts) }));
         }
-        if (newBlock.number) {
+        // Only update totalBlocks if the new block number is greater than current total
+        if (newBlock.number && newBlock.number > totalBlocks) {
           setTotalBlocks(newBlock.number);
         }
       } catch (err) {
@@ -120,7 +121,7 @@ export const useFetchBlocks = () => {
     };
 
     return testClient.watchBlocks({ onBlock: handleNewBlock, includeTransactions: true });
-  }, [currentPage]);
+  }, [currentPage, totalBlocks]); // Add totalBlocks to dependency array
 
   return {
     blocks,

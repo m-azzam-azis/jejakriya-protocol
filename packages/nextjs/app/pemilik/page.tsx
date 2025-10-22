@@ -38,7 +38,7 @@ const PemilikDashboard: NextPage = () => {
       price: "21.765 ETH",
       lastSale: "14.3 ETH",
       mintDate: "2025-10-15",
-      collateralValue: "6.5 ETH", // 30% LTV
+      collateralValue: "6.5 ETH",
       isCollateralized: false,
       description:
         "Kain tenun tangan dengan motif Mamuli khas Sumba Timur. Dibuat dengan pewarna alami dari tanaman lokal.",
@@ -106,251 +106,297 @@ const PemilikDashboard: NextPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-neutral text-neutral-content">
-      {/* Header/Navbar */}
-      <div className="navbar bg-neutral border-b border-base-content/10 px-6">
-        <div className="flex-1">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center font-bold text-xl">
-              JK
-            </div>
-          </Link>
+    <>
+      <style jsx global>{`
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+      `}</style>
 
-          <div className="tabs tabs-boxed ml-8 bg-neutral">
-            <a className="tab tab-active">Creator</a>
-            <a className="tab">Collector</a>
-          </div>
-        </div>
+      <div
+        className="min-h-screen relative"
+        style={{
+          background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)",
+          fontFamily: "'Poppins', sans-serif",
+        }}
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-full"
+          style={{
+            backgroundImage: "url('/Overlay.png')",
+            backgroundRepeat: "repeat-y",
+            backgroundPosition: "top left",
+            backgroundSize: "100% auto",
+            zIndex: 0,
+            opacity: 0.7,
+          }}
+        />
 
-        <div className="flex-none gap-4">
-          {/* Search */}
-          <div className="form-control">
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Search NFT's, Collections"
-                className="input input-bordered bg-base-100/5 border-base-content/20 w-80"
-              />
-              <button className="btn btn-square bg-base-100/5 border-base-content/20">
-                <MagnifyingGlassIcon className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Add NFT Button */}
-          <Link href="/agen/produk/baru" className="btn btn-primary gap-2">
-            <PlusIcon className="h-5 w-5" />
-            Add NFT
-          </Link>
-
-          {/* User Avatar */}
-          <div className="avatar placeholder">
-            <div className="bg-primary text-primary-content rounded-full w-10">
-              <span className="text-xl">R</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sidebar + Main Content */}
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-20 bg-neutral border-r border-base-content/10 flex flex-col items-center py-6 gap-6">
-          <button className="btn btn-ghost btn-square">
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-            </svg>
-          </button>
-          <button className="btn btn-ghost btn-square">
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-          <button className="btn btn-ghost btn-square">
-            <Squares2X2Icon className="h-6 w-6" />
-          </button>
-          <button className="btn btn-ghost btn-square">
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1 p-8">
-          {/* Page Title & Controls */}
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-5xl font-bold mb-2" style={{ fontFamily: "Georgia, serif" }}>
-                RECENT COLLECTIONS
-              </h1>
-              <div className="flex items-center gap-2 mt-4">
-                <Address address={connectedAddress} />
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <button
-                className={`btn btn-square ${viewMode === "grid" ? "btn-primary" : "btn-ghost"}`}
-                onClick={() => setViewMode("grid")}
-              >
-                <Squares2X2Icon className="h-5 w-5" />
-              </button>
-              <button
-                className={`btn btn-square ${viewMode === "list" ? "btn-primary" : "btn-ghost"}`}
-                onClick={() => setViewMode("list")}
-              >
-                <ListBulletIcon className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* NFT Grid */}
-          <div className="grid grid-cols-4 gap-6 mb-12">
-            {nftCollection.map(nft => (
-              <div
-                key={nft.id}
-                className="card bg-base-100/5 hover:bg-base-100/10 transition-all cursor-pointer group relative overflow-hidden"
-                onClick={() => setSelectedNFT(nft.id)}
-              >
-                {/* NFT Image */}
-                <figure className="relative aspect-square overflow-hidden">
-                  <Image
-                    src={nft.image}
-                    alt={nft.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    width={256}
-                    height={256}
-                  />
-
-                  {/* Overlay on Hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                    <div className="flex gap-2">
-                      <button className="btn btn-sm btn-circle btn-ghost">
-                        <EyeIcon className="h-4 w-4" />
-                      </button>
-                      <button className="btn btn-sm btn-circle btn-ghost">
-                        <HeartIcon className="h-4 w-4" />
-                      </button>
-                      <button className="btn btn-sm btn-circle btn-ghost">
-                        <ArrowsRightLeftIcon className="h-4 w-4" />
-                      </button>
-                    </div>
+        <div className="relative z-10">
+          {/* Header/Navbar */}
+          <div className="bg-white/5 backdrop-blur-sm border-b border-white/10 px-6 py-4">
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+              <div className="flex items-center gap-8">
+                <Link href="/" className="flex items-center gap-2">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xl"
+                    style={{
+                      background: "linear-gradient(135deg, #C48A04 0%, #E9A507 100%)",
+                      color: "#060606",
+                    }}
+                  >
+                    JK
                   </div>
+                </Link>
 
-                  {/* Collateral Badge */}
-                  {nft.isCollateralized && (
-                    <div className="absolute top-2 right-2 badge badge-warning badge-sm gap-1">🔒 Locked</div>
-                  )}
-
-                  {/* Top Left: Creator */}
-                  <div className="absolute top-2 left-2 flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1">
-                    <div className="avatar placeholder">
-                      <div className="bg-primary text-primary-content rounded-full w-6">
-                        <span className="text-xs">{nft.creator.charAt(0)}</span>
-                      </div>
-                    </div>
-                    <span className="text-xs font-semibold">{nft.creator}</span>
-                  </div>
-
-                  {/* Bottom Stats */}
-                  <div className="absolute bottom-2 left-2 flex gap-2">
-                    <div className="bg-black/60 backdrop-blur-sm rounded-lg px-2 py-1 text-xs flex items-center gap-1">
-                      <EyeIcon className="h-3 w-3" />
-                      {nft.views.toLocaleString()}
-                    </div>
-                    <div className="bg-black/60 backdrop-blur-sm rounded-lg px-2 py-1 text-xs">Last {nft.lastSale}</div>
-                  </div>
-                </figure>
-
-                {/* Card Body */}
-                <div className="card-body p-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="font-bold text-sm mb-1 line-clamp-1">{nft.name}</h3>
-                      <p className="text-xs text-base-content/60">{nft.creatorHandle}</p>
-                    </div>
-                    <button className="btn btn-ghost btn-circle btn-xs">
-                      <HeartIcon className="h-4 w-4" />
-                    </button>
-                  </div>
-
-                  <div className="flex items-center justify-between mt-2">
-                    <div className="badge badge-outline badge-sm">{nft.region}</div>
-                    <div className="text-xs text-base-content/60">{nft.tokenId}</div>
-                  </div>
+                <div className="flex gap-2">
+                  <button
+                    className="px-6 py-2 rounded-lg font-semibold text-black"
+                    style={{ background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)" }}
+                  >
+                    Creator
+                  </button>
+                  <button className="px-6 py-2 rounded-lg font-semibold bg-white/5 text-white border border-white/10 hover:bg-white/10">
+                    Collector
+                  </button>
                 </div>
               </div>
-            ))}
+
+              <div className="flex items-center gap-4">
+                {/* Search */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search NFT's, Collections"
+                    className="w-80 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/50 focus:outline-none focus:border-white/30"
+                  />
+                  <MagnifyingGlassIcon className="h-5 w-5 absolute right-3 top-2.5 text-white/50" />
+                </div>
+
+                {/* Add NFT Button */}
+                <Link
+                  href="/agen/produk/baru"
+                  className="px-6 py-2 rounded-lg font-semibold transition-all hover:scale-105"
+                  style={{
+                    background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
+                    color: "#060606",
+                  }}
+                >
+                  <PlusIcon className="h-5 w-5 inline-block mr-2" />
+                  Add NFT
+                </Link>
+
+                {/* User Avatar */}
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center font-bold"
+                  style={{ background: "linear-gradient(135deg, #C48A04 0%, #E9A507 100%)", color: "#060606" }}
+                >
+                  R
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* History Section */}
-          <div className="mt-16">
-            <h2 className="text-4xl font-bold mb-6" style={{ fontFamily: "Georgia, serif" }}>
-              HISTORY
-            </h2>
+          <div className="max-w-7xl mx-auto px-6 py-8">
+            {/* Page Title & Controls */}
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1
+                  className="text-5xl font-bold mb-4"
+                  style={{
+                    fontFamily: "'Aldo', sans-serif",
+                    background:
+                      "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  RECENT COLLECTIONS
+                </h1>
+                <div className="flex items-center gap-2">
+                  <Address address={connectedAddress} />
+                </div>
+              </div>
 
-            <div className="tabs tabs-boxed bg-transparent border-b border-base-content/10 mb-6">
-              <a className={`tab ${activeTab === "owned" ? "tab-active" : ""}`} onClick={() => setActiveTab("owned")}>
-                All history
-              </a>
-              <a
-                className={`tab ${activeTab === "history" ? "tab-active" : ""}`}
-                onClick={() => setActiveTab("history")}
-              >
-                Purchase
-              </a>
-              <a className="tab">Transfer</a>
+              <div className="flex gap-2">
+                <button
+                  className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${viewMode === "grid" ? "text-black" : "bg-white/5 text-white border border-white/10 hover:bg-white/10"}`}
+                  style={
+                    viewMode === "grid"
+                      ? { background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)" }
+                      : {}
+                  }
+                  onClick={() => setViewMode("grid")}
+                >
+                  <Squares2X2Icon className="h-5 w-5" />
+                </button>
+                <button
+                  className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${viewMode === "list" ? "text-black" : "bg-white/5 text-white border border-white/10 hover:bg-white/10"}`}
+                  style={
+                    viewMode === "list"
+                      ? { background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)" }
+                      : {}
+                  }
+                  onClick={() => setViewMode("list")}
+                >
+                  <ListBulletIcon className="h-5 w-5" />
+                </button>
+              </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="table table-zebra">
-                <thead>
-                  <tr>
-                    <th className="text-base-content/60">EVENT</th>
-                    <th className="text-base-content/60">FROM/TO</th>
-                    <th className="text-base-content/60">AMOUNT</th>
-                    <th className="text-base-content/60">VALUE</th>
-                    <th className="text-base-content/60">DATE</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {historyData.map((item, index) => (
-                    <tr key={index}>
-                      <td className="font-semibold">{item.event}</td>
-                      <td>
-                        <div className="flex items-center gap-2">
-                          <div className="avatar placeholder">
-                            <div className="bg-primary/20 rounded-full w-8">
-                              <span className="text-xs">A</span>
-                            </div>
-                          </div>
-                          <span>→</span>
-                          <div className="avatar placeholder">
-                            <div className="bg-secondary/20 rounded-full w-8">
-                              <span className="text-xs">B</span>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>{item.amount}</td>
-                      <td className="font-bold">{item.value}</td>
-                      <td className="text-base-content/60">{item.date}</td>
+            {/* NFT Grid */}
+            <div className="grid grid-cols-4 gap-6 mb-12">
+              {nftCollection.map(nft => (
+                <div
+                  key={nft.id}
+                  className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer group overflow-hidden hover:scale-105"
+                  onClick={() => setSelectedNFT(nft.id)}
+                >
+                  {/* NFT Image */}
+                  <div className="relative aspect-square overflow-hidden">
+                    <img
+                      src={nft.image}
+                      alt={nft.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+
+                    {/* Collateral Badge */}
+                    {nft.isCollateralized && (
+                      <div className="absolute top-3 right-3 bg-yellow-500/90 text-black px-3 py-1 rounded-full text-xs font-bold">
+                        🔒 Locked
+                      </div>
+                    )}
+
+                    {/* Creator Badge */}
+                    <div className="absolute top-3 left-3 flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1.5">
+                      <div
+                        className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                        style={{ background: "linear-gradient(135deg, #C48A04 0%, #E9A507 100%)", color: "#060606" }}
+                      >
+                        {nft.creator.charAt(0)}
+                      </div>
+                      <span className="text-xs font-semibold text-white">{nft.creator}</span>
+                    </div>
+
+                    {/* Bottom Stats */}
+                    <div className="absolute bottom-3 left-3 right-3 flex justify-between">
+                      <div className="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs flex items-center gap-1.5 text-white">
+                        <EyeIcon className="h-3.5 w-3.5" />
+                        {nft.views.toLocaleString()}
+                      </div>
+                      <div className="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs text-white font-semibold">
+                        Last {nft.lastSale}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Body */}
+                  <div className="p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className="font-bold text-white mb-1 line-clamp-1">{nft.name}</h3>
+                        <p className="text-xs text-white/60">{nft.creatorHandle}</p>
+                      </div>
+                      <button className="text-white/70 hover:text-white">
+                        <HeartIcon className="h-5 w-5" />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="bg-white/10 px-3 py-1 rounded-full text-white/80 text-xs font-semibold">
+                        {nft.region}
+                      </div>
+                      <div className="text-xs text-white/50">{nft.tokenId}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* History Section */}
+            <div className="mt-16">
+              <h2
+                className="text-4xl font-bold mb-6"
+                style={{
+                  fontFamily: "'Aldo', sans-serif",
+                  background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                HISTORY
+              </h2>
+
+              <div className="flex gap-2 mb-6">
+                <button
+                  className={`px-6 py-2 rounded-lg font-semibold transition-all ${activeTab === "owned" ? "text-black" : "bg-white/5 text-white border border-white/10 hover:bg-white/10"}`}
+                  style={
+                    activeTab === "owned"
+                      ? { background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)" }
+                      : {}
+                  }
+                  onClick={() => setActiveTab("owned")}
+                >
+                  All history
+                </button>
+                <button
+                  className={`px-6 py-2 rounded-lg font-semibold transition-all ${activeTab === "history" ? "text-black" : "bg-white/5 text-white border border-white/10 hover:bg-white/10"}`}
+                  style={
+                    activeTab === "history"
+                      ? { background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)" }
+                      : {}
+                  }
+                  onClick={() => setActiveTab("history")}
+                >
+                  Purchase
+                </button>
+                <button className="px-6 py-2 rounded-lg font-semibold bg-white/5 text-white border border-white/10 hover:bg-white/10">
+                  Transfer
+                </button>
+              </div>
+
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-white/10">
+                      <th className="text-left px-6 py-4 text-white/60 font-semibold text-sm">EVENT</th>
+                      <th className="text-left px-6 py-4 text-white/60 font-semibold text-sm">FROM/TO</th>
+                      <th className="text-left px-6 py-4 text-white/60 font-semibold text-sm">AMOUNT</th>
+                      <th className="text-left px-6 py-4 text-white/60 font-semibold text-sm">VALUE</th>
+                      <th className="text-left px-6 py-4 text-white/60 font-semibold text-sm">DATE</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {historyData.map((item, index) => (
+                      <tr key={index} className="border-b border-white/5 hover:bg-white/5">
+                        <td className="px-6 py-4 text-white font-semibold">{item.event}</td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs bg-white/10 text-white">
+                              A
+                            </div>
+                            <span className="text-white/60">→</span>
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs bg-white/10 text-white">
+                              B
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-white">{item.amount}</td>
+                        <td className="px-6 py-4 text-white font-bold">{item.value}</td>
+                        <td className="px-6 py-4 text-white/60">{item.date}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Right Panel - NFT Detail (when selected) */}
         {selectedNFT && (
-          <div className="w-96 bg-base-100/5 border-l border-base-content/10 p-6 overflow-y-auto">
+          <div className="fixed right-0 top-0 w-96 h-screen bg-white/5 backdrop-blur-sm border-l border-white/10 p-6 overflow-y-auto z-50">
             {(() => {
               const nft = nftCollection.find(n => n.id === selectedNFT);
               if (!nft) return null;
@@ -358,20 +404,22 @@ const PemilikDashboard: NextPage = () => {
               return (
                 <div>
                   <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="avatar placeholder">
-                          <div className="bg-primary text-primary-content rounded-full w-10">
-                            <span className="text-lg">{nft.creator.charAt(0)}</span>
-                          </div>
-                        </div>
-                        <div>
-                          <h3 className="font-bold">{nft.creator}</h3>
-                          <p className="text-xs text-base-content/60">{nft.creatorHandle}</p>
-                        </div>
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg"
+                        style={{ background: "linear-gradient(135deg, #C48A04 0%, #E9A507 100%)", color: "#060606" }}
+                      >
+                        {nft.creator.charAt(0)}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-white">{nft.creator}</h3>
+                        <p className="text-xs text-white/60">{nft.creatorHandle}</p>
                       </div>
                     </div>
-                    <button className="btn btn-ghost btn-circle btn-sm" onClick={() => setSelectedNFT(null)}>
+                    <button
+                      className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-white"
+                      onClick={() => setSelectedNFT(null)}
+                    >
                       ✕
                     </button>
                   </div>
@@ -386,86 +434,99 @@ const PemilikDashboard: NextPage = () => {
                   />
 
                   {/* NFT Title */}
-                  <h2 className="text-3xl font-bold mb-2" style={{ fontFamily: "Georgia, serif" }}>
+                  <h2
+                    className="text-3xl font-bold mb-2"
+                    style={{
+                      fontFamily: "'Aldo', sans-serif",
+                      background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
                     {nft.name}
                   </h2>
-                  <p className="text-sm text-base-content/70 mb-6">#{nft.tokenId.split("-")[2]}</p>
+                  <p className="text-sm text-white/70 mb-6">#{nft.tokenId.split("-")[2]}</p>
 
                   {/* Stats */}
-                  <div className="flex gap-4 mb-6">
-                    <div className="stat bg-base-100/5 rounded-lg p-4">
-                      <div className="stat-figure">
-                        <EyeIcon className="h-6 w-6 text-primary" />
-                      </div>
-                      <div className="stat-value text-2xl">{(nft.views / 1000).toFixed(1)}k</div>
-                      <div className="stat-desc">Views</div>
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                      <EyeIcon className="h-6 w-6 mb-2" style={{ color: "#E9A507" }} />
+                      <div className="text-2xl font-bold text-white">{(nft.views / 1000).toFixed(1)}k</div>
+                      <div className="text-xs text-white/60">Views</div>
                     </div>
-                    <div className="stat bg-base-100/5 rounded-lg p-4">
-                      <div className="stat-figure">
-                        <svg className="h-6 w-6 text-secondary" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      </div>
-                      <div className="stat-value text-2xl">{nft.price}</div>
-                      <div className="stat-desc">Current Price</div>
+                    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                      <CurrencyDollarIcon className="h-6 w-6 mb-2" style={{ color: "#E9A507" }} />
+                      <div className="text-2xl font-bold text-white">{nft.price}</div>
+                      <div className="text-xs text-white/60">Current Price</div>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-sm text-base-content/70 mb-6">{nft.description}</p>
+                  <p className="text-sm text-white/70 mb-6">{nft.description}</p>
 
                   {/* Actions */}
                   <div className="space-y-3">
                     {nft.isCollateralized ? (
                       <>
-                        <div className="alert alert-warning">
-                          <CurrencyDollarIcon className="h-5 w-5" />
-                          <div>
-                            <p className="font-bold text-sm">Active Loan</p>
-                            <p className="text-xs">Borrowed: {nft.activeLoan}</p>
+                        <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-4 mb-3">
+                          <div className="flex items-center gap-2 mb-1">
+                            <CurrencyDollarIcon className="h-5 w-5 text-yellow-400" />
+                            <p className="font-bold text-sm text-yellow-400">Active Loan</p>
                           </div>
+                          <p className="text-xs text-white/80">Borrowed: {nft.activeLoan}</p>
                         </div>
-                        <button className="btn btn-success btn-block gap-2">
-                          <CurrencyDollarIcon className="h-5 w-5" />
+                        <button className="w-full px-6 py-3 rounded-lg font-semibold bg-green-500 hover:bg-green-600 text-white transition-all">
+                          <CurrencyDollarIcon className="h-5 w-5 inline-block mr-2" />
                           Repay & Unlock
                         </button>
                       </>
                     ) : (
                       <>
-                        <button className="btn btn-primary btn-block gap-2">
-                          <CurrencyDollarIcon className="h-5 w-5" />
+                        <button
+                          className="w-full px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105"
+                          style={{
+                            background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
+                            color: "#060606",
+                          }}
+                        >
+                          <CurrencyDollarIcon className="h-5 w-5 inline-block mr-2" />
                           Borrow Against NFT
                         </button>
-                        <div className="text-center text-sm text-base-content/60">
+                        <div className="text-center text-sm text-white/60">
                           Max loan: {nft.collateralValue} (30% LTV)
                         </div>
                       </>
                     )}
 
-                    <button className="btn btn-outline btn-block gap-2">
-                      <ArrowsRightLeftIcon className="h-5 w-5" />
+                    <button className="w-full px-6 py-3 rounded-lg font-semibold bg-white/5 text-white border border-white/10 hover:bg-white/10 transition-all">
+                      <ArrowsRightLeftIcon className="h-5 w-5 inline-block mr-2" />
                       Transfer NFT
                     </button>
                   </div>
 
                   {/* Metadata */}
-                  <div className="mt-8 space-y-2">
-                    <h4 className="font-bold mb-3">Metadata</h4>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-base-content/60">Region</span>
-                      <span className="font-semibold">{nft.region}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-base-content/60">Token ID</span>
-                      <span className="font-semibold">{nft.tokenId}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-base-content/60">Mint Date</span>
-                      <span className="font-semibold">{new Date(nft.mintDate).toLocaleDateString("id-ID")}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-base-content/60">Last Sale</span>
-                      <span className="font-semibold">{nft.lastSale}</span>
+                  <div className="mt-8 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                    <h4 className="font-bold mb-3 text-white">Metadata</h4>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-white/60">Region</span>
+                        <span className="font-semibold text-white">{nft.region}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-white/60">Token ID</span>
+                        <span className="font-semibold text-white">{nft.tokenId}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-white/60">Mint Date</span>
+                        <span className="font-semibold text-white">
+                          {new Date(nft.mintDate).toLocaleDateString("id-ID")}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-white/60">Last Sale</span>
+                        <span className="font-semibold text-white">{nft.lastSale}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -474,7 +535,7 @@ const PemilikDashboard: NextPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

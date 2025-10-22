@@ -56,7 +56,8 @@ export const AnimatedStat: React.FC<AnimatedStatProps> = ({
     if (!isVisible) return;
 
     let startTime: number | null = null;
-    const startValue = 0;
+    let animationFrameId: number;
+    const startValue = count; // Start from current count to avoid jumps
     const endValue = value;
 
     const animate = (currentTime: number) => {
@@ -70,11 +71,18 @@ export const AnimatedStat: React.FC<AnimatedStatProps> = ({
       setCount(currentValue);
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       }
     };
 
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
+
+    // Cleanup function to cancel animation frame
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, [isVisible, value, duration]);
 
   return (

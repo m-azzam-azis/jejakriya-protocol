@@ -7803,9 +7803,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.5.227":
-  version: 1.5.238
-  resolution: "electron-to-chromium@npm:1.5.238"
-  checksum: d476c77576a58853d8b3f94c2d5835849eebe1acb0e05abc4e48610b47d5a8fe0858da94d39aeb656addc535b55eaf7bebb29af0343ecf37df3e8b32f76389b5
+  version: 1.5.237
+  resolution: "electron-to-chromium@npm:1.5.237"
+  checksum: 5905e2808dc6243ced0a83537afbafedec20c063feb6403a678b612a7855d79bc6ecb7d094bdab71f54173cf2ae5d1d8070b0c31572025001c94de62af84f5f8
   languageName: node
   linkType: hard
 
@@ -14988,7 +14988,7 @@ __metadata:
   dependencies:
     husky: ~9.1.6
     lint-staged: ~13.2.2
-    qrcode: ^1.5.4
+    yarn: ^1.22.22
   languageName: unknown
   linkType: soft
 

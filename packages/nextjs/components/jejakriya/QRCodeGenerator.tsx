@@ -25,6 +25,7 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
 
   useEffect(() => {
     if (canvasRef.current && value) {
+      setIsGenerated(false); // Reset generation status
       QRCode.toCanvas(
         canvasRef.current,
         value,
