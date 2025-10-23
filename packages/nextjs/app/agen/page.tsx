@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
 import {
@@ -10,119 +10,22 @@ import {
   PlusCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
-import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
-import { fetchFromIPFS } from "~~/utils/ipfs";
-
-// Definisikan tipe untuk produk
-type Product = {
-  id: string; // requestId
-  nama: string;
-  pengrajin: string;
-  status: string;
-  tanggal: string;
-};
-
-// Tambahkan di bagian atas file, setelah imports
-type MintRequestEvent = {
-  args: {
-    requestId: string;
-    ipfsHash: string;
-    artisan: string;
-    timestamp: bigint;
-  };
-};
-
-type MintApprovedEvent = {
-  args: {
-    requestId: string;
-  };
-};
-
-type MintRejectedEvent = {
-  args: {
-    requestId: string;
-  };
-};
-
-const pengrajinList = [
-  { id: 1, nama: "Ibu Lastri", desa: "Sumba Timur", jumlahProduk: 5, status: "aktif" },
-  { id: 2, nama: "Pak Wayan", desa: "Ubud, Bali", jumlahProduk: 3, status: "aktif" },
-  { id: 3, nama: "Ibu Siti", desa: "Yogyakarta", jumlahProduk: 8, status: "aktif" },
-];
 
 const AgenDashboard: NextPage = () => {
-  const [produkList, setProdukList] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"pengrajin" | "produk">("pengrajin");
 
-  // Ambil event dari smart contract
-  const { data: allRequestsEvents, isLoading: isLoadingRequests } = useScaffoldEventHistory({
-    contractName: "ICAS721",
-    eventName: "MintRequested",
-    fromBlock: 0n,
-  }) as { data: MintRequestEvent[] | undefined; isLoading: boolean };
+  // Mock data - nanti diganti dengan data real dari backend
+  const pengrajinList = [
+    { id: 1, nama: "Ibu Lastri", desa: "Sumba Timur", jumlahProduk: 5, status: "aktif" },
+    { id: 2, nama: "Pak Wayan", desa: "Ubud, Bali", jumlahProduk: 3, status: "aktif" },
+    { id: 3, nama: "Ibu Siti", desa: "Yogyakarta", jumlahProduk: 8, status: "aktif" },
+  ];
 
-  const { data: approvedEvents } = useScaffoldEventHistory({
-    contractName: "ICAS721",
-    eventName: "MintApproved",
-    fromBlock: 0n,
-  }) as { data: MintApprovedEvent[] | undefined };
-
-  const { data: rejectedEvents } = useScaffoldEventHistory({
-    contractName: "ICAS721",
-    eventName: "MintRejected",
-    fromBlock: 0n,
-  }) as { data: MintRejectedEvent[] | undefined };
-
-  // Effect untuk memproses data dari blockchain
-  useEffect(() => {
-    const fetchProducts = async () => {
-      if (!allRequestsEvents || isLoadingRequests) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const productsData = await Promise.all(
-          allRequestsEvents.map(async event => {
-            try {
-              // Fetch metadata dari IPFS
-              const metadata = await fetchFromIPFS(event.args.ipfsHash);
-              if (!metadata) throw new Error("Metadata not found");
-
-              // Tentukan status
-              let status = "menunggu_kurasi";
-              if (approvedEvents?.some(e => e.args.requestId === event.args.requestId)) {
-                status = "terverifikasi";
-              } else if (rejectedEvents?.some(e => e.args.requestId === event.args.requestId)) {
-                status = "ditolak";
-              }
-
-              return {
-                id: event.args.requestId,
-                nama: metadata.name || "Untitled",
-                pengrajin: event.args.artisan,
-                status,
-                tanggal: new Date(Number(event.args.timestamp) * 1000).toISOString(),
-              };
-            } catch (error) {
-              console.error(`Error processing product ${event.args.requestId}:`, error);
-              // Return null for failed items
-              return null;
-            }
-          }),
-        );
-
-        // Filter out failed items and set product list
-        setProdukList(productsData.filter((item): item is Product => item !== null));
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [allRequestsEvents, approvedEvents, rejectedEvents, isLoadingRequests]);
+  const produkList = [
+    { id: 1, nama: "Kain Tenun Sumba", pengrajin: "Ibu Lastri", status: "terverifikasi", tanggal: "2025-10-15" },
+    { id: 2, nama: "Tas Anyaman Rotan", pengrajin: "Pak Wayan", status: "menunggu_kurasi", tanggal: "2025-10-14" },
+    { id: 3, nama: "Batik Tulis Jogja", pengrajin: "Ibu Siti", status: "draf", tanggal: "2025-10-13" },
+  ];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -155,39 +58,6 @@ const AgenDashboard: NextPage = () => {
         );
     }
   };
-
-  // Add this helper function to truncate addresses
-  const truncateAddress = (address: string) => {
-    if (!address) return "";
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
-  };
-
-  // Tampilkan loading state
-  if (isLoading) {
-    return (
-      <div
-        className="flex flex-col min-h-screen relative text-white items-center justify-center"
-        style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)" }}
-      >
-        <span className="loading loading-spinner loading-lg text-yellow-400"></span>
-        <p className="text-white/70 mt-4 text-lg">Memuat data produk dari blockchain...</p>
-      </div>
-    );
-  }
-
-  // Tambahkan error handling untuk kasus tidak ada data
-  if (!produkList.length) {
-    return (
-      <div
-        className="flex flex-col min-h-screen relative text-white items-center justify-center"
-        style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)" }}
-      >
-        <DocumentTextIcon className="h-16 w-16 text-yellow-400 mb-4" />
-        <h2 className="text-2xl font-bold mb-2">Belum Ada Produk</h2>
-        <p className="text-white/70">Silakan tambahkan produk baru untuk mulai.</p>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -350,7 +220,7 @@ const AgenDashboard: NextPage = () => {
                   backgroundClip: "text",
                 }}
               >
-                {produkList.length}
+                {pengrajinList.length}
               </div>
               <div className="text-white/50 text-sm">Yang Anda kelola</div>
             </div>
@@ -392,35 +262,58 @@ const AgenDashboard: NextPage = () => {
             </div>
           </div>
 
-          {/* Replace Tabs section with Sections Headers */}
-          <div className="mb-8">
-            <h2
-              className="text-2xl font-bold mb-6 flex items-center"
-              style={{
-                fontFamily: "'Aldo', sans-serif",
-                background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
+          {/* Tabs */}
+          <div className="flex gap-2 mb-6">
+            <button
+              className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                activeTab === "pengrajin"
+                  ? "text-black"
+                  : "bg-white/5 text-white border border-white/10 hover:bg-white/10"
+              }`}
+              style={
+                activeTab === "pengrajin"
+                  ? {
+                      background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
+                    }
+                  : {}
+              }
+              onClick={() => setActiveTab("pengrajin")}
             >
-              <UserGroupIcon className="h-8 w-8 mr-3" style={{ color: "#E9A507" }} />
+              <UserGroupIcon className="h-5 w-5 inline-block mr-2" />
               Daftar Pengrajin
-            </h2>
+            </button>
+            <button
+              className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                activeTab === "produk" ? "text-black" : "bg-white/5 text-white border border-white/10 hover:bg-white/10"
+              }`}
+              style={
+                activeTab === "produk"
+                  ? {
+                      background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
+                    }
+                  : {}
+              }
+              onClick={() => setActiveTab("produk")}
+            >
+              <DocumentTextIcon className="h-5 w-5 inline-block mr-2" />
+              Daftar Produk
+            </button>
+          </div>
 
-            {/* Pengrajin Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {pengrajinList.map(pengrajin => (
+          {/* Content - Grid Cards */}
+          {activeTab === "pengrajin" && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pengrajinList.map((pengrajin, index) => (
                 <div
                   key={pengrajin.id}
                   className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all hover:scale-105"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div className="bg-white/10 w-12 h-12 rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold text-lg">{pengrajin.id}</span>
+                      <span className="text-white font-bold text-lg">{index + 1}</span>
                     </div>
                     <div className="bg-green-500/20 px-3 py-1 rounded-full">
-                      <span className="text-green-400 text-xs font-semibold capitalize">{pengrajin.status}</span>
+                      <span className="text-green-400 text-xs font-semibold">{pengrajin.status}</span>
                     </div>
                   </div>
 
@@ -439,7 +332,7 @@ const AgenDashboard: NextPage = () => {
 
                   <div className="space-y-2 mb-4">
                     <div>
-                      <p className="text-white/60 text-sm">Desa</p>
+                      <p className="text-white/60 text-sm">Lokasi</p>
                       <p className="text-white font-semibold">{pengrajin.desa}</p>
                     </div>
                     <div>
@@ -461,23 +354,9 @@ const AgenDashboard: NextPage = () => {
                 </div>
               ))}
             </div>
+          )}
 
-            {/* Produk Section Header */}
-            <h2
-              className="text-2xl font-bold mb-6 flex items-center"
-              style={{
-                fontFamily: "'Aldo', sans-serif",
-                background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              <DocumentTextIcon className="h-8 w-8 mr-3" style={{ color: "#E9A507" }} />
-              Daftar Produk
-            </h2>
-
-            {/* Produk Grid */}
+          {activeTab === "produk" && (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {produkList.map((produk, index) => (
                 <div
@@ -507,7 +386,7 @@ const AgenDashboard: NextPage = () => {
                   <div className="space-y-2 mb-4">
                     <div>
                       <p className="text-white/60 text-sm">Pengrajin</p>
-                      <p className="text-white font-semibold">{truncateAddress(produk.pengrajin)}</p>
+                      <p className="text-white font-semibold">{produk.pengrajin}</p>
                     </div>
                     <div>
                       <p className="text-white/60 text-sm">Tanggal Dibuat</p>
@@ -528,7 +407,7 @@ const AgenDashboard: NextPage = () => {
                 </div>
               ))}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

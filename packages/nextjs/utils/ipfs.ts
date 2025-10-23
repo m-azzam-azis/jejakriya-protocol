@@ -3,6 +3,8 @@
  * Uses public IPFS gateway for uploading NFT metadata
  */
 
+const metadataCache = new Map<string, IPFSMetadata>();
+
 interface IPFSMetadata {
   name: string;
   description: string;
@@ -85,54 +87,74 @@ export async function uploadToIPFS(metadata: IPFSMetadata): Promise<string> {
  */
 export async function fetchFromIPFS(ipfsHash: string): Promise<IPFSMetadata | null> {
   try {
-    console.log("🔍 Attempting to fetch metadata for:", ipfsHash);
+    // 1. Check in-memory cache first (fastest)
+    if (metadataCache.has(ipfsHash)) {
+      return metadataCache.get(ipfsHash) || null;
+    }
 
-    // First, try to get from localStorage (for development)
+    // 2. Try localStorage, but with debouncing and batching
     if (typeof window !== "undefined") {
       const storageKey = `ipfs_${ipfsHash}`;
-      console.log("🔍 Checking localStorage with key:", storageKey);
-      const stored = localStorage.getItem(storageKey);
-      if (stored) {
-        console.log("📥 Retrieved metadata from local storage:", ipfsHash);
-        const parsed = JSON.parse(stored);
-        console.log("📥 Parsed metadata:", parsed);
-        return parsed;
-      } else {
-        console.log("❌ Not found in localStorage");
+      try {
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          // Cache the result in memory
+          metadataCache.set(ipfsHash, parsed);
+          return parsed;
+        }
+      } catch (err) {
+        console.warn("localStorage error:", err);
+        // Continue to IPFS if localStorage fails
       }
     }
 
-    // If not in localStorage, try to fetch from IPFS gateway
+    // 3. Try IPFS gateways with timeout
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
     const ipfsGateways = [
       `https://ipfs.io/ipfs/${ipfsHash}`,
       `https://gateway.pinata.cloud/ipfs/${ipfsHash}`,
       `https://cloudflare-ipfs.com/ipfs/${ipfsHash}`,
     ];
 
-    for (const gateway of ipfsGateways) {
-      try {
-        const response = await fetch(gateway, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        });
+    try {
+      // Try all gateways in parallel, take the first successful response
+      const responses = await Promise.any(
+        ipfsGateways.map(gateway =>
+          fetch(gateway, {
+            signal: controller.signal,
+            headers: { Accept: "application/json" },
+          }),
+        ),
+      );
 
-        if (response.ok) {
-          const metadata = await response.json();
-          console.log("📥 Retrieved metadata from IPFS gateway:", ipfsHash);
-          return metadata;
+      clearTimeout(timeout);
+
+      if (responses.ok) {
+        const metadata = await responses.json();
+        
+        // Cache successful results both in memory and localStorage
+        metadataCache.set(ipfsHash, metadata);
+        if (typeof window !== "undefined") {
+          try {
+            localStorage.setItem(`ipfs_${ipfsHash}`, JSON.stringify(metadata));
+          } catch (err) {
+            console.warn("Error caching to localStorage:", err);
+          }
         }
-      } catch (err) {
-        console.warn(`Failed to fetch from ${gateway}:`, err);
-        // Continue to next gateway
+
+        return metadata;
       }
+    } catch (err) {
+      console.warn("All IPFS gateways failed:", err);
+      clearTimeout(timeout);
     }
 
-    console.warn("Could not retrieve metadata from any IPFS gateway");
     return null;
   } catch (error) {
-    console.error("Error fetching from IPFS:", error);
+    console.error("Error in fetchFromIPFS:", error);
     return null;
   }
 }
@@ -213,4 +235,31 @@ export function getIPFSImageUrl(ipfsHash: string): string {
 
   // Otherwise, use IPFS gateway
   return `https://ipfs.io/ipfs/${ipfsHash}`;
+}
+
+// Add this helper function for batch operations
+export async function fetchMultipleFromIPFS(ipfsHashes: string[]): Promise<(IPFSMetadata | null)[]> {
+  // Deduplicate hashes
+  const uniqueHashes = [...new Set(ipfsHashes)];
+  
+  // Process in smaller batches to avoid overwhelming the browser
+  const batchSize = 5;
+  const results: (IPFSMetadata | null)[] = new Array(ipfsHashes.length).fill(null);
+  
+  for (let i = 0; i < uniqueHashes.length; i += batchSize) {
+    const batch = uniqueHashes.slice(i, i + batchSize);
+    const batchResults = await Promise.all(
+      batch.map(hash => fetchFromIPFS(hash))
+    );
+    
+    // Map results back to original positions
+    ipfsHashes.forEach((hash, index) => {
+      const batchIndex = batch.indexOf(hash);
+      if (batchIndex !== -1) {
+        results[index] = batchResults[batchIndex];
+      }
+    });
+  }
+  
+  return results;
 }

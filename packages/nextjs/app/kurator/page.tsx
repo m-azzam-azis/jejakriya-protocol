@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-// <-- Tambahkan useRef
+import { Suspense, useCallback, useEffect, useState, memo } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import {
-  ChatBubbleBottomCenterTextIcon, // <-- Icon baru untuk modal
+  ChatBubbleBottomCenterTextIcon,
   CheckCircleIcon,
   ClockIcon,
   EyeIcon,
@@ -15,12 +14,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldEventHistory, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
-// <-- Tambahkan useScaffoldWriteContract
 import { fetchFromIPFS } from "~~/utils/ipfs";
-// Menggunakan fungsi canggih Anda
 import { notification } from "~~/utils/scaffold-eth";
-
-// <-- Tambahkan notification
+import ErrorBoundary from "~~/components/ErrorBoundary";
 
 // Tipe data (tidak berubah)
 type Product = {
@@ -53,7 +49,7 @@ type RejectedProduct = {
   reason: string;
 };
 
-const KuratorDashboard: NextPage = () => {
+const KuratorContent = () => {
   const { address: connectedAddress } = useAccount();
   const [activeTab, setActiveTab] = useState<"pending" | "approved" | "rejected">("pending");
 
@@ -86,98 +82,148 @@ const KuratorDashboard: NextPage = () => {
 
   // === 2. PROSES EVENT DAN AMBIL DATA IPFS ===
   // (Tidak berubah, ini sudah menggunakan Promise.all yang cepat)
-  useEffect(() => {
-    const processEvents = async () => {
-      if (!allRequestsEvents || !approvedEvents || !rejectedEvents) return;
+  const memoizedProcessEvents = useCallback(async () => {
+    if (!allRequestsEvents?.length || !approvedEvents || !rejectedEvents) return;
 
-      const approvedMap = new Map<string, any>();
-      for (const event of approvedEvents) {
-        const { requestId, tokenId, timestamp } = event.args as any;
-        approvedMap.set(requestId.toString(), {
-          tokenId: tokenId.toString(),
-          timestamp: Number(timestamp) * 1000,
-          txHash: event.transactionHash,
+    // Reset states first
+    setPendingProducts([]);
+    setApprovedProducts([]);
+    setRejectedProducts([]);
+
+    // Process in smaller batches
+    const BATCH_SIZE = 3;
+    let processedCount = 0;
+    
+    // Create sets for tracking processed IDs
+    const processedIds = new Set();
+
+    const processBatch = async () => {
+      const batch = allRequestsEvents.slice(
+        processedCount,
+        processedCount + BATCH_SIZE
+      );
+
+      if (batch.length === 0) return;
+
+      // Process batch
+      const results = await Promise.all(
+        batch.map(async event => {
+          const { requestId, artisan, submittedBy, regionCode, ipfsHash, timestamp } = event.args as any;
+          const reqIdString = requestId.toString();
+
+          // Skip if already processed
+          if (processedIds.has(reqIdString)) return null;
+          processedIds.add(reqIdString);
+
+          const metadata = await fetchFromIPFS(ipfsHash);
+          if (!metadata) return null;
+
+          return {
+            eventData: { reqIdString, artisan, submittedBy, regionCode, ipfsHash, timestamp },
+            metadata,
+          };
+        }),
+      ).then(results => results.filter(Boolean));
+
+      // Map fetched results into proper typed Product objects (filter out nulls)
+      const processedProducts = results
+        .filter((r): r is { eventData: any; metadata: any } => r !== null)
+        .map(r => {
+          const { eventData, metadata } = r;
+          return {
+            id: eventData.reqIdString,
+            nama: metadata?.name ?? "Untitled",
+            pengrajin: eventData.artisan,
+            agen: eventData.submittedBy,
+            tanggal: new Date(Number(eventData.timestamp) * 1000).toISOString(),
+            region: eventData.regionCode ?? "",
+            harga: Number(metadata?.price ?? 0),
+            photos: Array.isArray(metadata?.photos) ? metadata.photos.length : 0,
+            hasVideo: Boolean(metadata?.video),
+            ipfsHash: eventData.ipfsHash,
+          } as Product;
         });
+
+      // Prepare lookup sets from approved/rejected events
+      const approvedIds = new Set(
+        (approvedEvents || []).map((e: any) => e.args.requestId?.toString?.() ?? "")
+      );
+      const rejectedIds = new Set(
+        (rejectedEvents || []).map((e: any) => e.args.requestId?.toString?.() ?? "")
+      );
+
+      // Update state dengan data baru saja
+      const newPendingProducts = processedProducts.filter(p => !approvedIds.has(p.id) && !rejectedIds.has(p.id));
+      if (newPendingProducts.length > 0) {
+        setPendingProducts(prev => [...new Set([...prev, ...newPendingProducts])]);
       }
 
-      const rejectedMap = new Map<string, any>();
-      for (const event of rejectedEvents) {
-        const { requestId, reason, timestamp } = event.args as any;
-        rejectedMap.set(requestId.toString(), {
-          reason: reason,
-          timestamp: Number(timestamp) * 1000,
-        });
+      // Append to approvedProducts with extracted details from approvedEvents
+      setApprovedProducts(prev => [
+        ...prev,
+        ...processedProducts
+          .filter(p => approvedIds.has(p.id))
+          .map(p => {
+            const ev = approvedEvents.find((e: any) => e.args.requestId?.toString?.() === p.id) as any;
+            return {
+              id: p.id,
+              nama: p.nama,
+              pengrajin: p.pengrajin,
+              approved: ev ? new Date(Number(ev.args.timestamp) * 1000).toISOString() : new Date().toISOString(),
+              nftId: ev?.args?.tokenId?.toString?.() ?? "",
+              txHash: ev?.transactionHash ?? "",
+            } as ApprovedProduct;
+          }),
+      ]);
+
+      // Append to rejectedProducts with extracted details from rejectedEvents
+      setRejectedProducts(prev => [
+        ...prev,
+        ...processedProducts
+          .filter(p => rejectedIds.has(p.id))
+          .map(p => {
+            const ev = rejectedEvents.find((e: any) => e.args.requestId?.toString?.() === p.id) as any;
+            return {
+              id: p.id,
+              nama: p.nama,
+              pengrajin: p.pengrajin,
+              rejected: ev ? new Date(Number(ev.args.timestamp) * 1000).toISOString() : new Date().toISOString(),
+              reason: ev?.args?.reason ?? "",
+            } as RejectedProduct;
+          }),
+      ]);
+
+      processedCount += BATCH_SIZE;
+      
+      if (processedCount < allRequestsEvents.length) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        await processBatch();
       }
-
-      const promises = allRequestsEvents.map(async event => {
-        const { requestId, artisan, submittedBy, regionCode, ipfsHash, timestamp } = event.args as any;
-        const reqIdString = requestId.toString();
-        const metadata = await fetchFromIPFS(ipfsHash);
-        if (!metadata) {
-          console.warn(`Gagal fetch IPFS untuk request ${reqIdString}`);
-          return null;
-        }
-        return {
-          eventData: { reqIdString, artisan, submittedBy, regionCode, ipfsHash, timestamp },
-          metadata: metadata,
-        };
-      });
-
-      const results = await Promise.all(promises);
-
-      const pendingList: Product[] = [];
-      const approvedList: ApprovedProduct[] = [];
-      const rejectedList: RejectedProduct[] = [];
-
-      for (const result of results) {
-        if (!result) continue;
-        const { eventData, metadata } = result;
-        const { reqIdString, artisan, submittedBy, regionCode, ipfsHash, timestamp } = eventData;
-
-        if (approvedMap.has(reqIdString)) {
-          const approvalData = approvedMap.get(reqIdString);
-          approvedList.push({
-            id: reqIdString,
-            nama: metadata.name || "Tanpa Nama",
-            pengrajin: artisan,
-            approved: new Date(approvalData.timestamp).toISOString(),
-            nftId: `ICAS-721-${approvalData.tokenId}`,
-            txHash: approvalData.txHash,
-          });
-        } else if (rejectedMap.has(reqIdString)) {
-          const rejectionData = rejectedMap.get(reqIdString);
-          rejectedList.push({
-            id: reqIdString,
-            nama: metadata.name || "Tanpa Nama",
-            pengrajin: artisan,
-            rejected: new Date(rejectionData.timestamp).toISOString(),
-            reason: rejectionData.reason,
-          });
-        } else {
-          pendingList.push({
-            id: reqIdString,
-            nama: metadata.name || "Tanpa Nama",
-            pengrajin: artisan,
-            agen: submittedBy,
-            tanggal: new Date(Number(timestamp) * 1000).toISOString(),
-            region: regionCode,
-            harga: parseInt(metadata.attributes?.find((a: any) => a.trait_type === "Estimated Price")?.value || "0"),
-            photos: metadata.properties?.images?.length || 0,
-            hasVideo: !!metadata.properties?.video,
-            ipfsHash: ipfsHash,
-          });
-        }
-      }
-
-      setPendingProducts(pendingList);
-      setApprovedProducts(approvedList);
-      setRejectedProducts(rejectedList);
     };
 
-    if (!isLoading) {
-      processEvents();
-    }
-  }, [allRequestsEvents, approvedEvents, rejectedEvents, isLoading]);
+    await processBatch();
+  }, [allRequestsEvents, approvedEvents, rejectedEvents]);
+
+  // 2. Modify useEffect to prevent unnecessary reruns
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchData = async () => {
+      if (!mounted || isLoading) return;
+
+      try {
+        await memoizedProcessEvents();
+      } catch (error) {
+        console.error("Error processing events:", error);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      mounted = false;
+    };
+  }, [isLoading]); // Remove memoizedProcessEvents from dependencies
 
   // === 3. LOGIKA BARU UNTUK APPROVE & REJECT ===
 
@@ -252,6 +298,149 @@ const KuratorDashboard: NextPage = () => {
     }
   };
 
+  // Define PendingCardProps interface
+  interface PendingCardProps {
+    product: Product;
+    onQuickApprove: (id: string) => void;
+    onReject: (product: Product) => void;
+  }
+  
+  // 3. Memoize card components
+  const PendingCard = memo<PendingCardProps>(({ product, onQuickApprove, onReject }) => {
+    return (
+      <div
+        key={product.id}
+        className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 flex flex-col transition-all hover:bg-white/10"
+      >
+        <div className="flex-grow">
+          {/* ... (Header Card) ... */}
+          <div className="flex justify-between items-start mb-4">
+            <div className="bg-yellow-500/20 px-3 py-1 rounded-full">
+              <ClockIcon className="h-4 w-4 inline-block" style={{ color: "#E9A507" }} />
+              <span className="text-yellow-400 text-sm ml-1 font-semibold">Pending</span>
+            </div>
+            <div className="bg-white/10 px-3 py-1 rounded-full text-white/70 text-xs truncate max-w-[100px]">
+              ID: #{product.id.substring(0, 6)}...
+            </div>
+          </div>
+
+          {/* ... (Nama Produk) ... */}
+          <h3
+            className="text-xl font-bold mb-3"
+            style={{
+              fontFamily: "'Aldo', sans-serif",
+              background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            {product.nama}
+          </h3>
+
+          {/* ... (Region Badge) ... */}
+          <div className="mb-4">
+            <span
+              className="px-3 py-1 rounded-full text-xs font-semibold"
+              style={{
+                background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
+                color: "#060606",
+              }}
+            >
+              {product.region}
+            </span>
+          </div>
+
+          {/* ... (Details) ... */}
+          <div className="space-y-2 mb-4">
+            <div>
+              <p className="text-white/60 text-sm">Pengrajin</p>
+              <Address address={product.pengrajin} size="sm" />
+            </div>
+            <div>
+              <p className="text-white/60 text-sm">Agen</p>
+              <Address address={product.agen} size="sm" />
+            </div>
+            <div>
+              <p className="text-white/60 text-sm">Harga Estimasi</p>
+              <p className="text-white font-semibold">Rp {product.harga.toLocaleString("id-ID")}</p>
+            </div>
+            <div>
+              <p className="text-white/60 text-sm">Tanggal Submit</p>
+              <p className="text-white font-semibold">
+                {new Date(product.tanggal).toLocaleDateString("id-ID")}
+              </p>
+            </div>
+          </div>
+
+          {/* ... (Media Badges) ... */}
+          <div className="flex gap-2 mb-4">
+            <div className="bg-blue-500/20 px-3 py-1 rounded-full text-blue-300 text-xs">
+              {product.photos} Foto
+            </div>
+            {product.hasVideo && (
+              <div className="bg-green-500/20 px-3 py-1 rounded-full text-green-300 text-xs">
+                ✓ Video
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* --- ACTIONS (TOMBOL BARU) --- */}
+        <div className="space-y-2 mt-auto">
+          <Link
+            href={`/kurator/produk/${product.id}`} // <-- UBAH 'produk' ke 'review'
+            className="block w-full text-center px-4 py-2 rounded-lg font-semibold transition-all hover:scale-105"
+            style={{
+              background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
+              color: "#060606",
+            }}
+          >
+            <EyeIcon className="h-4 w-4 inline-block mr-2" />
+            Review Detail
+          </Link>
+
+          {/* Tombol Quick Approve */}
+          <button
+            className="w-full px-4 py-2 rounded-lg font-semibold bg-white/5 text-white border border-green-400/50 hover:bg-green-500/20 transition-all disabled:opacity-50"
+            disabled={!connectedAddress || isSubmitting}
+            onClick={() => onQuickApprove(product.id)}
+          >
+            {isSubmittingId === product.id && isApproving ? (
+              <span className="loading loading-spinner loading-sm"></span>
+            ) : (
+              <>
+                <CheckCircleIcon className="h-4 w-4 inline-block mr-2" />
+                Quick Approve
+              </>
+            )}
+          </button>
+
+          {/* Tombol Reject */}
+          <button
+            className="w-full px-4 py-2 rounded-lg font-semibold bg-white/5 text-white border border-red-400/50 hover:bg-red-500/20 transition-all disabled:opacity-50"
+            disabled={!connectedAddress || isSubmitting}
+            onClick={() => onReject(product)}
+          >
+            {isSubmittingId === product.id && isRejecting ? (
+              <span className="loading loading-spinner loading-sm"></span>
+            ) : (
+              <>
+                <XCircleIcon className="h-4 w-4 inline-block mr-2" />
+                Reject
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    );
+  });
+
+  // 4. Add loading states for each section
+  const [isFetchingPending, setIsFetchingPending] = useState(true);
+  const [isFetchingApproved, setIsFetchingApproved] = useState(true);
+  const [isFetchingRejected, setIsFetchingRejected] = useState(true);
+
   return (
     <>
       <div
@@ -278,7 +467,7 @@ const KuratorDashboard: NextPage = () => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-8">
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-white/10">
             {/* ... (Isi Header) ... */}
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-4">
               <ShieldCheckIcon className="h-12 w-12" style={{ color: "#E9A507" }} />
               <div>
                 <h1
@@ -457,131 +646,12 @@ const KuratorDashboard: NextPage = () => {
                     </div>
                   ) : (
                     pendingProducts.map(product => (
-                      <div
+                      <PendingCard
                         key={product.id}
-                        className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 flex flex-col transition-all hover:bg-white/10"
-                      >
-                        <div className="flex-grow">
-                          {/* ... (Header Card) ... */}
-                          <div className="flex justify-between items-start mb-4">
-                            <div className="bg-yellow-500/20 px-3 py-1 rounded-full">
-                              <ClockIcon className="h-4 w-4 inline-block" style={{ color: "#E9A507" }} />
-                              <span className="text-yellow-400 text-sm ml-1 font-semibold">Pending</span>
-                            </div>
-                            <div className="bg-white/10 px-3 py-1 rounded-full text-white/70 text-xs truncate max-w-[100px]">
-                              ID: #{product.id.substring(0, 6)}...
-                            </div>
-                          </div>
-
-                          {/* ... (Nama Produk) ... */}
-                          <h3
-                            className="text-xl font-bold mb-3"
-                            style={{
-                              fontFamily: "'Aldo', sans-serif",
-                              background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                              WebkitBackgroundClip: "text",
-                              WebkitTextFillColor: "transparent",
-                              backgroundClip: "text",
-                            }}
-                          >
-                            {product.nama}
-                          </h3>
-
-                          {/* ... (Region Badge) ... */}
-                          <div className="mb-4">
-                            <span
-                              className="px-3 py-1 rounded-full text-xs font-semibold"
-                              style={{
-                                background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
-                                color: "#060606",
-                              }}
-                            >
-                              {product.region}
-                            </span>
-                          </div>
-
-                          {/* ... (Details) ... */}
-                          <div className="space-y-2 mb-4">
-                            <div>
-                              <p className="text-white/60 text-sm">Pengrajin</p>
-                              <Address address={product.pengrajin} size="sm" />
-                            </div>
-                            <div>
-                              <p className="text-white/60 text-sm">Agen</p>
-                              <Address address={product.agen} size="sm" />
-                            </div>
-                            <div>
-                              <p className="text-white/60 text-sm">Harga Estimasi</p>
-                              <p className="text-white font-semibold">Rp {product.harga.toLocaleString("id-ID")}</p>
-                            </div>
-                            <div>
-                              <p className="text-white/60 text-sm">Tanggal Submit</p>
-                              <p className="text-white font-semibold">
-                                {new Date(product.tanggal).toLocaleDateString("id-ID")}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* ... (Media Badges) ... */}
-                          <div className="flex gap-2 mb-4">
-                            <div className="bg-blue-500/20 px-3 py-1 rounded-full text-blue-300 text-xs">
-                              {product.photos} Foto
-                            </div>
-                            {product.hasVideo && (
-                              <div className="bg-green-500/20 px-3 py-1 rounded-full text-green-300 text-xs">
-                                ✓ Video
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* --- ACTIONS (TOMBOL BARU) --- */}
-                        <div className="space-y-2 mt-auto">
-                          <Link
-                            href={`/kurator/produk/${product.id}`} // <-- UBAH 'produk' ke 'review'
-                            className="block w-full text-center px-4 py-2 rounded-lg font-semibold transition-all hover:scale-105"
-                            style={{
-                              background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
-                              color: "#060606",
-                            }}
-                          >
-                            <EyeIcon className="h-4 w-4 inline-block mr-2" />
-                            Review Detail
-                          </Link>
-
-                          {/* Tombol Quick Approve */}
-                          <button
-                            className="w-full px-4 py-2 rounded-lg font-semibold bg-white/5 text-white border border-green-400/50 hover:bg-green-500/20 transition-all disabled:opacity-50"
-                            disabled={!connectedAddress || isSubmitting}
-                            onClick={() => handleQuickApprove(product.id)}
-                          >
-                            {isSubmittingId === product.id && isApproving ? (
-                              <span className="loading loading-spinner loading-sm"></span>
-                            ) : (
-                              <>
-                                <CheckCircleIcon className="h-4 w-4 inline-block mr-2" />
-                                Quick Approve
-                              </>
-                            )}
-                          </button>
-
-                          {/* Tombol Reject */}
-                          <button
-                            className="w-full px-4 py-2 rounded-lg font-semibold bg-white/5 text-white border border-red-400/50 hover:bg-red-500/20 transition-all disabled:opacity-50"
-                            disabled={!connectedAddress || isSubmitting}
-                            onClick={() => openRejectModal(product)}
-                          >
-                            {isSubmittingId === product.id && isRejecting ? (
-                              <span className="loading loading-spinner loading-sm"></span>
-                            ) : (
-                              <>
-                                <XCircleIcon className="h-4 w-4 inline-block mr-2" />
-                                Reject
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </div>
+                        product={product}
+                        onQuickApprove={handleQuickApprove}
+                        onReject={openRejectModal}
+                      />
                     ))
                   )}
                 </div>
@@ -748,6 +818,22 @@ const KuratorDashboard: NextPage = () => {
         </form>
       </dialog>
     </>
+  );
+};
+
+const KuratorDashboard: NextPage = () => {
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={
+        <div className="flex flex-col min-h-screen relative text-white items-center justify-center"
+             style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%" }}>
+          <span className="loading loading-spinner loading-lg text-yellow-400"></span>
+          <p className="text-white/70 mt-4 text-lg">Memuat Dashboard Kurator...</p>
+        </div>
+      }>
+        <KuratorContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 

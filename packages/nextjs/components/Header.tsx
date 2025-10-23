@@ -36,8 +36,8 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/kurator",
   },
   {
-    label: "Pemilik",
-    href: "/pemilik",
+    label: "Pengrajin",
+    href: "/pengrajin",
   },
   {
     label: "Admin",
