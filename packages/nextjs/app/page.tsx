@@ -45,7 +45,7 @@ const Home: NextPage = () => {
             <div className="flex items-center justify-center mb-6">
               <SparklesIcon className="h-16 w-16 text-white mr-4" />
               <h1
-                className="text-6xl md:text-7xl font-bold"
+                className="text-8xl md:text-9xl font-bold"
                 style={{
                   fontFamily: "'Mileast', sans-serif",
                   background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
@@ -98,7 +98,7 @@ const Home: NextPage = () => {
         <div id="tiga-pilar" className="w-full px-8 py-16">
           <div className="max-w-6xl mx-auto">
             <h2
-              className="text-4xl md:text-5xl font-bold text-center mb-12"
+              className="text-5xl md:text-6xl font-bold text-center mb-12"
               style={{
                 fontFamily: "'Mileast', sans-serif",
                 background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
@@ -214,232 +214,130 @@ const Home: NextPage = () => {
         </div>
 
         {/* Journey Timeline Section */}
-        <div className="w-full px-8 py-16">
-          <div className="max-w-6xl mx-auto">
-            <h2
-              className="text-4xl md:text-5xl font-bold text-center mb-8"
+<div className="w-full px-8 py-16">
+  <div className="max-w-6xl mx-auto">
+    <h2
+      className="text-5xl md:text-6xl font-bold text-center mb-8"
+      style={{
+        fontFamily: "'Mileast', sans-serif",
+        background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+      }}
+    >
+      Perjalanan di JejakKriya
+    </h2>
+    <p className="text-xl text-white/80 text-center mb-16 max-w-3xl mx-auto">
+      Dari pendataan hingga pemanfaatan ekonomi — ikuti langkah demi langkah bagaimana karya kriya
+      bertransformasi menjadi aset digital yang bernilai.
+    </p>
+
+    <div className="relative">
+      {/* Vertical Line */}
+      <div
+        className="absolute left-1/2 transform -translate-x-1/2 z-0"
+        style={{
+          width: "4px",
+          height: "calc(90% - 3rem)",
+          top: "6rem",
+          background: "linear-gradient(180deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+        }}
+      ></div>
+
+      {/* Timeline Steps */}
+      <div className="space-y-8">
+        {[
+          {
+            step: 1,
+            title: "Pendataan oleh Agen",
+            description: "Jejak Kriya memfasilitasi Agen untuk membantu pengrajin mendokumentasikan karya mereka dan menginput data kerajinan ke sistem sebagai langkah awal digitalisasi."
+          },
+          {
+            step: 2,
+            title: "Pengajuan ke Kurator",
+            description: "Data kerajinan diajukan ke Kurator melalui platform untuk dinilai dari segi kualitas, keaslian, dan nilai budaya."
+          },
+          {
+            step: 3,
+            title: "Kurasi dan Persetujuan",
+            description: "Kurator meninjau setiap pengajuan dan memberikan keputusan. Jika disetujui, sistem otomatis melanjutkan ke proses minting NFT."
+          },
+          {
+            step: 4,
+            title: "Minting NFT Otomatis",
+            description: "Sistem Jejak Kriya mengubah kerajinan yang lolos kurasi menjadi NFT di blockchain, lengkap dengan sertifikasi digital yang unik dan terverifikasi."
+          },
+          {
+            step: 5,
+            title: "NFT Tersimpan di Akun Pengrajin",
+            description: "NFT yang telah diterbitkan muncul di dashboard pengrajin sebagai bukti kepemilikan digital dan aset bernilai ekonomi."
+          },
+          {
+            step: 6,
+            title: "Pemanfaatan NFT untuk Lending",
+            description: "NFT dapat digunakan sebagai agunan dalam lending pool, memungkinkan pengrajin memperoleh pembiayaan berbasis blockchain."
+          },
+          {
+            step: 7,
+            title: "Pemantauan oleh Admin dan Ekraf",
+            description: "Semua aktivitas dan transaksi tercatat otomatis di dashboard Admin dan Kemenparekraf untuk memastikan transparansi dan akuntabilitas ekosistem ekonomi kreatif."
+          }
+        ].map((item, index) => (
+          <div
+            key={index}
+            className={`relative flex items-center ${
+              index % 2 === 0 ? "justify-start" : "justify-end"
+            }`}
+          >
+            {/* Circle Indicator */}
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2 z-10 rounded-full shadow-lg"
               style={{
-                fontFamily: "'Mileast', sans-serif",
-                background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
+                width: "3rem",
+                height: "3rem",
+                background: "linear-gradient(135deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#060606",
+                fontWeight: "bold",
+                fontSize: "1.25rem",
               }}
             >
-              Perjalanan di JejakKriya
-            </h2>
-            <p className="text-xl text-white/80 text-center mb-16 max-w-3xl mx-auto">
-              Dari pendataan hingga pemanfaatan ekonomi — ikuti langkah demi langkah bagaimana karya kriya
-              bertransformasi menjadi aset digital yang bernilai.
-            </p>
+              {item.step}
+            </div>
 
-            <div className="relative">
-              {/* Timeline Steps */}
-              <div className="space-y-12">
-                {/* Step 1 */}
-                <div className="relative flex items-start gap-8">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl z-10 shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                        color: "#060606",
-                      }}
-                    >
-                      1
-                    </div>
-                    <div className="w-1 h-full bg-gradient-to-b from-[#E9A507] to-transparent mt-4"></div>
-                  </div>
-                  <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all">
-                    <h3
-                      className="text-2xl md:text-3xl font-bold text-white mb-2"
-                      style={{ fontFamily: "'Mileast', sans-serif" }}
-                    >
-                      Pendataan oleh Agen
-                    </h3>
-                    <p className="text-white/80">
-                      Jejak Kriya memfasilitasi Agen untuk membantu pengrajin mendokumentasikan karya mereka dan
-                      menginput data kerajinan ke sistem sebagai langkah awal digitalisasi.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Step 2 */}
-                <div className="relative flex items-start gap-8">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl z-10 shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                        color: "#060606",
-                      }}
-                    >
-                      2
-                    </div>
-                    <div className="w-1 h-full bg-gradient-to-b from-[#E9A507] to-transparent mt-4"></div>
-                  </div>
-                  <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all">
-                    <h3
-                      className="text-2xl md:text-3xl font-bold text-white mb-2"
-                      style={{ fontFamily: "'Mileast', sans-serif" }}
-                    >
-                      Pengajuan ke Kurator
-                    </h3>
-                    <p className="text-white/80">
-                      Data kerajinan diajukan ke Kurator melalui platform untuk dinilai dari segi kualitas, keaslian,
-                      dan nilai budaya.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Step 3 */}
-                <div className="relative flex items-start gap-8">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl z-10 shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                        color: "#060606",
-                      }}
-                    >
-                      3
-                    </div>
-                    <div className="w-1 h-full bg-gradient-to-b from-[#E9A507] to-transparent mt-4"></div>
-                  </div>
-                  <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all">
-                    <h3
-                      className="text-2xl md:text-3xl font-bold text-white mb-2"
-                      style={{ fontFamily: "'Mileast', sans-serif" }}
-                    >
-                      Kurasi dan Persetujuan
-                    </h3>
-                    <p className="text-white/80">
-                      Kurator meninjau setiap pengajuan dan memberikan keputusan. Jika disetujui, sistem otomatis
-                      melanjutkan ke proses minting NFT.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Step 4 */}
-                <div className="relative flex items-start gap-8">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl z-10 shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                        color: "#060606",
-                      }}
-                    >
-                      4
-                    </div>
-                    <div className="w-1 h-full bg-gradient-to-b from-[#E9A507] to-transparent mt-4"></div>
-                  </div>
-                  <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all">
-                    <h3
-                      className="text-2xl md:text-3xl font-bold text-white mb-2"
-                      style={{ fontFamily: "'Mileast', sans-serif" }}
-                    >
-                      Minting NFT Otomatis
-                    </h3>
-                    <p className="text-white/80">
-                      Sistem Jejak Kriya mengubah kerajinan yang lolos kurasi menjadi NFT di blockchain, lengkap dengan
-                      sertifikasi digital yang unik dan terverifikasi.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Step 5 */}
-                <div className="relative flex items-start gap-8">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl z-10 shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                        color: "#060606",
-                      }}
-                    >
-                      5
-                    </div>
-                    <div className="w-1 h-full bg-gradient-to-b from-[#E9A507] to-transparent mt-4"></div>
-                  </div>
-                  <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all">
-                    <h3
-                      className="text-2xl md:text-3xl font-bold text-white mb-2"
-                      style={{ fontFamily: "'Mileast', sans-serif" }}
-                    >
-                      NFT Tersimpan di Akun Pengrajin
-                    </h3>
-                    <p className="text-white/80">
-                      NFT yang telah diterbitkan muncul di dashboard pengrajin sebagai bukti kepemilikan digital dan
-                      aset bernilai ekonomi.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Step 6 */}
-                <div className="relative flex items-start gap-8">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl z-10 shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                        color: "#060606",
-                      }}
-                    >
-                      6
-                    </div>
-                    <div className="w-1 h-full bg-gradient-to-b from-[#E9A507] to-transparent mt-4"></div>
-                  </div>
-                  <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all">
-                    <h3
-                      className="text-2xl md:text-3xl font-bold text-white mb-2"
-                      style={{ fontFamily: "'Mileast', sans-serif" }}
-                    >
-                      Pemanfaatan NFT untuk Lending
-                    </h3>
-                    <p className="text-white/80">
-                      NFT dapat digunakan sebagai agunan dalam lending pool, memungkinkan pengrajin memperoleh
-                      pembiayaan berbasis blockchain.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Step 7 */}
-                <div className="relative flex items-start gap-8">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl z-10 shadow-lg"
-                      style={{
-                        background: "linear-gradient(135deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                        color: "#060606",
-                      }}
-                    >
-                      7
-                    </div>
-                  </div>
-                  <div className="flex-1 bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all">
-                    <h3
-                      className="text-2xl md:text-3xl font-bold text-white mb-2"
-                      style={{ fontFamily: "'Mileast', sans-serif" }}
-                    >
-                      Pemantauan oleh Admin dan Ekraf
-                    </h3>
-                    <p className="text-white/80">
-                      Semua aktivitas dan transaksi tercatat otomatis di dashboard Admin dan Kemenparekraf untuk
-                      memastikan transparansi dan akuntabilitas ekosistem ekonomi kreatif.
-                    </p>
-                  </div>
-                </div>
+            {/* Content Card */}
+            <div
+              className={`w-5/12 ${
+                index % 2 === 0 ? "pr-8 text-right" : "pl-8 text-left"
+              }`}
+            >
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all">
+                <h3
+                  className="text-1xl md:text-2xl font-bold text-white mb-3"
+                  style={{ fontFamily: "'Mileast', sans-serif" }}
+                >
+                  {item.title}
+                </h3>
+                <p className="text-white/80 leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             </div>
           </div>
-        </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
 
         {/* Ecosystem Section */}
-        <div className="w-full px-8 py-16">
+        <div className="w-full px-8 py-16 pt-8">
           <div className="max-w-6xl mx-auto">
             <h2
-              className="text-4xl md:text-5xl font-bold text-center mb-16"
+              className="text-5xl md:text-6xl font-bold text-center mb-16"
               style={{
                 fontFamily: "'Mileast', sans-serif",
                 background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
@@ -492,8 +390,7 @@ const Home: NextPage = () => {
                 <img
                   src="/pengrajin.png"
                   alt="Pengrajin"
-                  className="w-full h-auto rounded-2xl shadow-2xl"
-                  style={{ opacity: 1 }}
+                  className="w-full h-auto rounded-2xl shadow-2xl relative z-10"
                 />
               </div>
             </div>
@@ -501,7 +398,7 @@ const Home: NextPage = () => {
             {/* Section 1 - Agen */}
             <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
               <div className="order-2 md:order-1">
-                <img src="/agen.png" alt="Agen" className="w-full h-auto rounded-2xl shadow-2xl" />
+                <img src="/agen.png" alt="Agen" className="w-full h-auto rounded-2xl shadow-2xl relative z-10" />
               </div>
               <div className="order-1 md:order-2">
                 <h3
@@ -579,14 +476,14 @@ const Home: NextPage = () => {
                 </Link>
               </div>
               <div className="order-2">
-                <img src="/kurator.png" alt="Kurator" className="w-full h-auto rounded-2xl shadow-2xl" />
+                <img src="/kurator.png" alt="Kurator" className="w-full h-auto rounded-2xl shadow-2xl relative z-10" />
               </div>
             </div>
 
             {/* Section 3 - Kemenparekraf */}
             <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
               <div className="order-2 md:order-1">
-                <img src="/ekraf.png" alt="Kemenparekraf" className="w-full h-auto rounded-2xl shadow-2xl" />
+                <img src="/ekraf.png" alt="Kemenparekraf" className="w-full h-auto rounded-2xl shadow-2xl relative z-10" />
               </div>
               <div className="order-1 md:order-2">
                 <h3
@@ -663,7 +560,7 @@ const Home: NextPage = () => {
                 </Link>
               </div>
               <div className="order-2">
-                <img src="/admin.png" alt="Admin" className="w-full h-auto rounded-2xl shadow-2xl" />
+                <img src="/admin.png" alt="Admin" className="w-full h-auto rounded-2xl shadow-2xl relative z-10" />
               </div>
             </div>
           </div>
