@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useState, memo } from "react";
+import { Suspense, memo, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
@@ -12,11 +12,11 @@ import {
   ShieldCheckIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
+import ErrorBoundary from "~~/components/ErrorBoundary";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldEventHistory, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { fetchFromIPFS } from "~~/utils/ipfs";
 import { notification } from "~~/utils/scaffold-eth";
-import ErrorBoundary from "~~/components/ErrorBoundary";
 
 // Tipe data (tidak berubah)
 type Product = {
@@ -93,15 +93,12 @@ const KuratorContent = () => {
     // Process in smaller batches
     const BATCH_SIZE = 3;
     let processedCount = 0;
-    
+
     // Create sets for tracking processed IDs
     const processedIds = new Set();
 
     const processBatch = async () => {
-      const batch = allRequestsEvents.slice(
-        processedCount,
-        processedCount + BATCH_SIZE
-      );
+      const batch = allRequestsEvents.slice(processedCount, processedCount + BATCH_SIZE);
 
       if (batch.length === 0) return;
 
@@ -145,12 +142,8 @@ const KuratorContent = () => {
         });
 
       // Prepare lookup sets from approved/rejected events
-      const approvedIds = new Set(
-        (approvedEvents || []).map((e: any) => e.args.requestId?.toString?.() ?? "")
-      );
-      const rejectedIds = new Set(
-        (rejectedEvents || []).map((e: any) => e.args.requestId?.toString?.() ?? "")
-      );
+      const approvedIds = new Set((approvedEvents || []).map((e: any) => e.args.requestId?.toString?.() ?? ""));
+      const rejectedIds = new Set((rejectedEvents || []).map((e: any) => e.args.requestId?.toString?.() ?? ""));
 
       // Update state dengan data baru saja
       const newPendingProducts = processedProducts.filter(p => !approvedIds.has(p.id) && !rejectedIds.has(p.id));
@@ -194,7 +187,7 @@ const KuratorContent = () => {
       ]);
 
       processedCount += BATCH_SIZE;
-      
+
       if (processedCount < allRequestsEvents.length) {
         await new Promise(resolve => setTimeout(resolve, 100));
         await processBatch();
@@ -304,7 +297,7 @@ const KuratorContent = () => {
     onQuickApprove: (id: string) => void;
     onReject: (product: Product) => void;
   }
-  
+
   // 3. Memoize card components
   const PendingCard = memo<PendingCardProps>(({ product, onQuickApprove, onReject }) => {
     return (
@@ -328,12 +321,12 @@ const KuratorContent = () => {
           <h3
             className="text-xl font-bold mb-3"
             style={{
-                fontFamily: "'Mileast', sans-serif",
-                background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
+              fontFamily: "'Mileast', sans-serif",
+              background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
           >
             {product.nama}
           </h3>
@@ -367,21 +360,15 @@ const KuratorContent = () => {
             </div>
             <div>
               <p className="text-white/60 text-sm">Tanggal Submit</p>
-              <p className="text-white font-semibold">
-                {new Date(product.tanggal).toLocaleDateString("id-ID")}
-              </p>
+              <p className="text-white font-semibold">{new Date(product.tanggal).toLocaleDateString("id-ID")}</p>
             </div>
           </div>
 
           {/* ... (Media Badges) ... */}
           <div className="flex gap-2 mb-4">
-            <div className="bg-blue-500/20 px-3 py-1 rounded-full text-blue-300 text-xs">
-              {product.photos} Foto
-            </div>
+            <div className="bg-blue-500/20 px-3 py-1 rounded-full text-blue-300 text-xs">{product.photos} Foto</div>
             {product.hasVideo && (
-              <div className="bg-green-500/20 px-3 py-1 rounded-full text-green-300 text-xs">
-                ✓ Video
-              </div>
+              <div className="bg-green-500/20 px-3 py-1 rounded-full text-green-300 text-xs">✓ Video</div>
             )}
           </div>
         </div>
@@ -824,13 +811,17 @@ const KuratorContent = () => {
 const KuratorDashboard: NextPage = () => {
   return (
     <ErrorBoundary>
-      <Suspense fallback={
-        <div className="flex flex-col min-h-screen relative text-white items-center justify-center"
-             style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%" }}>
-          <span className="loading loading-spinner loading-lg text-yellow-400"></span>
-          <p className="text-white/70 mt-4 text-lg">Memuat Dashboard Kurator...</p>
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div
+            className="flex flex-col min-h-screen relative text-white items-center justify-center"
+            style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%" }}
+          >
+            <span className="loading loading-spinner loading-lg text-yellow-400"></span>
+            <p className="text-white/70 mt-4 text-lg">Memuat Dashboard Kurator...</p>
+          </div>
+        }
+      >
         <KuratorContent />
       </Suspense>
     </ErrorBoundary>

@@ -134,7 +134,7 @@ export async function fetchFromIPFS(ipfsHash: string): Promise<IPFSMetadata | nu
 
       if (responses.ok) {
         const metadata = await responses.json();
-        
+
         // Cache successful results both in memory and localStorage
         metadataCache.set(ipfsHash, metadata);
         if (typeof window !== "undefined") {
@@ -241,17 +241,15 @@ export function getIPFSImageUrl(ipfsHash: string): string {
 export async function fetchMultipleFromIPFS(ipfsHashes: string[]): Promise<(IPFSMetadata | null)[]> {
   // Deduplicate hashes
   const uniqueHashes = [...new Set(ipfsHashes)];
-  
+
   // Process in smaller batches to avoid overwhelming the browser
   const batchSize = 5;
   const results: (IPFSMetadata | null)[] = new Array(ipfsHashes.length).fill(null);
-  
+
   for (let i = 0; i < uniqueHashes.length; i += batchSize) {
     const batch = uniqueHashes.slice(i, i + batchSize);
-    const batchResults = await Promise.all(
-      batch.map(hash => fetchFromIPFS(hash))
-    );
-    
+    const batchResults = await Promise.all(batch.map(hash => fetchFromIPFS(hash)));
+
     // Map results back to original positions
     ipfsHashes.forEach((hash, index) => {
       const batchIndex = batch.indexOf(hash);
@@ -260,6 +258,6 @@ export async function fetchMultipleFromIPFS(ipfsHashes: string[]): Promise<(IPFS
       }
     });
   }
-  
+
   return results;
 }

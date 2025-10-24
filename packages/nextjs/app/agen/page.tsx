@@ -16,13 +16,22 @@ const AgenDashboard: NextPage = () => {
   const [activeTab, setActiveTab] = useState<"pengrajin" | "produk">("pengrajin");
 
   // Use product store for real data
-  const products = useProductStore((s) => s.products);
+  const products = useProductStore(s => s.products);
 
   // Aggregate pengrajin list from products
-  const pengrajinMap: Record<string, { id: string; nama: string; desa?: string; jumlahProduk: number; status?: string }> = {};
-  products.forEach((p) => {
+  const pengrajinMap: Record<
+    string,
+    { id: string; nama: string; desa?: string; jumlahProduk: number; status?: string }
+  > = {};
+  products.forEach(p => {
     if (!pengrajinMap[p.pengrajinId]) {
-      pengrajinMap[p.pengrajinId] = { id: p.pengrajinId, nama: p.pengrajinName, desa: "-", jumlahProduk: 0, status: "aktif" };
+      pengrajinMap[p.pengrajinId] = {
+        id: p.pengrajinId,
+        nama: p.pengrajinName,
+        desa: "-",
+        jumlahProduk: 0,
+        status: "aktif",
+      };
     }
     pengrajinMap[p.pengrajinId].jumlahProduk++;
   });
@@ -30,9 +39,9 @@ const AgenDashboard: NextPage = () => {
 
   const produkList = products.slice().reverse();
 
-  const pendingProducts = products.filter((p) => p.status === "pending");
-  const approvedProducts = products.filter((p) => p.status === "approved");
-  const mintedProducts = products.filter((p) => p.status === "minted");
+  const pendingProducts = products.filter(p => p.status === "pending");
+  const approvedProducts = products.filter(p => p.status === "approved");
+  const mintedProducts = products.filter(p => p.status === "minted");
 
   const toDate = (d: any) => (d ? new Date(d) : new Date());
 
@@ -40,14 +49,17 @@ const AgenDashboard: NextPage = () => {
     .slice()
     .sort((a, b) => toDate(b.reviewedAt ?? b.submittedAt).getTime() - toDate(a.reviewedAt ?? a.submittedAt).getTime())
     .slice(0, 10)
-    .map((p) => {
+    .map(p => {
       const time = p.reviewedAt ?? p.submittedAt;
       if (p.status === "pending") {
         return { text: `${p.pengrajinName} - produk "${p.name}" menunggu verifikasi`, time };
       } else if (p.status === "approved") {
         return { text: `Produk "${p.name}" disetujui oleh ${p.reviewedBy}`, time };
       } else if (p.status === "minted") {
-        return { text: `NFT "${p.name}" berhasil di-mint (token: ${p.nftTokenId?.slice(0, 8) ?? "-"}) untuk ${p.pengrajinName}`, time };
+        return {
+          text: `NFT "${p.name}" berhasil di-mint (token: ${p.nftTokenId?.slice(0, 8) ?? "-"}) untuk ${p.pengrajinName}`,
+          time,
+        };
       } else if (p.status === "rejected") {
         return { text: `Produk "${p.name}" ditolak: ${p.rejectionReason ?? "-"}`, time };
       }
@@ -96,8 +108,8 @@ const AgenDashboard: NextPage = () => {
   return (
     <>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-        @import url('https://fonts.cdnfonts.com/css/mileast');
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+        @import url("https://fonts.cdnfonts.com/css/mileast");
       `}</style>
 
       <div
@@ -301,18 +313,18 @@ const AgenDashboard: NextPage = () => {
           <div className="grid gap-6 mb-6">
             <div className="col-span-2">
               <div className="card bg-white/10 backdrop-blur-sm shadow-lg p-4">
-                                  <h2
-                    className="text-xl font-bold mb-1"
-                    style={{
-                      fontFamily: "'Mileast', sans-serif",
-                      background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                    }}
-                  >
-                    Aktivitas Terbaru
-                  </h2>
+                <h2
+                  className="text-xl font-bold mb-1"
+                  style={{
+                    fontFamily: "'Mileast', sans-serif",
+                    background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  Aktivitas Terbaru
+                </h2>
                 <table className="table w-full">
                   <thead>
                     <tr>
@@ -463,7 +475,9 @@ const AgenDashboard: NextPage = () => {
                     </div>
                     <div>
                       <p className="text-white/60 text-sm">Tanggal Dibuat</p>
-                      <p className="text-white font-semibold">{new Date(produk.submittedAt).toLocaleDateString("id-ID")}</p>
+                      <p className="text-white font-semibold">
+                        {new Date(produk.submittedAt).toLocaleDateString("id-ID")}
+                      </p>
                     </div>
                   </div>
 

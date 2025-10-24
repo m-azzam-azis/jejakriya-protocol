@@ -7,10 +7,10 @@ import {
   ArrowTrendingUpIcon,
   BuildingLibraryIcon,
   ChartBarIcon,
+  CurrencyDollarIcon,
   DocumentDuplicateIcon,
   FunnelIcon,
-  MapPinIcon,
-  CurrencyDollarIcon, // Added for potential future use
+  MapPinIcon, // Added for potential future use
   UserGroupIcon, // Added for potential future use
 } from "@heroicons/react/24/outline";
 
@@ -22,9 +22,7 @@ import {
 
 // Improved Shimmer Placeholder with subtle animation
 const ShimmerPlaceholder = ({ className }: { className?: string }) => (
-  <div
-    className={`bg-white/10 rounded-lg overflow-hidden relative ${className}`}
-  >
+  <div className={`bg-white/10 rounded-lg overflow-hidden relative ${className}`}>
     <div
       className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"
       style={{ animation: "shimmer 1.5s infinite" }}
@@ -88,8 +86,7 @@ const EkrafDashboardPage = () => {
 
   // Gold gradient text style
   const goldGradientText = {
-    background:
-      "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+    background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     backgroundClip: "text",
@@ -97,18 +94,13 @@ const EkrafDashboardPage = () => {
 
   // Gold gradient button style
   const goldGradientButton = {
-    background:
-      "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
+    background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
     color: "#060606", // Dark text for contrast
   };
 
   // Simple SVG Bar Chart Placeholder
   const PlaceholderBarChart = () => (
-    <svg
-      viewBox="0 0 100 50"
-      className="w-full h-full text-white/30"
-      preserveAspectRatio="none"
-    >
+    <svg viewBox="0 0 100 50" className="w-full h-full text-white/30" preserveAspectRatio="none">
       {/* Bars with gold gradient */}
       <defs>
         <linearGradient id="goldBarGradient" x1="0" y1="0" x2="0" y2="1">
@@ -128,11 +120,7 @@ const EkrafDashboardPage = () => {
   );
   // Simple SVG Line Chart Placeholder
   const PlaceholderLineChart = () => (
-    <svg
-      viewBox="0 0 100 50"
-      className="w-full h-full text-white/30"
-      preserveAspectRatio="none"
-    >
+    <svg viewBox="0 0 100 50" className="w-full h-full text-white/30" preserveAspectRatio="none">
       <defs>
         <linearGradient id="goldLineGradient" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#C48A04" />
@@ -157,8 +145,7 @@ const EkrafDashboardPage = () => {
     <div
       className="flex flex-col min-h-screen relative text-white"
       style={{
-        background:
-          "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)",
+        background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)",
         fontFamily: "'Poppins', sans-serif", // Base font Poppins
       }}
     >
@@ -266,7 +253,7 @@ const EkrafDashboardPage = () => {
                     {stat.value}
                   </p>
                 )}
-                 <p className="text-xs text-white/50 mt-auto pt-2">{stat.description}</p>
+                <p className="text-xs text-white/50 mt-auto pt-2">{stat.description}</p>
               </div>
             ))}
           </section>
@@ -276,31 +263,27 @@ const EkrafDashboardPage = () => {
             {/* Chart 1: Pasar Sekunder (Example: Bar Chart) */}
             <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/10">
               <h3 className="font-aldo text-2xl mb-4 flex items-center" style={goldGradientText}>
-                 <ChartBarIcon className="h-6 w-6 mr-3 text-yellow-400"/>
-                 Volume Pasar Sekunder
+                <ChartBarIcon className="h-6 w-6 mr-3 text-yellow-400" />
+                Volume Pasar Sekunder
               </h3>
-              <div className="h-64 md:h-72"> {/* Fixed height for chart area */}
-                {loading ? (
-                  <ShimmerPlaceholder className="h-full w-full" />
-                ) : (
-                  <PlaceholderBarChart />
-                )}
+              <div className="h-64 md:h-72">
+                {" "}
+                {/* Fixed height for chart area */}
+                {loading ? <ShimmerPlaceholder className="h-full w-full" /> : <PlaceholderBarChart />}
               </div>
-                <p className="text-xs text-white/50 mt-2 text-center">Volume transaksi bulanan (simulasi)</p>
+              <p className="text-xs text-white/50 mt-2 text-center">Volume transaksi bulanan (simulasi)</p>
             </div>
 
             {/* Chart 2: Aktivitas Kurator (Example: Line Chart) */}
             <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/10">
               <h3 className="font-aldo text-2xl mb-4 flex items-center" style={goldGradientText}>
-                <UserGroupIcon className="h-6 w-6 mr-3 text-yellow-400"/>
+                <UserGroupIcon className="h-6 w-6 mr-3 text-yellow-400" />
                 Aktivitas Verifikasi
               </h3>
-              <div className="h-64 md:h-72"> {/* Fixed height for chart area */}
-                {loading ? (
-                  <ShimmerPlaceholder className="h-full w-full" />
-                ) : (
-                  <PlaceholderLineChart />
-                )}
+              <div className="h-64 md:h-72">
+                {" "}
+                {/* Fixed height for chart area */}
+                {loading ? <ShimmerPlaceholder className="h-full w-full" /> : <PlaceholderLineChart />}
               </div>
               <p className="text-xs text-white/50 mt-2 text-center">Jumlah verifikasi per hari (simulasi)</p>
             </div>

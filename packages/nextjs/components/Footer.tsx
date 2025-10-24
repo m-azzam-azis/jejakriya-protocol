@@ -14,13 +14,13 @@ export const Footer = () => {
   const { targetNetwork } = useTargetNetwork();
   const isLocalNetwork = targetNetwork.id === hardhat.id;
 
-return (
-  <div className="min-h-0">
-    <footer style={{ backgroundColor: "#3D2C88" }} className="w-full text-white py-3">
-      <div className="max-w-7xl mx-auto text-center">
-        <span className="font-semibold">Jejakriya 2025</span>
-      </div>
-    </footer>
-  </div>
-);
+  return (
+    <div className="min-h-0">
+      <footer style={{ backgroundColor: "#3D2C88" }} className="w-full text-white py-3">
+        <div className="max-w-7xl mx-auto text-center">
+          <span className="font-semibold">Jejakriya 2025</span>
+        </div>
+      </footer>
+    </div>
+  );
 };
