@@ -18,7 +18,8 @@ const GlobalStyles = () => (
     @import url("https://fonts.cdnfonts.com/css/mileast");
 
     @keyframes pulse {
-      0%, 100% {
+      0%,
+      100% {
         opacity: 1;
       }
       50% {
@@ -70,70 +71,70 @@ const nftAssets = [
   {
     id: 1,
     name: "Keris Pusaka Naga Sasra",
-    image: "https://placehold.co/100x100/3D2C88/F2C14D?text=Kriya1",
+    image: "keris.png",
     curator: "Ibu Wati",
     collateralValue: 5000,
   },
   {
     id: 2,
     name: "Batik Tulis Sido Asih",
-    image: "https://placehold.co/100x100/3D2C88/F2C14D?text=Kriya2",
+    image: "sidhoasih.png",
     curator: "Kriya",
     collateralValue: 1200,
   },
   {
     id: 3,
     name: "Wayang Golek Cepot",
-    image: "https://placehold.co/100x100/3D2C88/F2C14D?text=Kriya3",
+    image: "cepot.png",
     curator: "Karsa",
     collateralValue: 850,
   },
   {
     id: 4,
     name: "Ukiran Asmat 'Wuramon'",
-    image: "https://placehold.co/100x100/3D2C88/F2C14D?text=Kriya4",
+    image: "asmat.png",
     curator: "Ibu Wati",
     collateralValue: 3100,
   },
   {
     id: 5,
     name: "Songket Palembang 'Lepan'",
-    image: "https://placehold.co/100x100/3D2C88/F2C14D?text=Kriya5",
+    image: "songket.png",
     curator: "Kriya",
     collateralValue: 2200,
   },
   {
     id: 6,
     name: "Topeng Cirebon 'Panji'",
-    image: "https://placehold.co/100x100/3D2C88/F2C14D?text=Kriya6",
+    image: "panji.png",
     curator: "Karsa",
     collateralValue: 600,
   },
   {
     id: 7,
     name: "Tenun Ikat Sumba",
-    image: "https://placehold.co/100x100/3D2C88/F2C14D?text=Kriya7",
+    image: "ikatsumba.png",
     curator: "Kriya",
     collateralValue: 1800,
   },
   {
     id: 8,
     name: "Patung Gading Gajah",
-    image: "https://placehold.co/100x100/3D2C88/F2C14D?text=Kriya8",
+    image: "gading.png",
     curator: "Ibu Wati",
     collateralValue: 7500,
   },
   {
     id: 9,
     name: "Batik Parang Rusak",
-    image: "https://placehold.co/100x100/3D2C88/F2C14D?text=Kriya9",
+    image: "parangrusak.png",
     curator: "Karsa",
     collateralValue: 950,
   },
   {
     id: 10,
     name: "Noken Papua 'Anggrek'",
-    image: "https://placehold.co/100x100/3D2C88/F2C14D?text=Kriya10",
+    image: "noken.png",
     curator: "Kriya",
     collateralValue: 300,
   },
@@ -141,9 +142,9 @@ const nftAssets = [
 
 // --- Data untuk Filter Koleksi ---
 const collectionFilters = [
-  { name: "Ibu Wati", by: "Wati LABS", value: "Ibu Wati", image: "/wati.jpg", floorPrice: 1.27, volume: 41.8 },
-  { name: "Kriya Nusantara", by: "Kriya LABS", value: "Kriya", image: "/xbow.jpg", floorPrice: 0.8, volume: 20.1 },
-  { name: "Cipta Karsa", by: "Karsa LABS", value: "Karsa", image: "/hog.jpg", floorPrice: 30.5, volume: 1500.0 },
+  { name: "Ibu Wati", by: "Wati LABS", value: "Ibu Wati", image: "keris.png", floorPrice: 1.27, volume: 41.8 },
+  { name: "Kriya Nusantara", by: "Kriya LABS", value: "Kriya", image: "noken.png", floorPrice: 0.8, volume: 20.1 },
+  { name: "Cipta Karsa", by: "Karsa LABS", value: "Karsa", image: "cepot.png", floorPrice: 30.5, volume: 1500.0 },
 ];
 
 const LendingPage = () => {
@@ -210,10 +211,7 @@ const LendingPage = () => {
                     <strong>Nilai:</strong> {asset.collateralValue.toLocaleString()} USDC
                   </p>
                 </div>
-                <button 
-                  className="w-full mt-4 py-2 rounded-lg border-0 font-bold"
-                  style={goldGradientButton}
-                >
+                <button className="w-full mt-4 py-2 rounded-lg border-0 font-bold" style={goldGradientButton}>
                   Ajukan Pinjaman
                 </button>
               </div>
@@ -254,10 +252,7 @@ const LendingPage = () => {
             <TableRowShimmer />
           ) : (
             filteredAssets.map(asset => (
-              <tr
-                key={asset.id}
-                className="border-b border-purple-900/30 hover:bg-purple-900/20 transition-colors"
-              >
+              <tr key={asset.id} className="border-b border-purple-900/30 hover:bg-purple-900/20 transition-colors">
                 <td className="p-4">
                   <input type="checkbox" className="bg-transparent border-white/30 rounded" />
                 </td>
@@ -276,10 +271,7 @@ const LendingPage = () => {
                 <td className="p-4 text-white/70 whitespace-nowrap">{asset.curator}</td>
                 <td className="p-4 font-semibold whitespace-nowrap">{asset.collateralValue.toLocaleString()} USDC</td>
                 <td className="p-4">
-                  <button 
-                    className="w-full py-2 rounded-lg border-0 font-bold text-sm"
-                    style={goldGradientButton}
-                  >
+                  <button className="w-full py-2 rounded-lg border-0 font-bold text-sm" style={goldGradientButton}>
                     Ajukan Pinjaman
                   </button>
                 </td>
@@ -326,10 +318,7 @@ const LendingPage = () => {
             </div>
           </div>
 
-          <button 
-            className="border-0 font-bold px-6 py-3 rounded-lg flex items-center"
-            style={goldGradientButton}
-          >
+          <button className="border-0 font-bold px-6 py-3 rounded-lg flex items-center" style={goldGradientButton}>
             VIEW COLLECTION <ArrowRightIcon className="h-5 w-5 ml-2" />
           </button>
         </div>
@@ -430,7 +419,7 @@ const LendingPage = () => {
                 </div>
               </section>
             </div>
-            
+
             {/* Konten Aset (Full-width untuk Tabel, Full-width dengan padding untuk Grid) */}
             <div className="w-full">
               {viewMode === "list" ? (
