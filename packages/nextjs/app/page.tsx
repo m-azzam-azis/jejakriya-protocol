@@ -39,59 +39,60 @@ const Home: NextPage = () => {
             opacity: 0.7,
           }}
         />
-{/* Hero Section */}
-<div className="w-full min-h-screen flex items-center justify-center px-5">
-  <div className="max-w-6xl mx-auto text-center">
-    <div className="flex items-center justify-center mb-6">
-      <SparklesIcon className="h-16 w-16 text-white mr-4" />
-      <h1
-        className="text-6xl md:text-7xl font-bold"
-        style={{
-          fontFamily: "'Mileast', sans-serif",
-          background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-        }}
-      >
-        JejakKriya
-      </h1>
-    </div>
+        {/* Hero Section */}
+        <div className="w-full min-h-screen flex items-center justify-center px-5">
+          <div className="max-w-6xl mx-auto text-center">
+            <div className="flex items-center justify-center mb-6">
+              <SparklesIcon className="h-16 w-16 text-white mr-4" />
+              <h1
+                className="text-6xl md:text-7xl font-bold"
+                style={{
+                  fontFamily: "'Mileast', sans-serif",
+                  background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                JejakKriya
+              </h1>
+            </div>
 
-    <p
-      className="text-3xl md:text-4xl font-semibold text-white mb-6"
-      style={{ fontFamily: "Poppins', sans-serif" }}
-    >
-      Protokol Fundamental untuk Aset Kreatif Indonesia
-    </p>
+            <p
+              className="text-3xl md:text-4xl font-semibold text-white mb-6"
+              style={{ fontFamily: "Poppins', sans-serif" }}
+            >
+              Protokol Fundamental untuk Aset Kreatif Indonesia
+            </p>
 
-    <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-12">
-  Membuka nilai ekonomi karya kriya, seni, dan produk kreatif melalui verifikasi terdesentralisasi, pembiayaan mikro DeFi, dan data transparan untuk pembuat kebijakan.
-    </p>
+            <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-12">
+              Membuka nilai ekonomi karya kriya, seni, dan produk kreatif melalui verifikasi terdesentralisasi,
+              pembiayaan mikro DeFi, dan data transparan untuk pembuat kebijakan.
+            </p>
 
-    {/* Action Buttons */}
-    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-      <Link
-        href="/agen"
-        className="inline-block px-8 py-4 rounded-lg font-bold text-lg transition-all hover:scale-105"
-        style={{
-          background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
-          color: "#060606",
-        }}
-      >
-        Gabung Ekosistem
-        <ArrowRightIcon className="h-5 w-5 inline-block ml-2" />
-      </Link>
-      
-      <button
-        onClick={() => document.getElementById('tiga-pilar')?.scrollIntoView({ behavior: 'smooth' })}
-        className="inline-block px-8 py-4 rounded-lg font-bold text-lg transition-all hover:scale-105 border-2 border-[#E9A507] text-white hover:bg-[#E9A507] hover:text-black"
-      >
-        Pelajari Selengkapnya
-      </button>
-    </div>
-  </div>
-</div>
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                href="/agen"
+                className="inline-block px-8 py-4 rounded-lg font-bold text-lg transition-all hover:scale-105"
+                style={{
+                  background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
+                  color: "#060606",
+                }}
+              >
+                Gabung Ekosistem
+                <ArrowRightIcon className="h-5 w-5 inline-block ml-2" />
+              </Link>
+
+              <button
+                onClick={() => document.getElementById("tiga-pilar")?.scrollIntoView({ behavior: "smooth" })}
+                className="inline-block px-8 py-4 rounded-lg font-bold text-lg transition-all hover:scale-105 border-2 border-[#E9A507] text-white hover:bg-[#E9A507] hover:text-black"
+              >
+                Pelajari Selengkapnya
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Three Pillars Section */}
         <div id="tiga-pilar" className="w-full px-8 py-16">

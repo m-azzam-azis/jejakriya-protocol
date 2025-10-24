@@ -131,30 +131,32 @@ const AgenDashboard: NextPage = () => {
             opacity: 0.7,
           }}
         />
-
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-8">
-          {/* Header */}
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-white/10">
-            <div className="flex items-center gap-4">
-              <UserGroupIcon className="h-12 w-12" style={{ color: "#E9A507" }} />
-              <div>
-                <h1
-                  className="text-4xl font-bold mb-2"
-                  style={{
-                    fontFamily: "'Mileast', sans-serif",
-                    background:
-                      "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  Portal Agen Digital
-                </h1>
-                <p className="text-white/80 text-lg">Selamat datang, Doni! Kelola pengrajin dan produk dari sini.</p>
-              </div>
-            </div>
-          </div>
+          {/* Header - Diubah menjadi centered seperti kurator */}
+<div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-8 pt-[150px]">
+  <div className="text-center mb-12">
+    <div className="flex items-center justify-center gap-4 mb-6">
+      <UserGroupIcon className="h-16 w-16" style={{ color: "#E9A507" }} />
+      <h1
+        className="text-5xl md:text-6xl font-bold"
+        style={{
+          fontFamily: "'Mileast', sans-serif",
+          background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}
+      >
+        Portal Agen Digital
+      </h1>
+    </div>
+    
+    <p 
+      className="text-xl text-white/80 max-w-2xl mx-auto text-semibold mb-6"
+      style={{ fontFamily: "'Poppins', sans-serif" }}
+    >
+      Selamat datang, Doni! Kelola pengrajin dan produk dari sini.
+    </p>
+  </div>
 
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

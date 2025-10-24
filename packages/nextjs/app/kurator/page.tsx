@@ -430,6 +430,9 @@ const KuratorContent = () => {
 
   return (
     <>
+    <style jsx global>{`
+      @import url('https://fonts.cdnfonts.com/css/mileast');
+    `}</style>
       <div
         className="flex items-center flex-col min-h-screen relative"
         style={{
@@ -451,39 +454,40 @@ const KuratorContent = () => {
           }}
         />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-8">
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-white/10">
-            {/* ... (Isi Header) ... */}
-            <div className="flex items-center gap-4">
-              <ShieldCheckIcon className="h-12 w-12" style={{ color: "#E9A507" }} />
-              <div>
-                <h1
-                  className="text-4xl font-bold mb-2"
-                  style={{
-                    fontFamily: "'Mileast', sans-serif",
-                    background:
-                      "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  Portal Kurator
-                </h1>
-                <p className="text-white/80 text-lg">
-                  Selamat datang, Ibu Wati! Verifikasi produk untuk memastikan kualitas dan keaslian.
-                </p>
-              </div>
-            </div>
+        {/* Header Portal Kurator - Diubah menjadi tengah */}
+<div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-8 pt-[150px]">
+  <div className="text-center mb-12">
+    <div className="flex items-center justify-center gap-4 mb-6">
+      <ShieldCheckIcon className="h-16 w-16" style={{ color: "#E9A507" }} />
+      <h1
+        className="text-5xl md:text-6xl font-bold"
+        style={{
+          fontFamily: "'Mileast', sans-serif",
+          background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}
+      >
+        Portal Kurator
+      </h1>
+    </div>
+    
+    <p 
+      className="text-xl text-white/80 max-w-2xl font-semibold mx-auto mb-6"
+      style={{ fontFamily: "'Poppins', sans-serif" }}
+    >
+      Selamat datang, Ibu Wati! Verifikasi produk untuk memastikan kualitas dan keaslian.
+    </p>
 
-            <div className="flex items-center gap-2 mt-4 bg-white/5 rounded-lg p-4 border border-white/10">
-              <p className="text-white font-semibold">Wallet Kurator:</p>
-              <Address address={connectedAddress} />
-              {!connectedAddress && (
-                <p className="text-yellow-400 text-sm ml-auto">⚠️ Silakan connect wallet untuk approve produk</p>
-              )}
-            </div>
-          </div>
+    <div className="flex items-center justify-center gap-2 bg-white/5 rounded-lg p-4 border border-white/10 max-w-md mx-auto">
+      <p className="text-white font-semibold" style={{ fontFamily: "'Mileast', sans-serif" }}>Wallet Kurator:</p>
+      <Address address={connectedAddress} />
+      {!connectedAddress && (
+        <p className="text-yellow-400 text-sm ml-auto">⚠️ Silakan connect wallet untuk approve produk</p>
+      )}
+    </div>
+  </div>
 
           {/* ... (Stats & Tabs tidak berubah) ... */}
           <div className="grid md:grid-cols-3 gap-6 mb-8">

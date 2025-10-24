@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -84,13 +84,57 @@ export const Header = () => {
   const burgerMenuRef = useRef<HTMLDetailsElement>(null);
   const router = useRouter();
 
+  // State untuk mengontrol show/hide header
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
   useOutsideClick(burgerMenuRef, () => {
     burgerMenuRef?.current?.removeAttribute("open");
   });
 
+  // Effect untuk handle scroll behavior
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < 100) {
+        // Di atas halaman, selalu tampilkan header
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scroll ke bawah - sembunyikan header
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        // Scroll ke atas - tampilkan header
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    // Throttle scroll event untuk performance
+    let ticking = false;
+    const throttledScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", throttledScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", throttledScroll);
+    };
+  }, [lastScrollY]);
+
   return (
     <div
-      className="sticky lg:static top-0 navbar min-h-[96px] shrink-0 z-20 shadow-lg px-4 sm:px-6"
+      className={`fixed top-0 left-0 right-0 navbar min-h-[96px] shrink-0 z-50 shadow-lg px-4 sm:px-6 transition-transform duration-300 ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
       style={{
         fontFamily: "'Poppins', sans-serif",
         backgroundColor: "#3D2C88",
