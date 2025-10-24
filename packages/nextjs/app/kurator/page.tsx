@@ -364,13 +364,6 @@ const KuratorContent = () => {
             </div>
           </div>
 
-          {/* ... (Media Badges) ... */}
-          <div className="flex gap-2 mb-4">
-            <div className="bg-blue-500/20 px-3 py-1 rounded-full text-blue-300 text-xs">{product.photos} Foto</div>
-            {product.hasVideo && (
-              <div className="bg-green-500/20 px-3 py-1 rounded-full text-green-300 text-xs">✓ Video</div>
-            )}
-          </div>
         </div>
 
         {/* --- ACTIONS (TOMBOL BARU) --- */}
