@@ -112,7 +112,7 @@ const PemilikDashboard: NextPage = () => {
       `}</style>
 
       <div
-        className="min-h-screen relative"
+        className="min-h-screen relative pt-[100px]"
         style={{
           background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)",
           fontFamily: "'Poppins', sans-serif",
