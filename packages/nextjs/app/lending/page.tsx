@@ -11,6 +11,23 @@ import {
   Squares2X2Icon,
 } from "@heroicons/react/24/outline";
 
+// Global styles dipindah ke komponen Style
+const GlobalStyles = () => (
+  <style jsx global>{`
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+    @import url("https://fonts.cdnfonts.com/css/mileast");
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+  `}</style>
+);
+
 // Komponen Shimmer Placeholder
 const ShimmerPlaceholder = ({ className }: { className?: string }) => (
   <div className={`animate-pulse bg-white/10 rounded-md ${className}`} />
@@ -122,7 +139,7 @@ const nftAssets = [
   },
 ];
 
-// --- Data untuk Filter Koleksi (disesuaikan untuk Hero Section) ---
+// --- Data untuk Filter Koleksi ---
 const collectionFilters = [
   { name: "Ibu Wati", by: "Wati LABS", value: "Ibu Wati", image: "/wati.jpg", floorPrice: 1.27, volume: 41.8 },
   { name: "Kriya Nusantara", by: "Kriya LABS", value: "Kriya", image: "/xbow.jpg", floorPrice: 0.8, volume: 20.1 },
@@ -131,8 +148,8 @@ const collectionFilters = [
 
 const LendingPage = () => {
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState("list"); // 'list' atau 'grid'
-  const [selectedCollection, setSelectedCollection] = useState(collectionFilters[0].value); // Default koleksi pertama
+  const [viewMode, setViewMode] = useState("list");
+  const [selectedCollection, setSelectedCollection] = useState(collectionFilters[0].value);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1500);
@@ -163,7 +180,7 @@ const LendingPage = () => {
         ? Array.from({ length: 9 }).map((_, i) => (
             <div
               key={i}
-              className="bg-purple-950/20 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-purple-800/50" // WARNA UNGU
+              className="bg-purple-950/20 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-purple-800/50"
             >
               <ShimmerPlaceholder className="h-48 w-full rounded-lg" />
               <ShimmerPlaceholder className="h-7 w-3/4 mt-4" />
@@ -174,13 +191,13 @@ const LendingPage = () => {
         : filteredAssets.map(asset => (
             <div
               key={asset.id}
-              className="bg-purple-950/20 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border border-purple-800/50 transition-all duration-300 hover:bg-purple-900/30 hover:border-purple-700" // WARNA UNGU
+              className="bg-purple-950/20 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border border-purple-800/50 transition-all duration-300 hover:bg-purple-900/30 hover:border-purple-700"
             >
               <div className="relative h-48 w-full">
                 <img src={asset.image} alt={asset.name} className="absolute inset-0 w-full h-full object-cover" />
               </div>
               <div className="p-4">
-                <h3 className="font-aldo text-2xl truncate" style={goldGradientText}>
+                <h3 className="text-2xl truncate" style={goldGradientText}>
                   {asset.name}
                 </h3>
                 <div className="text-sm text-white/70 mt-2 space-y-1">
@@ -193,7 +210,10 @@ const LendingPage = () => {
                     <strong>Nilai:</strong> {asset.collateralValue.toLocaleString()} USDC
                   </p>
                 </div>
-                <button className="btn btn-sm w-full mt-4 border-0 font-bold" style={goldGradientButton}>
+                <button 
+                  className="w-full mt-4 py-2 rounded-lg border-0 font-bold"
+                  style={goldGradientButton}
+                >
                   Ajukan Pinjaman
                 </button>
               </div>
@@ -205,16 +225,11 @@ const LendingPage = () => {
   // --- Komponen Tabel (List Aset) ---
   const AssetTable = () => (
     <div className="overflow-x-auto bg-purple-950/20 backdrop-blur-sm border-y border-purple-800/50 shadow-xl">
-      {" "}
-      {/* WARNA UNGU & border-y (Ini sekarang full-width) */}
-      <table className="table w-full">
-        {/* DIHAPUS: max-w-7xl mx-auto & spasi */}
-        {/* Head */}
+      <table className="w-full">
         <thead className="border-b border-purple-800/50">
-          {" "}
           <tr>
             <th className="p-4 w-12">
-              <input type="checkbox" className="checkbox bg-transparent border-white/30" />
+              <input type="checkbox" className="bg-transparent border-white/30 rounded" />
             </th>
             <th className="text-left p-4 text-xs text-white/50 uppercase tracking-wider">
               <div className="flex items-center gap-1 cursor-pointer">
@@ -231,7 +246,7 @@ const LendingPage = () => {
                 Nilai Kolateral <ChevronDownIcon className="h-4 w-4" />
               </div>
             </th>
-            <th className="w-48"></th> {/* Kolom untuk Tombol */}
+            <th className="w-48"></th>
           </tr>
         </thead>
         <tbody>
@@ -241,10 +256,10 @@ const LendingPage = () => {
             filteredAssets.map(asset => (
               <tr
                 key={asset.id}
-                className="border-b border-purple-900/30 hover:bg-purple-900/20 transition-colors" // WARNA UNGU
+                className="border-b border-purple-900/30 hover:bg-purple-900/20 transition-colors"
               >
                 <td className="p-4">
-                  <input type="checkbox" className="checkbox bg-transparent border-white/30" />
+                  <input type="checkbox" className="bg-transparent border-white/30 rounded" />
                 </td>
                 <td className="p-4">
                   <div className="flex items-center gap-3">
@@ -261,7 +276,10 @@ const LendingPage = () => {
                 <td className="p-4 text-white/70 whitespace-nowrap">{asset.curator}</td>
                 <td className="p-4 font-semibold whitespace-nowrap">{asset.collateralValue.toLocaleString()} USDC</td>
                 <td className="p-4">
-                  <button className="btn btn-sm w-full border-0 font-bold" style={goldGradientButton}>
+                  <button 
+                    className="w-full py-2 rounded-lg border-0 font-bold text-sm"
+                    style={goldGradientButton}
+                  >
                     Ajukan Pinjaman
                   </button>
                 </td>
@@ -292,7 +310,9 @@ const LendingPage = () => {
 
         {/* Konten Detail di Pojok Kiri Bawah */}
         <div className="absolute bottom-6 left-6 text-white z-10 p-4 bg-black/60 rounded-lg backdrop-blur-sm max-w-sm md:max-w-md">
-          <h1 className="text-3xl md:text-4xl font-aldo mb-2">{currentCollection.name}</h1>
+          <h1 className="text-3xl md:text-4xl mb-2" style={goldGradientText}>
+            {currentCollection.name}
+          </h1>
           <p className="text-white/70 text-lg mb-4">By {currentCollection.by}</p>
 
           <div className="flex gap-6 mb-4">
@@ -306,13 +326,16 @@ const LendingPage = () => {
             </div>
           </div>
 
-          <button className="btn border-0 font-bold px-6" style={goldGradientButton}>
+          <button 
+            className="border-0 font-bold px-6 py-3 rounded-lg flex items-center"
+            style={goldGradientButton}
+          >
             VIEW COLLECTION <ArrowRightIcon className="h-5 w-5 ml-2" />
           </button>
         </div>
 
         {/* Thumbnail Carousel untuk Mengganti Gambar Utama */}
-        <div className="absolute bottom-6 right-6 z-10 flex gap-3 overflow-x-auto py-2 pr-2 scrollbar-hide">
+        <div className="absolute bottom-6 right-6 z-10 flex gap-3 overflow-x-auto py-2 pr-2">
           {collectionFilters.map(filter => (
             <button
               key={filter.value}
@@ -338,93 +361,90 @@ const LendingPage = () => {
   };
 
   return (
-    <div
-      className="flex flex-col min-h-screen relative text-white"
-      style={{
-        background: "#0D0D0D",
-        fontFamily: "'Poppins', sans-serif",
-      }}
-    >
-      {/* Overlay */}
+    <>
+      <GlobalStyles />
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 h-full"
+        className="flex flex-col min-h-screen relative text-white"
         style={{
-          backgroundImage: "url('/Overlay.png')",
-          backgroundRepeat: "repeat-y",
-          backgroundSize: "100% auto",
-          zIndex: 0,
-          opacity: 0.7,
+          background: "#0D0D0D",
+          fontFamily: "'Poppins', sans-serif",
         }}
-      />
+      >
+        {/* Overlay */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full"
+          style={{
+            backgroundImage: "url('/Overlay.png')",
+            backgroundRepeat: "repeat-y",
+            backgroundSize: "100% auto",
+            zIndex: 0,
+            opacity: 0.7,
+          }}
+        />
 
-      <div className="relative z-10 w-full pt-[120px]">
-        {/* --- HERO SECTION (Full-width dengan padding) --- */}
-        <div className="w-full p-4 md:p-6">
-          {" "}
-          {/* DIHAPUS: max-w-7xl mx-auto */}
-          <HeroCollectionSection />
-        </div>
+        <div className="relative z-10 w-full pt-[120px]">
+          {/* --- HERO SECTION (Full-width dengan padding) --- */}
+          <div className="w-full p-4 md:p-6">
+            <HeroCollectionSection />
+          </div>
 
-        {/* ===== MAIN CONTENT ===== */}
-        <main className="w-full">
-          {" "}
-          {/* Hapus max-w-7xl dari sini */}
-          {/* --- Header Konten & Search (Full-width dengan padding) --- */}
-          <div className="w-full p-4 md:p-6 pt-0">
-            {" "}
-            {/* DIHAPUS: max-w-7xl mx-auto */}
-            <section className="flex-grow w-full">
-              {/* Header Konten (View Toggler) - DIUBAH ALIGNMENT KE KIRI */}
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-                <h2 className="font-aldo text-3xl" style={goldGradientText}>
-                  Galeri Aset Jaminan
-                </h2>
-                <div className="flex items-center gap-2 p-1 bg-white/5 border border-white/10 rounded-lg">
-                  <button
-                    className={`btn btn-sm btn-ghost ${
-                      viewMode === "list" ? "text-yellow-400" : "text-white/50"
-                    } hover:text-yellow-400`}
-                    onClick={() => setViewMode("list")}
-                  >
-                    <Bars3Icon className="h-5 w-5" />
-                  </button>
-                  <button
-                    className={`btn btn-sm btn-ghost ${
-                      viewMode === "grid" ? "text-yellow-400" : "text-white/50"
-                    } hover:text-yellow-400`}
-                    onClick={() => setViewMode("grid")}
-                  >
-                    <Squares2X2Icon className="h-5 w-5" />
-                  </button>
+          {/* ===== MAIN CONTENT ===== */}
+          <main className="w-full">
+            {/* --- Header Konten & Search (Full-width dengan padding) --- */}
+            <div className="w-full p-4 md:p-6 pt-0">
+              <section className="flex-grow w-full">
+                {/* Header Konten (View Toggler) */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                  <h2 className="text-3xl" style={goldGradientText}>
+                    Galeri Aset Jaminan
+                  </h2>
+                  <div className="flex items-center gap-2 p-1 bg-white/5 border border-white/10 rounded-lg">
+                    <button
+                      className={`p-2 rounded ${
+                        viewMode === "list" ? "text-yellow-400" : "text-white/50"
+                      } hover:text-yellow-400`}
+                      onClick={() => setViewMode("list")}
+                    >
+                      <Bars3Icon className="h-5 w-5" />
+                    </button>
+                    <button
+                      className={`p-2 rounded ${
+                        viewMode === "grid" ? "text-yellow-400" : "text-white/50"
+                      } hover:text-yellow-400`}
+                      onClick={() => setViewMode("grid")}
+                    >
+                      <Squares2X2Icon className="h-5 w-5" />
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              {/* --- SEARCH BAR DI BAWAH JUDUL "Galeri Aset Jaminan" --- */}
-              <div className="relative mb-6">
-                <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
-                <input
-                  type="text"
-                  placeholder="Cari aset di galeri ini..."
-                  className="input bg-white/5 border-white/20 w-full pl-10 rounded-lg focus:border-yellow-400 focus:ring-yellow-400"
-                />
-              </div>
-            </section>
-          </div>
-          {/* Konten Aset (Full-width untuk Tabel, Full-width dengan padding untuk Grid) */}
-          <div className="w-full">
-            {viewMode === "list" ? (
-              <AssetTable /> // AssetTable akan full-width
-            ) : (
-              // AssetGrid juga full-width tapi diberi padding
-              <div className="w-full p-4 md:p-6 pt-0">
-                <AssetGrid />
-              </div>
-            )}
-          </div>
-        </main>
+                {/* --- SEARCH BAR DI BAWAH JUDUL "Galeri Aset Jaminan" --- */}
+                <div className="relative mb-6">
+                  <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
+                  <input
+                    type="text"
+                    placeholder="Cari aset di galeri ini..."
+                    className="bg-white/5 border border-white/20 w-full pl-10 p-3 rounded-lg focus:border-yellow-400 focus:ring-yellow-400"
+                  />
+                </div>
+              </section>
+            </div>
+            
+            {/* Konten Aset (Full-width untuk Tabel, Full-width dengan padding untuk Grid) */}
+            <div className="w-full">
+              {viewMode === "list" ? (
+                <AssetTable />
+              ) : (
+                <div className="w-full p-4 md:p-6 pt-0">
+                  <AssetGrid />
+                </div>
+              )}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

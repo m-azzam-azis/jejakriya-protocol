@@ -109,6 +109,8 @@ const PemilikDashboard: NextPage = () => {
     <>
       <style jsx global>{`
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+        @import url("https://fonts.cdnfonts.com/css/mileast");
+
       `}</style>
 
       <div
@@ -136,18 +138,6 @@ const PemilikDashboard: NextPage = () => {
           <div className="bg-white/5 backdrop-blur-sm border-b border-white/10 px-6 py-4">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
               <div className="flex items-center gap-8">
-                <Link href="/" className="flex items-center gap-2">
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xl"
-                    style={{
-                      background: "linear-gradient(135deg, #C48A04 0%, #E9A507 100%)",
-                      color: "#060606",
-                    }}
-                  >
-                    JK
-                  </div>
-                </Link>
-
                 <div className="flex gap-2">
                   <button
                     className="px-6 py-2 rounded-lg font-semibold text-black"
@@ -203,7 +193,7 @@ const PemilikDashboard: NextPage = () => {
                 <h1
                   className="text-5xl font-bold mb-4"
                   style={{
-                    fontFamily: "'Aldo', sans-serif",
+                    fontFamily: "'Mileast', sans-serif",
                     background:
                       "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
                     WebkitBackgroundClip: "text",
@@ -211,7 +201,7 @@ const PemilikDashboard: NextPage = () => {
                     backgroundClip: "text",
                   }}
                 >
-                  RECENT COLLECTIONS
+                  Recent Collection
                 </h1>
                 <div className="flex items-center gap-2">
                   <Address address={connectedAddress} />
@@ -318,14 +308,14 @@ const PemilikDashboard: NextPage = () => {
               <h2
                 className="text-4xl font-bold mb-6"
                 style={{
-                  fontFamily: "'Aldo', sans-serif",
+                  fontFamily: "'Mileast', sans-serif",
                   background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                 }}
               >
-                HISTORY
+                History
               </h2>
 
               <div className="flex gap-2 mb-6">

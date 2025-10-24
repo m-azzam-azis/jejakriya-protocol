@@ -16,33 +16,35 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 
-// Global styles (Mengganti Poppins dengan Mileast)
-<style jsx global>{`
-  @import url("https://fonts.cdnfonts.com/css/mileast");
-  @import url("https://fonts.cdnfonts.com/css/aldo");
-`}</style>;
+// Global styles dipindah ke komponen Style
+const GlobalStyles = () => (
+  <style jsx global>{`
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+    @import url("https://fonts.cdnfonts.com/css/mileast");
+    
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+  `}</style>
+);
 
-// Shimmer Placeholder (tidak berubah)
+// Shimmer Placeholder
 const ShimmerPlaceholder = ({ className }: { className?: string }) => (
-  <div className={`bg-white/10 rounded-lg overflow-hidden relative ${className}`}>
+  <div
+    className={`bg-white/10 rounded-lg overflow-hidden relative ${className}`}
+  >
     <div
       className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"
-      style={{ animation: "shimmer 1.5s infinite" }}
     />
-    <style jsx>{`
-      @keyframes shimmer {
-        0% {
-          transform: translateX(-100%);
-        }
-        100% {
-          transform: translateX(100%);
-        }
-      }
-    `}</style>
   </div>
 );
 
-// --- Komponen Modal ---
+// Komponen Modal
 const DashboardModal = ({
   isOpen,
   onClose,
@@ -56,9 +58,9 @@ const DashboardModal = ({
 }) => {
   if (!isOpen) return null;
 
-  // Gold gradient text style
   const goldGradientText = {
-    background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+    background:
+      "linear-gradient(90deg, #C48A04 0%, #E9A007 25%, #F2C14D 50%, #E9A007 75%, #C48A04 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     backgroundClip: "text",
@@ -71,17 +73,20 @@ const DashboardModal = ({
     >
       <div
         className="bg-gradient-to-br from-[#0D0D0D] via-[#1a1a1a] to-[#0D0D0D] border border-white/20 rounded-2xl shadow-xl w-full max-w-2xl"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header Modal */}
         <div className="flex items-center justify-between p-5 border-b border-white/10">
           <h3
-            className="font-aldo text-2xl" // Header modal tetap pakai Aldo
-            style={goldGradientText}
+            className="text-2xl"
+            style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
           >
             {title}
           </h3>
-          <button onClick={onClose} className="text-white/50 hover:text-yellow-400 transition-colors">
+          <button
+            onClick={onClose}
+            className="text-white/50 hover:text-yellow-400 transition-colors"
+          >
             <XCircleIcon className="h-7 w-7" />
           </button>
         </div>
@@ -92,7 +97,6 @@ const DashboardModal = ({
     </div>
   );
 };
-// --- Akhir Komponen Modal ---
 
 const EkrafDashboardPage = () => {
   const [loading, setLoading] = useState(true);
@@ -105,9 +109,11 @@ const EkrafDashboardPage = () => {
 
   const [isCuratorModalOpen, setIsCuratorModalOpen] = useState(false);
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -120,14 +126,14 @@ const EkrafDashboardPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Data Hardcoded (tidak berubah)
+  // Data Hardcoded
   const totalAssets = 15780;
   const provincesCovered = 28;
   const monthlyGrowth = 8.5;
   const totalValueLocked = 12500000;
   const activeCurators = 52;
 
-  // Stats Cards (tidak berubah)
+  // Stats Cards
   const statsCards = [
     {
       title: "Total Aset Terverifikasi",
@@ -161,41 +167,99 @@ const EkrafDashboardPage = () => {
     },
   ];
 
-  // Style gradients (tidak berubah)
+  // Style gradients
   const goldGradientText = {
-    background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+    background:
+      "linear-gradient(90deg, #C48A04 0%, #E9A007 25%, #F2C14D 50%, #E9A007 75%, #C48A04 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     backgroundClip: "text",
   };
 
   const goldGradientButton = {
-    background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)",
+    background:
+      "linear-gradient(90deg, #C48A04 0%, #E9A007 50%, #C48A04 100%)",
     color: "#060606",
   };
 
-  // --- Placeholder Charts (tidak berubah) ---
-
+  // Placeholder Charts
   const PlaceholderBarChart = () => (
-    <svg viewBox="0 0 100 50" className="w-full h-full text-white/30" preserveAspectRatio="none">
+    <svg
+      viewBox="0 0 100 50"
+      className="w-full h-full text-white/30"
+      preserveAspectRatio="none"
+    >
       <defs>
         <linearGradient id="goldBarGradient" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#F2C14D" />
           <stop offset="100%" stopColor="#C48A04" />
         </linearGradient>
       </defs>
-      <rect x="5" y="30" width="15" height="20" fill="url(#goldBarGradient)" rx="2" />
-      <rect x="25" y="10" width="15" height="40" fill="url(#goldBarGradient)" rx="2" />
-      <rect x="45" y="20" width="15" height="30" fill="url(#goldBarGradient)" rx="2" />
-      <rect x="65" y="5" width="15" height="45" fill="url(#goldBarGradient)" rx="2" />
-      <rect x="85" y="25" width="15" height="25" fill="url(#goldBarGradient)" rx="2" />
-      <line x1="0" y1="50" x2="100" y2="50" stroke="currentColor" strokeWidth="0.5" />
-      <line x1="0" y1="0" x2="0" y2="50" stroke="currentColor" strokeWidth="0.5" />
+      <rect
+        x="5"
+        y="30"
+        width="15"
+        height="20"
+        fill="url(#goldBarGradient)"
+        rx="2"
+      />
+      <rect
+        x="25"
+        y="10"
+        width="15"
+        height="40"
+        fill="url(#goldBarGradient)"
+        rx="2"
+      />
+      <rect
+        x="45"
+        y="20"
+        width="15"
+        height="30"
+        fill="url(#goldBarGradient)"
+        rx="2"
+      />
+      <rect
+        x="65"
+        y="5"
+        width="15"
+        height="45"
+        fill="url(#goldBarGradient)"
+        rx="2"
+      />
+      <rect
+        x="85"
+        y="25"
+        width="15"
+        height="25"
+        fill="url(#goldBarGradient)"
+        rx="2"
+      />
+      <line
+        x1="0"
+        y1="50"
+        x2="100"
+        y2="50"
+        stroke="currentColor"
+        strokeWidth="0.5"
+      />
+      <line
+        x1="0"
+        y1="0"
+        x2="0"
+        y2="50"
+        stroke="currentColor"
+        strokeWidth="0.5"
+      />
     </svg>
   );
 
   const PlaceholderLineChart = () => (
-    <svg viewBox="0 0 100 50" className="w-full h-full text-white/30" preserveAspectRatio="none">
+    <svg
+      viewBox="0 0 100 50"
+      className="w-full h-full text-white/30"
+      preserveAspectRatio="none"
+    >
       <defs>
         <linearGradient id="goldLineGradient" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#C48A04" />
@@ -210,8 +274,22 @@ const EkrafDashboardPage = () => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <line x1="0" y1="50" x2="100" y2="50" stroke="currentColor" strokeWidth="0.5" />
-      <line x1="0" y1="0" x2="0" y2="50" stroke="currentColor" strokeWidth="0.5" />
+      <line
+        x1="0"
+        y1="50"
+        x2="100"
+        y2="50"
+        stroke="currentColor"
+        strokeWidth="0.5"
+      />
+      <line
+        x1="0"
+        y1="0"
+        x2="0"
+        y2="50"
+        stroke="currentColor"
+        strokeWidth="0.5"
+      />
     </svg>
   );
 
@@ -220,7 +298,7 @@ const EkrafDashboardPage = () => {
       <defs>
         <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="#F2C14D" />
-          <stop offset="100%" stopColor="#E9A507" />
+          <stop offset="100%" stopColor="#E9A007" />
         </linearGradient>
         <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="#C48A04" />
@@ -293,56 +371,69 @@ const EkrafDashboardPage = () => {
   );
 
   return (
-    <div
-      className="flex flex-col min-h-screen relative text-white"
-      style={{
-        background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)",
-        // --- PERUBAHAN FONT DI SINI ---
-        fontFamily: "'Mileast', sans-serif",
-      }}
-    >
-      {/* Overlay */}
+    <>
+      <GlobalStyles />
       <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 h-full"
+        className="flex flex-col min-h-screen relative text-white"
         style={{
-          backgroundImage: "url('/Overlay.png')",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          zIndex: 0,
-          opacity: 0.4,
+          background:
+            "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)",
+          fontFamily: "'Poppins', sans-serif",
         }}
-      />
+      >
+        {/* Overlay */}
+        <div
+          aria-hidden
+  className="pointer-events-none absolute inset-x-0 top-0 h-full"
+            style={{
+              backgroundImage: "url('/Overlay.png')",
+              backgroundRepeat: "repeat-y",
+              backgroundPosition: "top left",
+              backgroundSize: "100% auto",
+              zIndex: 0,
+              opacity: 0.7,
+            }}
+        />
 
-      {/* Content Container */}
-      <div className="relative z-10 w-full flex flex-col flex-grow ">
-        {/* ===== HERO/HEADER SECTION ===== */}
-        <header className="w-full py-12 px-5 pt-[120px] text-center">
-          <h1
-            className="text-5xl md:text-7xl font-bold font-aldo tracking-wider" // Tetap pakai Aldo
-            style={goldGradientText}
-          >
-            Dashboard EKRAF
-          </h1>
-          <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto mt-5">
-            Pandangan makro dan wawasan strategis dari data on-chain JejakKriya.
-          </p>
-        </header>
+        {/* Container Utama */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-8 pt-[150px]">
+          {/* ===== HERO/HEADER SECTION ===== */}
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <BuildingLibraryIcon
+                className="h-16 w-16"
+                style={{ color: "#E9A507" }}
+              />
+              <h1
+                className="text-5xl md:text-6xl font-bold"
+                style={{
+                  fontFamily: "'Mileast', sans-serif",
+                  ...goldGradientText,
+                }}
+              >
+                Dashboard EKRAF
+              </h1>
+            </div>
+            <p
+              className="text-xl text-white/80 max-w-2xl mx-auto"
+              style={{ fontFamily: "'Poppins', sans-serif" }}
+            >
+              Pandangan makro dan wawasan strategis dari data on-chain JejakKriya.
+            </p>
+          </div>
 
-        {/* ===== MAIN CONTENT ===== */}
-        <main className="w-full max-w-7xl mx-auto p-4 md:p-6 flex-grow">
+          {/* ===== MAIN CONTENT ===== */}
           {/* --- Filter Section --- */}
-          <section className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/10 mb-8">
+          <section className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10 mb-8">
             <h2
-              className="font-aldo text-2xl mb-5 flex items-center" // Tetap pakai Aldo
-              style={goldGradientText}
+              className="text-2xl mb-5 flex items-center"
+              style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
             >
               <FunnelIcon className="h-6 w-6 mr-3 text-yellow-400" />
               Filter Data & Ekspor
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 items-end">
-              {/* Filter Inputs dengan state */}
+              {/* Filter Inputs */}
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-white/60">Tanggal Mulai</label>
                 <input
@@ -350,7 +441,7 @@ const EkrafDashboardPage = () => {
                   name="startDate"
                   value={filters.startDate}
                   onChange={handleFilterChange}
-                  className="input bg-black/20 border-white/20 w-full rounded-lg text-white/80 placeholder-white/50 focus:border-yellow-400 focus:ring-yellow-400"
+                  className="bg-black/20 border border-white/20 w-full rounded-lg text-white/80 placeholder-white/50 focus:border-yellow-400 focus:ring-yellow-400 p-2"
                 />
               </div>
               <div className="flex flex-col gap-1">
@@ -360,7 +451,7 @@ const EkrafDashboardPage = () => {
                   name="endDate"
                   value={filters.endDate}
                   onChange={handleFilterChange}
-                  className="input bg-black/20 border-white/20 w-full rounded-lg text-white/80 placeholder-white/50 focus:border-yellow-400 focus:ring-yellow-400"
+                  className="bg-black/20 border border-white/20 w-full rounded-lg text-white/80 placeholder-white/50 focus:border-yellow-400 focus:ring-yellow-400 p-2"
                 />
               </div>
               <div className="flex flex-col gap-1">
@@ -369,7 +460,7 @@ const EkrafDashboardPage = () => {
                   name="province"
                   value={filters.province}
                   onChange={handleFilterChange}
-                  className="select bg-black/20 border-white/20 w-full rounded-lg text-white/80 focus:border-yellow-400 focus:ring-yellow-400"
+                  className="bg-black/20 border border-white/20 w-full rounded-lg text-white/80 focus:border-yellow-400 focus:ring-yellow-400 p-2"
                 >
                   <option className="bg-gray-800 text-white" value="all">
                     Semua Provinsi
@@ -391,7 +482,7 @@ const EkrafDashboardPage = () => {
                   name="category"
                   value={filters.category}
                   onChange={handleFilterChange}
-                  className="select bg-black/20 border-white/20 w-full rounded-lg text-white/80 focus:border-yellow-400 focus:ring-yellow-400"
+                  className="bg-black/20 border border-white/20 w-full rounded-lg text-white/80 focus:border-yellow-400 focus:ring-yellow-400 p-2"
                 >
                   <option className="bg-gray-800 text-white" value="all">
                     Semua Kategori
@@ -409,105 +500,136 @@ const EkrafDashboardPage = () => {
               </div>
 
               <div className="flex justify-start md:justify-end gap-2 pt-4 col-span-1 md:col-span-2 lg:col-span-4 xl:col-span-1 self-end">
-                <button className="btn btn-outline border-white/30 text-white hover:bg-white/10 hover:border-white rounded-lg flex-1 md:flex-none">
+                <button className="border border-white/30 text-white hover:bg-white/10 hover:border-white rounded-lg px-4 py-2 flex items-center gap-2">
                   <DocumentDuplicateIcon className="h-4 w-4" /> CSV
                 </button>
-                <button className="btn border-0 font-bold rounded-lg flex-1 md:flex-none" style={goldGradientButton}>
+                <button
+                  className="border-0 font-bold rounded-lg px-4 py-2 flex items-center gap-2"
+                  style={goldGradientButton}
+                >
                   <DocumentDuplicateIcon className="h-4 w-4" /> PDF
                 </button>
               </div>
             </div>
           </section>
 
-          {/* --- Stats Grid Section (5 Kolom) --- */}
+          {/* --- Stats Grid Section --- */}
           <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-            {statsCards.map((stat, index) => (
-              <div
-                key={index}
-                className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/10 transition-all duration-300 hover:border-yellow-400/50 hover:shadow-yellow-400/10 flex flex-col"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-md font-semibold text-white/70">{stat.title}</h3>
-                  <stat.icon className="h-7 w-7 text-yellow-400 flex-shrink-0" />
-                </div>
-                {loading ? (
-                  <ShimmerPlaceholder className="h-12 w-3/4 mt-1 mb-2" />
-                ) : (
-                  <p
-                    className="text-3xl md:text-4xl font-aldo tracking-wide my-1" // Angka besar tetap pakai Aldo
-                    style={goldGradientText}
-                  >
-                    {stat.value}
+            {statsCards.map((stat, index) => {
+              const IconComponent = stat.icon;
+              return (
+                <div
+                  key={index}
+                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10 transition-all duration-300 hover:border-yellow-400/50 hover:shadow-yellow-400/10 flex flex-col"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-md font-semibold text-white/70">
+                      {stat.title}
+                    </h3>
+                    <IconComponent className="h-7 w-7 text-yellow-400 flex-shrink-0" />
+                  </div>
+                  {loading ? (
+                    <ShimmerPlaceholder className="h-12 w-3/4 mt-1 mb-2" />
+                  ) : (
+                    <p
+                      className="text-3xl md:text-4xl my-1"
+                      style={{
+                        fontFamily: "'Mileast', sans-serif",
+                        ...goldGradientText,
+                      }}
+                    >
+                      {stat.value}
+                    </p>
+                  )}
+                  <p className="text-xs text-white/50 mt-auto pt-2">
+                    {stat.description}
                   </p>
-                )}
-                <p className="text-xs text-white/50 mt-auto pt-2">{stat.description}</p>
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </section>
 
-          {/* --- Charts Section (Grid Lebih Kompleks) --- */}
+          {/* --- Charts Section --- */}
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Chart 1: Pasar Sekunder (Lebar 2 kolom) */}
-            <div className="lg:col-span-2 bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/10">
+            {/* Chart 1: Pasar Sekunder */}
+            <div className="lg:col-span-2 bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10">
               <h3
-                className="font-aldo text-2xl mb-4 flex items-center" // Tetap pakai Aldo
-                style={goldGradientText}
+                className="text-2xl mb-4 flex items-center"
+                style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
               >
                 <ChartBarIcon className="h-6 w-6 mr-3 text-yellow-400" />
                 Volume Pasar Sekunder
               </h3>
               <div className="h-72 md:h-80">
-                {loading ? <ShimmerPlaceholder className="h-full w-full" /> : <PlaceholderBarChart />}
+                {loading ? (
+                  <ShimmerPlaceholder className="h-full w-full" />
+                ) : (
+                  <PlaceholderBarChart />
+                )}
               </div>
-              <p className="text-xs text-white/50 mt-2 text-center">Volume transaksi bulanan (simulasi)</p>
+              <p className="text-xs text-white/50 mt-2 text-center">
+                Volume transaksi bulanan (simulasi)
+              </p>
             </div>
 
-            {/* Chart 2: Aktivitas Verifikasi (1 kolom) */}
-            <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/10">
+            {/* Chart 2: Aktivitas Verifikasi */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10">
               <h3
-                className="font-aldo text-2xl mb-4 flex items-center" // Tetap pakai Aldo
-                style={goldGradientText}
+                className="text-2xl mb-4 flex items-center"
+                style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
               >
                 <UserGroupIcon className="h-6 w-6 mr-3 text-yellow-400" />
                 Aktivitas Verifikasi
               </h3>
               <div className="h-72 md:h-80">
-                {loading ? <ShimmerPlaceholder className="h-full w-full" /> : <PlaceholderLineChart />}
+                {loading ? (
+                  <ShimmerPlaceholder className="h-full w-full" />
+                ) : (
+                  <PlaceholderLineChart />
+                )}
               </div>
-              <p className="text-xs text-white/50 mt-2 text-center">Jumlah verifikasi per hari (simulasi)</p>
+              <p className="text-xs text-white/50 mt-2 text-center">
+                Jumlah verifikasi per hari (simulasi)
+              </p>
             </div>
 
-            {/* WIDGET BARU: Komposisi Kategori */}
-            <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/10">
+            {/* Komposisi Kategori */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10">
               <h3
-                className="font-aldo text-2xl mb-4 flex items-center" // Tetap pakai Aldo
-                style={goldGradientText}
+                className="text-2xl mb-4 flex items-center"
+                style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
               >
                 <ChartPieIcon className="h-6 w-6 mr-3 text-yellow-400" />
                 Komposisi Kategori
               </h3>
               <div className="h-48">
-                {loading ? <ShimmerPlaceholder className="h-full w-full rounded-full" /> : <PlaceholderDonutChart />}
+                {loading ? (
+                  <ShimmerPlaceholder className="h-full w-full rounded-full" />
+                ) : (
+                  <PlaceholderDonutChart />
+                )}
               </div>
-              {/* Legenda Simulasi */}
               <div className="flex justify-center gap-4 mt-4 text-xs text-white/70">
                 <span className="flex items-center">
-                  <span className="h-3 w-3 rounded-full bg-yellow-400 mr-2"></span>Tenun (50%)
+                  <span className="h-3 w-3 rounded-full bg-yellow-400 mr-2"></span>
+                  Tenun (50%)
                 </span>
                 <span className="flex items-center">
-                  <span className="h-3 w-3 rounded-full bg-yellow-700 mr-2"></span>Batik (30%)
+                  <span className="h-3 w-3 rounded-full bg-yellow-700 mr-2"></span>
+                  Batik (30%)
                 </span>
                 <span className="flex items-center">
-                  <span className="h-3 w-3 rounded-full bg-purple-500 mr-2"></span>Lainnya (20%)
+                  <span className="h-3 w-3 rounded-full bg-purple-500 mr-2"></span>
+                  Lainnya (20%)
                 </span>
               </div>
             </div>
 
-            {/* WIDGET BARU: Kurator Teraktif */}
-            <div className="flex flex-col bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/10">
+            {/* Kurator Teraktif */}
+            <div className="flex flex-col bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10">
               <h3
-                className="font-aldo text-2xl mb-4 flex items-center" // Tetap pakai Aldo
-                style={goldGradientText}
+                className="text-2xl mb-4 flex items-center"
+                style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
               >
                 <UsersIcon className="h-6 w-6 mr-3 text-yellow-400" />
                 Kurator Teraktif
@@ -517,7 +639,6 @@ const EkrafDashboardPage = () => {
                   <PlaceholderList items={3} />
                 ) : (
                   <div className="flex flex-col gap-3 text-sm">
-                    {/* Data List Simulasi */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <img
@@ -527,7 +648,9 @@ const EkrafDashboardPage = () => {
                         />
                         <div>
                           <p className="font-semibold">Dekranasda Jabar</p>
-                          <p className="text-xs text-white/50">1,204 Verifikasi</p>
+                          <p className="text-xs text-white/50">
+                            1,204 Verifikasi
+                          </p>
                         </div>
                       </div>
                       <span className="text-yellow-400 font-bold">#1</span>
@@ -563,10 +686,9 @@ const EkrafDashboardPage = () => {
                   </div>
                 )}
               </div>
-              {/* Tombol Trigger Modal */}
               <div className="mt-auto pt-4">
                 <button
-                  className="btn btn-sm border-0 font-bold rounded-lg w-full text-xs"
+                  className="border-0 font-bold rounded-lg w-full text-xs py-2"
                   style={goldGradientButton}
                   onClick={() => setIsCuratorModalOpen(true)}
                 >
@@ -575,58 +697,86 @@ const EkrafDashboardPage = () => {
               </div>
             </div>
 
-            {/* WIDGET BARU: Peta Distribusi */}
-            <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/10">
+            {/* Peta Distribusi */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10">
               <h3
-                className="font-aldo text-2xl mb-4 flex items-center" // Tetap pakai Aldo
-                style={goldGradientText}
+                className="text-2xl mb-4 flex items-center"
+                style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
               >
                 <GlobeAltIcon className="h-6 w-6 mr-3 text-yellow-400" />
                 Distribusi Geografis
               </h3>
               <div className="h-48 flex items-center justify-center">
-                {loading ? <ShimmerPlaceholder className="h-full w-full" /> : <PlaceholderMap />}
+                {loading ? (
+                  <ShimmerPlaceholder className="h-full w-full" />
+                ) : (
+                  <PlaceholderMap />
+                )}
               </div>
-              <p className="text-xs text-white/50 mt-2 text-center">Peta sebaran aset terverifikasi (simulasi)</p>
+              <p className="text-xs text-white/50 mt-2 text-center">
+                Peta sebaran aset terverifikasi (simulasi)
+              </p>
             </div>
           </section>
-        </main>
 
-        {/* Footer Placeholder */}
-        <footer className="w-full text-center p-6 mt-12 text-sm text-white/40">
-          © 2025 JejakKriya - Kementerian Pariwisata dan Ekonomi Kreatif
-        </footer>
+          {/* Footer */}
+          <footer className="w-full text-center p-6 mt-12 text-sm text-white/40">
+            © 2025 JejakKriya - Kementerian Pariwisata dan Ekonomi Kreatif
+          </footer>
+        </div>
 
-        {/* Instance Modal */}
+        {/* Modal */}
         <DashboardModal
           isOpen={isCuratorModalOpen}
           onClose={() => setIsCuratorModalOpen(false)}
           title="Daftar Lengkap Kurator Aktif"
         >
-          {/* Konten simulasi untuk modal */}
           <div className="flex flex-col gap-4 text-sm">
             {[
               { name: "Dekranasda Jabar", count: 1204, rank: 1, initial: "DJ" },
               { name: "Kriya Yogya", count: 980, rank: 2, initial: "KY" },
               { name: "Asosiasi Batik", count: 751, rank: 3, initial: "AB" },
               { name: "Museum Tekstil", count: 620, rank: 4, initial: "MT" },
-              { name: "Cita Tenun Indonesia", count: 512, rank: 5, initial: "CT" },
+              {
+                name: "Cita Tenun Indonesia",
+                count: 512,
+                rank: 5,
+                initial: "CT",
+              },
               { name: "Galeri Nasional", count: 450, rank: 6, initial: "GN" },
-              { name: "Institut Seni Bali", count: 398, rank: 7, initial: "IS" },
-            ].map(item => (
-              <div key={item.rank} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+              {
+                name: "Institut Seni Bali",
+                count: 398,
+                rank: 7,
+                initial: "IS",
+              },
+            ].map((item) => (
+              <div
+                key={item.rank}
+                className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+              >
                 <div className="flex items-center gap-3">
                   <img
-                    src={`https://ui-avatars.com/api/?name=${item.initial}&background=${item.rank === 1 ? "c48a04" : "3D2C88"}&color=fff`}
+                    src={`https://ui-avatars.com/api/?name=${
+                      item.initial
+                    }&background=${
+                      item.rank === 1 ? "c48a04" : "3D2C88"
+                    }&color=fff`}
                     alt="avatar"
                     className="h-10 w-10 rounded-full"
                   />
                   <div>
                     <p className="font-semibold">{item.name}</p>
-                    <p className="text-xs text-white/50">{item.count.toLocaleString("id-ID")} Verifikasi</p>
+                    <p className="text-xs text-white/50">
+                      {item.count.toLocaleString("id-ID")} Verifikasi
+                    </p>
                   </div>
                 </div>
-                <span className={`font-bold ${item.rank === 1 ? "text-yellow-400" : "text-white/70"}`}>
+                <span
+                  className={`font-bold ${
+                    item.rank === 1 ? "text-yellow-400" : "text-white/70"
+                  }`}
+                >
                   #{item.rank}
                 </span>
               </div>
@@ -634,7 +784,7 @@ const EkrafDashboardPage = () => {
           </div>
         </DashboardModal>
       </div>
-    </div>
+    </>
   );
 };
 
