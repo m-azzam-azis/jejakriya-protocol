@@ -1,0 +1,384 @@
+{
+  "address": "0x26a9AEDAD510B9099365172e1C38bB269CDe6Ee9",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "curator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "CuratorAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "curator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "CuratorRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_curator",
+          "type": "address"
+        }
+      ],
+      "name": "addCurator",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "curators",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllCurators",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getCuratorCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isCurator",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_curator",
+          "type": "address"
+        }
+      ],
+      "name": "removeCurator",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x64b960004e18d14454a00bf7da609abf8204c10e44af83371981643c8ec1c410",
+  "receipt": {
+    "to": null,
+    "from": "0x2AC4acB91e91f9949e2B6616ccf7BfF567554586",
+    "contractAddress": "0x26a9AEDAD510B9099365172e1C38bB269CDe6Ee9",
+    "transactionIndex": 27,
+    "gasUsed": "476642",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000800000000000000004000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000001000000000002000000000010000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000020000000000000000000000",
+    "blockHash": "0xa15dfdfb33f3fef21716ef4983d8528916f0636f59d6dee386abb87651b971ad",
+    "transactionHash": "0x64b960004e18d14454a00bf7da609abf8204c10e44af83371981643c8ec1c410",
+    "logs": [
+      {
+        "transactionIndex": 27,
+        "blockNumber": 9480863,
+        "transactionHash": "0x64b960004e18d14454a00bf7da609abf8204c10e44af83371981643c8ec1c410",
+        "address": "0x26a9AEDAD510B9099365172e1C38bB269CDe6Ee9",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000002ac4acb91e91f9949e2b6616ccf7bff567554586"
+        ],
+        "data": "0x",
+        "logIndex": 25,
+        "blockHash": "0xa15dfdfb33f3fef21716ef4983d8528916f0636f59d6dee386abb87651b971ad"
+      }
+    ],
+    "blockNumber": 9480863,
+    "cumulativeGasUsed": "8169349",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "84a53fbce6b5a6c4d5763013a22a6617",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"curator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"CuratorAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"curator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"CuratorRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_curator\",\"type\":\"address\"}],\"name\":\"addCurator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"curators\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAllCurators\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getCuratorCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"isCurator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_curator\",\"type\":\"address\"}],\"name\":\"removeCurator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Smart contract untuk manajemen whitelist kurator\",\"errors\":{\"OwnableInvalidOwner(address)\":[{\"details\":\"The owner is not a valid owner account. (eg. `address(0)`)\"}],\"OwnableUnauthorizedAccount(address)\":[{\"details\":\"The caller account is not authorized to perform an operation.\"}]},\"kind\":\"dev\",\"methods\":{\"addCurator(address)\":{\"details\":\"Menambahkan kurator baru ke whitelist\",\"params\":{\"_curator\":\"Address kurator yang akan ditambahkan\"}},\"constructor\":{\"details\":\"Constructor - set deployer sebagai owner\"},\"getAllCurators()\":{\"details\":\"Mendapatkan daftar semua kurator\",\"returns\":{\"_0\":\"Array address kurator\"}},\"getCuratorCount()\":{\"details\":\"Mendapatkan jumlah total kurator\",\"returns\":{\"_0\":\"Jumlah kurator yang terdaftar\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"removeCurator(address)\":{\"details\":\"Menghapus kurator dari whitelist\",\"params\":{\"_curator\":\"Address kurator yang akan dihapus\"}},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"title\":\"CuratorRegistry\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"Hanya owner (Kemenparekraf/Ekraf) yang bisa menambah/menghapus kurator\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/CuratorRegistry.sol\":\"CuratorRegistry\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * The initial owner is set to the address provided by the deployer. This can\\n * later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    /**\\n     * @dev The caller account is not authorized to perform an operation.\\n     */\\n    error OwnableUnauthorizedAccount(address account);\\n\\n    /**\\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\\n     */\\n    error OwnableInvalidOwner(address owner);\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\\n     */\\n    constructor(address initialOwner) {\\n        if (initialOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(initialOwner);\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        if (owner() != _msgSender()) {\\n            revert OwnableUnauthorizedAccount(_msgSender());\\n        }\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        if (newOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"contracts/CuratorRegistry.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\n\\n/**\\n * @title CuratorRegistry\\n * @dev Smart contract untuk manajemen whitelist kurator\\n * @notice Hanya owner (Kemenparekraf/Ekraf) yang bisa menambah/menghapus kurator\\n */\\ncontract CuratorRegistry is Ownable {\\n    // Mapping untuk cek apakah address adalah kurator yang terverifikasi\\n    mapping(address => bool) public isCurator;\\n    \\n    // Array untuk tracking semua kurator (untuk UI)\\n    address[] public curators;\\n    mapping(address => uint256) private curatorIndex;\\n    \\n    // Events untuk tracking perubahan\\n    event CuratorAdded(address indexed curator, uint256 timestamp);\\n    event CuratorRemoved(address indexed curator, uint256 timestamp);\\n    \\n    /**\\n     * @dev Menambahkan kurator baru ke whitelist\\n     * @param _curator Address kurator yang akan ditambahkan\\n     */\\n    function addCurator(address _curator) external onlyOwner {\\n        require(_curator != address(0), \\\"Invalid curator address\\\");\\n        require(!isCurator[_curator], \\\"Curator already exists\\\");\\n        \\n        isCurator[_curator] = true;\\n        curators.push(_curator);\\n        curatorIndex[_curator] = curators.length - 1;\\n        \\n        emit CuratorAdded(_curator, block.timestamp);\\n    }\\n    \\n    /**\\n     * @dev Menghapus kurator dari whitelist\\n     * @param _curator Address kurator yang akan dihapus\\n     */\\n    function removeCurator(address _curator) external onlyOwner {\\n        require(isCurator[_curator], \\\"Curator does not exist\\\");\\n        \\n        isCurator[_curator] = false;\\n        \\n        // Remove from array (swap with last element)\\n        uint256 index = curatorIndex[_curator];\\n        uint256 lastIndex = curators.length - 1;\\n        \\n        if (index != lastIndex) {\\n            address lastCurator = curators[lastIndex];\\n            curators[index] = lastCurator;\\n            curatorIndex[lastCurator] = index;\\n        }\\n        \\n        curators.pop();\\n        delete curatorIndex[_curator];\\n        \\n        emit CuratorRemoved(_curator, block.timestamp);\\n    }\\n    \\n    /**\\n     * @dev Mendapatkan jumlah total kurator\\n     * @return Jumlah kurator yang terdaftar\\n     */\\n    function getCuratorCount() external view returns (uint256) {\\n        return curators.length;\\n    }\\n    \\n    /**\\n     * @dev Mendapatkan daftar semua kurator\\n     * @return Array address kurator\\n     */\\n    function getAllCurators() external view returns (address[] memory) {\\n        return curators;\\n    }\\n    \\n    /**\\n     * @dev Constructor - set deployer sebagai owner\\n     */\\n    constructor() Ownable(msg.sender) {\\n        // Owner akan menjadi address yang deploy contract ini\\n        // Biasanya untuk testing, ini adalah address dari Kemenparekraf/Ekraf\\n    }\\n}\\n\",\"keccak256\":\"0x8d8ff6b84df9a1717b63c7c4c9a5eaf7410aab90c986b536ce307b1f05532450\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50338061003757604051631e4fbdf760e01b81526000600482015260240160405180910390fd5b61004081610046565b50610096565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b610731806100a56000396000f3fe608060405234801561001057600080fd5b50600436106100935760003560e01c80638da5cb5b116100665780638da5cb5b1461010657806398f25c441461012b578063c097c07f1461013e578063dff434341461014f578063f2fde38b1461016257600080fd5b806334f0e39e1461009857806338501df5146100ad5780636c7b79d4146100cb578063715018a6146100fe575b600080fd5b6100ab6100a6366004610612565b610175565b005b6100b5610306565b6040516100c29190610642565b60405180910390f35b6100ee6100d9366004610612565b60016020526000908152604090205460ff1681565b60405190151581526020016100c2565b6100ab610368565b6000546001600160a01b03165b6040516001600160a01b0390911681526020016100c2565b6100ab610139366004610612565b61037c565b6002546040519081526020016100c2565b61011361015d36600461068f565b61052d565b6100ab610170366004610612565b610557565b61017d610595565b6001600160a01b0381166101d85760405162461bcd60e51b815260206004820152601760248201527f496e76616c69642063757261746f72206164647265737300000000000000000060448201526064015b60405180910390fd5b6001600160a01b03811660009081526001602052604090205460ff161561023a5760405162461bcd60e51b815260206004820152601660248201527543757261746f7220616c72656164792065786973747360501b60448201526064016101cf565b6001600160a01b03811660008181526001602081905260408220805460ff191682179055600280548083018255928190527f405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5ace90920180546001600160a01b031916909317909255546102ac91906106a8565b6001600160a01b038216600081815260036020526040908190209290925590517f8776991c91a32d448553835a322727bc3b570c033a9f64ee33aa6bf339ac5b21906102fb9042815260200190565b60405180910390a250565b6060600280548060200260200160405190810160405280929190818152602001828054801561035e57602002820191906000526020600020905b81546001600160a01b03168152600190910190602001808311610340575b5050505050905090565b610370610595565b61037a60006105c2565b565b610384610595565b6001600160a01b03811660009081526001602052604090205460ff166103e55760405162461bcd60e51b815260206004820152601660248201527510dd5c985d1bdc88191bd95cc81b9bdd08195e1a5cdd60521b60448201526064016101cf565b6001600160a01b0381166000908152600160208181526040808420805460ff19169055600390915282205460025490929161041f916106a8565b90508082146104a75760006002828154811061043d5761043d6106cf565b600091825260209091200154600280546001600160a01b03909216925082918590811061046c5761046c6106cf565b600091825260208083209190910180546001600160a01b0319166001600160a01b039485161790559290911681526003909152604090208290555b60028054806104b8576104b86106e5565b60008281526020808220600019908401810180546001600160a01b03191690559092019092556001600160a01b0385168083526003825260408084209390935591514281527f256ad18300de1ee5fb412f5b114a8442c115bb2570dc7e49caf15a5e0e646318910160405180910390a2505050565b6002818154811061053d57600080fd5b6000918252602090912001546001600160a01b0316905081565b61055f610595565b6001600160a01b03811661058957604051631e4fbdf760e01b8152600060048201526024016101cf565b610592816105c2565b50565b6000546001600160a01b0316331461037a5760405163118cdaa760e01b81523360048201526024016101cf565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60006020828403121561062457600080fd5b81356001600160a01b038116811461063b57600080fd5b9392505050565b6020808252825182820181905260009190848201906040850190845b818110156106835783516001600160a01b03168352928401929184019160010161065e565b50909695505050505050565b6000602082840312156106a157600080fd5b5035919050565b818103818111156106c957634e487b7160e01b600052601160045260246000fd5b92915050565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052603160045260246000fdfea2646970667358221220e9b5e3f2faff8a1a8514a358c17fdc0f842f6d8b824327d548e6426c345af89e64736f6c63430008140033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100935760003560e01c80638da5cb5b116100665780638da5cb5b1461010657806398f25c441461012b578063c097c07f1461013e578063dff434341461014f578063f2fde38b1461016257600080fd5b806334f0e39e1461009857806338501df5146100ad5780636c7b79d4146100cb578063715018a6146100fe575b600080fd5b6100ab6100a6366004610612565b610175565b005b6100b5610306565b6040516100c29190610642565b60405180910390f35b6100ee6100d9366004610612565b60016020526000908152604090205460ff1681565b60405190151581526020016100c2565b6100ab610368565b6000546001600160a01b03165b6040516001600160a01b0390911681526020016100c2565b6100ab610139366004610612565b61037c565b6002546040519081526020016100c2565b61011361015d36600461068f565b61052d565b6100ab610170366004610612565b610557565b61017d610595565b6001600160a01b0381166101d85760405162461bcd60e51b815260206004820152601760248201527f496e76616c69642063757261746f72206164647265737300000000000000000060448201526064015b60405180910390fd5b6001600160a01b03811660009081526001602052604090205460ff161561023a5760405162461bcd60e51b815260206004820152601660248201527543757261746f7220616c72656164792065786973747360501b60448201526064016101cf565b6001600160a01b03811660008181526001602081905260408220805460ff191682179055600280548083018255928190527f405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5ace90920180546001600160a01b031916909317909255546102ac91906106a8565b6001600160a01b038216600081815260036020526040908190209290925590517f8776991c91a32d448553835a322727bc3b570c033a9f64ee33aa6bf339ac5b21906102fb9042815260200190565b60405180910390a250565b6060600280548060200260200160405190810160405280929190818152602001828054801561035e57602002820191906000526020600020905b81546001600160a01b03168152600190910190602001808311610340575b5050505050905090565b610370610595565b61037a60006105c2565b565b610384610595565b6001600160a01b03811660009081526001602052604090205460ff166103e55760405162461bcd60e51b815260206004820152601660248201527510dd5c985d1bdc88191bd95cc81b9bdd08195e1a5cdd60521b60448201526064016101cf565b6001600160a01b0381166000908152600160208181526040808420805460ff19169055600390915282205460025490929161041f916106a8565b90508082146104a75760006002828154811061043d5761043d6106cf565b600091825260209091200154600280546001600160a01b03909216925082918590811061046c5761046c6106cf565b600091825260208083209190910180546001600160a01b0319166001600160a01b039485161790559290911681526003909152604090208290555b60028054806104b8576104b86106e5565b60008281526020808220600019908401810180546001600160a01b03191690559092019092556001600160a01b0385168083526003825260408084209390935591514281527f256ad18300de1ee5fb412f5b114a8442c115bb2570dc7e49caf15a5e0e646318910160405180910390a2505050565b6002818154811061053d57600080fd5b6000918252602090912001546001600160a01b0316905081565b61055f610595565b6001600160a01b03811661058957604051631e4fbdf760e01b8152600060048201526024016101cf565b610592816105c2565b50565b6000546001600160a01b0316331461037a5760405163118cdaa760e01b81523360048201526024016101cf565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60006020828403121561062457600080fd5b81356001600160a01b038116811461063b57600080fd5b9392505050565b6020808252825182820181905260009190848201906040850190845b818110156106835783516001600160a01b03168352928401929184019160010161065e565b50909695505050505050565b6000602082840312156106a157600080fd5b5035919050565b818103818111156106c957634e487b7160e01b600052601160045260246000fd5b92915050565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052603160045260246000fdfea2646970667358221220e9b5e3f2faff8a1a8514a358c17fdc0f842f6d8b824327d548e6426c345af89e64736f6c63430008140033",
+  "devdoc": {
+    "details": "Smart contract untuk manajemen whitelist kurator",
+    "errors": {
+      "OwnableInvalidOwner(address)": [
+        {
+          "details": "The owner is not a valid owner account. (eg. `address(0)`)"
+        }
+      ],
+      "OwnableUnauthorizedAccount(address)": [
+        {
+          "details": "The caller account is not authorized to perform an operation."
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "addCurator(address)": {
+        "details": "Menambahkan kurator baru ke whitelist",
+        "params": {
+          "_curator": "Address kurator yang akan ditambahkan"
+        }
+      },
+      "constructor": {
+        "details": "Constructor - set deployer sebagai owner"
+      },
+      "getAllCurators()": {
+        "details": "Mendapatkan daftar semua kurator",
+        "returns": {
+          "_0": "Array address kurator"
+        }
+      },
+      "getCuratorCount()": {
+        "details": "Mendapatkan jumlah total kurator",
+        "returns": {
+          "_0": "Jumlah kurator yang terdaftar"
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "removeCurator(address)": {
+        "details": "Menghapus kurator dari whitelist",
+        "params": {
+          "_curator": "Address kurator yang akan dihapus"
+        }
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "title": "CuratorRegistry",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "notice": "Hanya owner (Kemenparekraf/Ekraf) yang bisa menambah/menghapus kurator",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 8,
+        "contract": "contracts/CuratorRegistry.sol:CuratorRegistry",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 3104,
+        "contract": "contracts/CuratorRegistry.sol:CuratorRegistry",
+        "label": "isCurator",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_address,t_bool)"
+      },
+      {
+        "astId": 3107,
+        "contract": "contracts/CuratorRegistry.sol:CuratorRegistry",
+        "label": "curators",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_array(t_address)dyn_storage"
+      },
+      {
+        "astId": 3111,
+        "contract": "contracts/CuratorRegistry.sol:CuratorRegistry",
+        "label": "curatorIndex",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_mapping(t_address,t_uint256)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_address)dyn_storage": {
+        "base": "t_address",
+        "encoding": "dynamic_array",
+        "label": "address[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_address,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

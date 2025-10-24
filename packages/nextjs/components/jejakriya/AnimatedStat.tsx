@@ -39,13 +39,15 @@ export const AnimatedStat: React.FC<AnimatedStatProps> = ({
       { threshold: 0.1 },
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [isVisible]);
@@ -54,7 +56,8 @@ export const AnimatedStat: React.FC<AnimatedStatProps> = ({
     if (!isVisible) return;
 
     let startTime: number | null = null;
-    const startValue = 0;
+    let animationFrameId: number;
+    const startValue = count; // Start from current count to avoid jumps
     const endValue = value;
 
     const animate = (currentTime: number) => {
@@ -68,11 +71,18 @@ export const AnimatedStat: React.FC<AnimatedStatProps> = ({
       setCount(currentValue);
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       }
     };
 
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
+
+    // Cleanup function to cancel animation frame
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, [isVisible, value, duration]);
 
   return (

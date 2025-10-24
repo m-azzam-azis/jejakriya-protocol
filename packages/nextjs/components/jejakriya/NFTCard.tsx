@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArrowsRightLeftIcon, EyeIcon, HeartIcon } from "@heroicons/react/24/outline";
 
 interface NFTCardProps {
@@ -35,10 +36,12 @@ export const NFTCard = ({
     >
       {/* NFT Image */}
       <figure className="relative aspect-square overflow-hidden">
-        <img
+        <Image
           src={image}
           alt={name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          width={256}
+          height={256}
         />
 
         {/* Overlay on Hover */}

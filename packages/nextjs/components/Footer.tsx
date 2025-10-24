@@ -9,72 +9,78 @@ import { Faucet } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useGlobalState } from "~~/services/store/store";
 
-/**
- * Site footer
- */
+const footerLinks = [
+  {
+    label: "Home",
+    href: "/",
+  },
+  {
+    label: "Lending",
+    href: "/lending",
+  },
+  {
+    label: "Ekraf",
+    href: "/ekraf",
+  },
+  {
+    label: "Agen",
+    href: "/agen",
+  },
+  {
+    label: "Kurator",
+    href: "/kurator",
+  },
+  {
+    label: "Pengrajin",
+    href: "/pengrajin",
+  },
+  {
+    label: "Admin",
+    href: "/admin",
+  },
+];
+
 export const Footer = () => {
   const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrency.price);
   const { targetNetwork } = useTargetNetwork();
   const isLocalNetwork = targetNetwork.id === hardhat.id;
 
   return (
-    <div className="min-h-0 py-5 px-1 mb-11 lg:mb-0">
-      <div>
-        <div className="fixed flex justify-between items-center w-full z-10 p-4 bottom-0 left-0 pointer-events-none">
-          <div className="flex flex-col md:flex-row gap-2 pointer-events-auto">
-            {nativeCurrencyPrice > 0 && (
-              <div>
-                <div className="btn btn-primary btn-sm font-normal gap-1 cursor-auto">
-                  <CurrencyDollarIcon className="h-4 w-4" />
-                  <span>{nativeCurrencyPrice.toFixed(2)}</span>
-                </div>
-              </div>
-            )}
-            {isLocalNetwork && (
-              <>
-                <Faucet />
-                <Link href="/blockexplorer" passHref className="btn btn-primary btn-sm font-normal gap-1">
-                  <MagnifyingGlassIcon className="h-4 w-4" />
-                  <span>Block Explorer</span>
-                </Link>
-              </>
-            )}
-          </div>
-          <SwitchTheme className={`pointer-events-auto ${isLocalNetwork ? "self-end md:self-auto" : ""}`} />
-        </div>
-      </div>
-      <div className="w-full">
-        <ul className="menu menu-horizontal w-full">
-          <div className="flex justify-center items-center gap-2 text-sm w-full">
-            <div className="text-center">
-              <a href="https://github.com/scaffold-eth/se-2" target="_blank" rel="noreferrer" className="link">
-                Fork me
-              </a>
-            </div>
-            <span>·</span>
-            <div className="flex justify-center items-center gap-2">
-              <p className="m-0 text-center">
-                Built with <HeartIcon className="inline-block h-4 w-4" /> at
-              </p>
-              <a
-                className="flex justify-center items-center gap-1"
-                href="https://buidlguidl.com/"
-                target="_blank"
-                rel="noreferrer"
+    <div className="min-h-0">
+      <footer style={{ backgroundColor: "#3D2C88" }} className="w-full text-white py-6">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            {/* Kolom 1 - Logo Jejak Kriya (1/3) */}
+            <div className="w-full md:w-1/3 mb-4 md:mb-0">
+              <h1
+                className="text-3xl font-bold text-center md:text-left"
+                style={{
+                  fontFamily: "'Mileast', sans-serif",
+                  whiteSpace: "pre-line",
+                  lineHeight: "1.2",
+                }}
               >
-                <BuidlGuidlLogo className="w-3 h-5 pb-1" />
-                <span className="link">BuidlGuidl</span>
-              </a>
+                Jejak{"\n"}Kriya
+              </h1>
             </div>
-            <span>·</span>
-            <div className="text-center">
-              <a href="https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA" target="_blank" rel="noreferrer" className="link">
-                Support
-              </a>
+
+            {/* Kolom 2 - Navigation Links (2/3) */}
+            <div className="w-full md:w-2/3">
+              <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6">
+                {footerLinks.map((link, index) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-white/80 hover:text-white transition-colors duration-200 font-medium text-sm md:text-base"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
-        </ul>
-      </div>
+        </div>
+      </footer>
     </div>
   );
 };
