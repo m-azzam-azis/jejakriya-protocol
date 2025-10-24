@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
@@ -424,7 +425,13 @@ const PemilikDashboard: NextPage = () => {
                   </div>
 
                   {/* Large Image */}
-                  <img src={nft.image} alt={nft.name} className="w-full aspect-square object-cover rounded-2xl mb-6" />
+                  <Image
+                    src={nft.image}
+                    alt={nft.name}
+                    className="w-full aspect-square object-cover rounded-2xl mb-6"
+                    height={256}
+                    width={256}
+                  />
 
                   {/* NFT Title */}
                   <h2

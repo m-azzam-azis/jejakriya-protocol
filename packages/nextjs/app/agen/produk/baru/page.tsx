@@ -3,12 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { NextPage } from "next";
+import { useAccount } from "wagmi";
 import { ArrowLeftIcon, CheckIcon, DocumentTextIcon, PhotoIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
-import { useProductStore } from "~~/services/store/productStore";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { uploadImageToIPFS, uploadToIPFS } from "~~/utils/ipfs";
+import { notification } from "~~/utils/scaffold-eth";
 
 const TambahProdukBaru: NextPage = () => {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const { address: connectedAddress } = useAccount();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -39,14 +44,10 @@ const TambahProdukBaru: NextPage = () => {
     video: null,
   });
 
-  // Mock pengrajin list (UI uses these ids in the select)
-  const mockPengrajin = [
-    { id: "1", name: "Ibu Lastri", location: "Sumba Timur" },
-    { id: "2", name: "Pak Wayan", location: "Ubud, Bali" },
-    { id: "3", name: "Ibu Siti", location: "Yogyakarta" },
-  ];
-
-  const addProduct = useProductStore((s) => s.addProduct);
+  // Scaffold-ETH hook for contract interaction
+  const { writeContractAsync: writeIcas721Async } = useScaffoldWriteContract({
+    contractName: "ICAS721",
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -97,27 +98,103 @@ const TambahProdukBaru: NextPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Find pengrajin info from mock list
-    const pengrajin = mockPengrajin.find((p) => p.id === formData.pengrajinId);
-    if (!pengrajin) {
-      alert("Pilih pengrajin terlebih dahulu");
+    if (!connectedAddress) {
+      notification.error("Please connect your wallet first");
       return;
     }
 
-    // Map form data to store shape
-    addProduct({
-      pengrajinId: formData.pengrajinId,
-      pengrajinName: pengrajin.name,
-      name: formData.namaProduk || "(Tanpa Nama)",
-      description: formData.deskripsi || formData.ceritaProduk || "",
-      category: formData.jenisProduk || "Lainnya",
-      imageUrl: previewUrls.photos[0] || "/logo.png",
-      submittedBy: "Agen Demo",
-    });
+    setIsSubmitting(true);
 
-    // Feedback and redirect to Agen dashboard
-    alert("Produk berhasil diajukan! Menunggu verifikasi kurator.");
-    router.push("/agen/dashboard");
+    try {
+      notification.info("📤 Uploading to IPFS...");
+
+      // Step 1: Upload images to IPFS (if any)
+      const imageHashes: string[] = [];
+      if (mediaFiles.photos.length > 0) {
+        for (const file of mediaFiles.photos) {
+          try {
+            const imageHash = await uploadImageToIPFS(file);
+            imageHashes.push(imageHash);
+          } catch (error) {
+            console.error("Error uploading image:", error);
+          }
+        }
+      }
+
+      // Step 2: Create NFT metadata following OpenSea standard
+      const nftMetadata = {
+        name: formData.namaProduk,
+        description: formData.ceritaProduk || formData.deskripsi,
+        // Use first uploaded image or a placeholder
+        image:
+          imageHashes.length > 0
+            ? `ipfs://${imageHashes[0]}`
+            : "https://images.unsplash.com/photo-1582739024744-3c0d1c985d08?w=400&h=400&fit=crop",
+        attributes: [
+          {
+            trait_type: "Region",
+            value: formData.regionCode,
+          },
+          {
+            trait_type: "Category",
+            value: formData.jenisProduk,
+          },
+          {
+            trait_type: "Materials",
+            value: formData.bahanBaku,
+          },
+          {
+            trait_type: "Production Time",
+            value: formData.waktuPembuatan,
+          },
+          {
+            trait_type: "Estimated Price",
+            value: formData.hargaEstimasi,
+          },
+        ],
+        // Additional metadata (not standard but useful)
+        external_url: "", // Could link to your website
+        properties: {
+          images: imageHashes.map(hash => `ipfs://${hash}`),
+          video: previewUrls.video,
+          materials: formData.bahanBaku,
+          productionTime: formData.waktuPembuatan,
+          estimatedPrice: formData.hargaEstimasi,
+          timestamp: Date.now(),
+        },
+      };
+
+      console.log("📦 NFT Metadata:", nftMetadata);
+
+      // Step 3: Upload metadata JSON to IPFS
+      const metadataHash = await uploadToIPFS(nftMetadata);
+      console.log("✅ IPFS Upload complete! Hash:", metadataHash);
+
+      notification.success("📝 Metadata uploaded to IPFS!");
+
+      // Step 4: Submit to blockchain
+      notification.info("🔗 Submitting to blockchain...");
+
+      const artisanAddress = connectedAddress;
+
+      // Call smart contract to request mint
+      await writeIcas721Async({
+        functionName: "requestMint",
+        args: [artisanAddress, formData.regionCode, formData.jenisProduk, metadataHash],
+      });
+
+      notification.success("🎉 Product submitted for curator approval!");
+
+      // Wait a bit for the transaction to be confirmed
+      setTimeout(() => {
+        router.push("/agen/submissions");
+      }, 2000);
+    } catch (error) {
+      console.error("Error submitting product:", error);
+      notification.error("Failed to submit product. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleSaveDraft = () => {
@@ -126,12 +203,7 @@ const TambahProdukBaru: NextPage = () => {
   };
 
   return (
-    <>
-      <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
-        @import url("https://fonts.cdnfonts.com/css/aldo");
-      `}</style>
-
+    <div>
       <div
         className="min-h-screen relative"
         style={{
@@ -223,6 +295,20 @@ const TambahProdukBaru: NextPage = () => {
               onSubmit={handleSubmit}
               className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-8"
             >
+              {/* Wallet Connection Warning */}
+              {!connectedAddress && (
+                <div className="mb-6 bg-yellow-500/10 border border-yellow-400/30 rounded-lg p-4 flex items-start gap-3">
+                  <DocumentTextIcon className="h-6 w-6 text-yellow-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-white/90 font-semibold mb-1">Wallet Not Connected</p>
+                    <p className="text-white/70 text-sm">
+                      Please connect your wallet to submit products to the blockchain. You can fill the form, but
+                      submission requires wallet connection.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Step 1: Data Produk */}
               {step === 1 && (
                 <div className="space-y-6">
@@ -630,10 +716,20 @@ const TambahProdukBaru: NextPage = () => {
                       </button>
                       <button
                         type="submit"
-                        className="px-6 py-3 rounded-lg font-semibold bg-green-500 hover:bg-green-600 text-white transition-all hover:scale-105"
+                        disabled={isSubmitting || !connectedAddress}
+                        className="px-6 py-3 rounded-lg font-semibold bg-green-500 hover:bg-green-600 text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                       >
-                        <CheckIcon className="h-5 w-5 inline-block mr-2" />
-                        Ajukan untuk Kurasi
+                        {isSubmitting ? (
+                          <>
+                            <span className="loading loading-spinner loading-sm mr-2"></span>
+                            Submitting to Blockchain...
+                          </>
+                        ) : (
+                          <>
+                            <CheckIcon className="h-5 w-5 inline-block mr-2" />
+                            {!connectedAddress ? "Connect Wallet" : "Ajukan untuk Kurasi"}
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -643,7 +739,7 @@ const TambahProdukBaru: NextPage = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

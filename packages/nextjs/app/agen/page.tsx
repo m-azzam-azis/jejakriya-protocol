@@ -145,7 +145,7 @@ const AgenDashboard: NextPage = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Link
               href="/agen/pengrajin/baru"
               className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all hover:scale-105 cursor-pointer"
@@ -204,6 +204,37 @@ const AgenDashboard: NextPage = () => {
                     Tambah Produk Baru
                   </h3>
                   <p className="text-white/70 text-sm">Dokumentasikan karya pengrajin</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/agen/submissions"
+              className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all hover:scale-105 cursor-pointer"
+            >
+              <div className="flex items-center gap-4">
+                <div
+                  className="p-4 rounded-xl"
+                  style={{
+                    background: "linear-gradient(135deg, #C48A04 0%, #E9A507 100%)",
+                  }}
+                >
+                  <DocumentTextIcon className="h-8 w-8 text-black" />
+                </div>
+                <div>
+                  <h3
+                    className="text-xl font-bold mb-1"
+                    style={{
+                      fontFamily: "'Mileast', sans-serif",
+                      background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    Lihat Submissions
+                  </h3>
+                  <p className="text-white/70 text-sm">Track status produk di blockchain</p>
                 </div>
               </div>
             </Link>
