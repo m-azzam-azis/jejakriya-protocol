@@ -5,9 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { hardhat } from "viem/chains";
-import { Bars3Icon } from "@heroicons/react/24/outline";
+import { Bars3Icon, UserCircleIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick, useTargetNetwork } from "~~/hooks/scaffold-eth";
+import { useAuth } from "~~/contexts/AuthContext";
+import { hasAccess } from "~~/types/auth";
 
 type HeaderMenuLink = {
   label: string;
@@ -22,6 +24,10 @@ export const menuLinks: HeaderMenuLink[] = [
   {
     label: "Lending",
     href: "/lending",
+  },
+  {
+    label: "Profile",
+    href: "/profile",
   },
   {
     label: "Ekraf",
@@ -47,9 +53,17 @@ export const menuLinks: HeaderMenuLink[] = [
 
 export const HeaderMenuLinks = () => {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  // Filter menu berdasarkan role user
+  const filteredMenuLinks = menuLinks.filter(link => {
+    if (!user) return link.href === "/" || link.href === "/lending" || link.href === "/pengrajin";
+    return hasAccess(user.role, link.href);
+  });
+
   return (
     <>
-      {menuLinks.map(({ label, href }) => {
+      {filteredMenuLinks.map(({ label, href }) => {
         const isActive = pathname === href;
         return (
           <li key={href}>
@@ -83,6 +97,7 @@ export const Header = () => {
   const isLocalNetwork = targetNetwork.id === hardhat.id;
   const burgerMenuRef = useRef<HTMLDetailsElement>(null);
   const router = useRouter();
+  const { user, logout } = useAuth();
 
   // State untuk mengontrol show/hide header
   const [isVisible, setIsVisible] = useState(true);
@@ -91,6 +106,11 @@ export const Header = () => {
   useOutsideClick(burgerMenuRef, () => {
     burgerMenuRef?.current?.removeAttribute("open");
   });
+
+  const handleLogout = () => {
+    logout();
+    router.push("/login");
+  };
 
   // Effect untuk handle scroll behavior
   useEffect(() => {
@@ -184,8 +204,51 @@ export const Header = () => {
         </ul>
       </div>
 
-      {/* Right side - Wallet info */}
-      <div className="navbar-end flex gap-2 ml-auto">
+      {/* Right side - User info & Wallet */}
+      <div className="navbar-end flex items-center gap-3 ml-auto">
+        {user ? (
+          <>
+
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout}
+              className="btn btn-sm gap-2 border-none hover:scale-105 transition-transform"
+              style={{
+                background: 'linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)',
+                color: '#060606',
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 600,
+              }}
+            >
+              <ArrowRightOnRectangleIcon className="h-5 w-5" />
+              <span className="hidden md:inline">Logout</span>
+            </button>
+          </>
+        ) : (
+          <>
+            {/* Login/Register buttons when not logged in */}
+            <Link
+              href="/login"
+              className="btn btn-sm btn-ghost text-white hover:bg-white/10 border border-white/30"
+              style={{ fontFamily: "'Poppins', sans-serif" }}
+            >
+              Login
+            </Link>
+            <Link
+              href="/register"
+              className="btn btn-sm border-none"
+              style={{
+                background: 'linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #C48A04 100%)',
+                color: '#060606',
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 600,
+              }}
+            >
+              Register
+            </Link>
+          </>
+        )}
+
         <RainbowKitCustomConnectButton />
         {isLocalNetwork && <FaucetButton />}
       </div>

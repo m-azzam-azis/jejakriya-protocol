@@ -1,4 +1,5 @@
 import { ethers } from "hardhat";
+import * as deployedContracts from "../deployments/localhost/CuratorRegistry.json";
 
 /**
  * Simple script to add curator using hardhat default accounts
@@ -7,9 +8,10 @@ import { ethers } from "hardhat";
 async function main() {
   // Address to add as curator
   const CURATOR_ADDRESS = "0xD940Aadc4AAAEEd0Cd2Da6b1Baf8D8f8fBD56e37";
-  const REGISTRY_ADDRESS = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
+  const REGISTRY_ADDRESS = deployedContracts.address;
 
   console.log("\n🎭 Adding Curator to Registry...\n");
+  console.log(`Registry Address: ${REGISTRY_ADDRESS}`);
 
   // Get signers (hardhat accounts)
   const [deployer] = await ethers.getSigners();

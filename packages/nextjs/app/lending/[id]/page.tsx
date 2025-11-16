@@ -17,6 +17,7 @@ import { useScaffoldWriteContract, useScaffoldReadContract, useScaffoldEventHist
 import { notification } from "~~/utils/scaffold-eth";
 import { fetchFromIPFS } from "~~/utils/ipfs";
 import { parseEther, formatEther } from "viem";
+import deployedContracts from "~~/contracts/deployedContracts";
 
 type NFTMetadata = {
   name: string;
@@ -52,6 +53,9 @@ const LendingDetailPage = () => {
   const protocolFee = 2; // 2% APY
   const lpRate = 10; // 10% APY for liquidity providers
 
+  // Get LendingPool address from deployedContracts
+  const lendingPoolAddress = deployedContracts[31337]?.LendingPool?.address as `0x${string}` | undefined;
+
   // Check if NFT is locked in lending pool
   const { data: isLocked } = useScaffoldReadContract({
     contractName: "LendingPool",
@@ -67,14 +71,12 @@ const LendingDetailPage = () => {
   });
 
   // Check if NFT is approved for LendingPool
-  const { data: approvedAddress } = useScaffoldReadContract({
+  const { data: approvedAddress, refetch: refetchApproval } = useScaffoldReadContract({
     contractName: "ICAS721",
     functionName: "getApproved",
     args: [BigInt(tokenId || "0")],
   });
 
-  const lendingPoolAddress = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"; // From deployedContracts
-  
   const { writeContractAsync: writeLendingPool } = useScaffoldWriteContract("LendingPool");
   const { writeContractAsync: writeICAS721 } = useScaffoldWriteContract("ICAS721");
 
@@ -234,6 +236,11 @@ const LendingDetailPage = () => {
       return;
     }
 
+    if (!lendingPoolAddress) {
+      notification.error("LendingPool contract not found");
+      return;
+    }
+
     if (nftOwner?.toLowerCase() !== connectedAddress.toLowerCase()) {
       notification.error("You don't own this NFT");
       return;
@@ -248,7 +255,11 @@ const LendingDetailPage = () => {
       });
 
       notification.success("NFT approved successfully! You can now request a loan.");
-      setIsApproved(true);
+      
+      // Refetch approval status
+      setTimeout(() => {
+        refetchApproval();
+      }, 2000);
     } catch (error: any) {
       console.error("Error approving NFT:", error);
       notification.error(error?.message || "Failed to approve NFT");
@@ -291,15 +302,14 @@ const LendingDetailPage = () => {
     try {
       setIsSubmitting(true);
       
-      // Convert USDC amount to wei (assuming 6 decimals for USDC)
-      // For demo, using 18 decimals like ETH
-      const amountInWei = parseEther(loanAmount);
+      // Convert USDC amount to proper format (6 decimals)
+      const amountInUSDC = BigInt(Math.floor(parseFloat(loanAmount) * 1_000_000));
       const durationInDays = BigInt(loanDuration);
 
       // Call smart contract function
       await writeLendingPool({
         functionName: "requestLoan",
-        args: [BigInt(tokenId), amountInWei, durationInDays],
+        args: [BigInt(tokenId), amountInUSDC, durationInDays],
       });
 
       notification.success("Loan request submitted successfully! NFT is now locked.");

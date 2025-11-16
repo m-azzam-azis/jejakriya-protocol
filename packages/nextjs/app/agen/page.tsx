@@ -10,9 +10,18 @@ import {
   PlusCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
+import { ProtectedRoute } from "~~/components/ProtectedRoute";
 import { useProductStore } from "~~/services/store/productStore";
 
 const AgenDashboard: NextPage = () => {
+  return (
+    <ProtectedRoute>
+      <AgenDashboardContent />
+    </ProtectedRoute>
+  );
+};
+
+const AgenDashboardContent = () => {
   const [activeTab, setActiveTab] = useState<"pengrajin" | "produk">("pengrajin");
 
   // Use product store for real data

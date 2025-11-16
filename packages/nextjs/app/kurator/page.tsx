@@ -13,6 +13,7 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 import ErrorBoundary from "~~/components/ErrorBoundary";
+import { ProtectedRoute } from "~~/components/ProtectedRoute";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldEventHistory, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { fetchFromIPFS } from "~~/utils/ipfs";
@@ -807,21 +808,23 @@ const KuratorContent = () => {
 
 const KuratorDashboard: NextPage = () => {
   return (
-    <ErrorBoundary>
-      <Suspense
-        fallback={
-          <div
-            className="flex flex-col min-h-screen relative text-white items-center justify-center"
-            style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%" }}
-          >
-            <span className="loading loading-spinner loading-lg text-yellow-400"></span>
-            <p className="text-white/70 mt-4 text-lg">Memuat Dashboard Kurator...</p>
-          </div>
-        }
-      >
-        <KuratorContent />
-      </Suspense>
-    </ErrorBoundary>
+    <ProtectedRoute>
+      <ErrorBoundary>
+        <Suspense
+          fallback={
+            <div
+              className="flex flex-col min-h-screen relative text-white items-center justify-center"
+              style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%" }}
+            >
+              <span className="loading loading-spinner loading-lg text-yellow-400"></span>
+              <p className="text-white/70 mt-4 text-lg">Memuat Dashboard Kurator...</p>
+            </div>
+          }
+        >
+          <KuratorContent />
+        </Suspense>
+      </ErrorBoundary>
+    </ProtectedRoute>
   );
 };
 

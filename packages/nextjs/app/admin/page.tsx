@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ProtectedRoute } from "~~/components/ProtectedRoute";
 
 // Import font Mileast langsung di komponen
 const importFonts = `
@@ -44,6 +45,14 @@ const AdminSidebar = () => (
 );
 
 export default function AdminDashboardPage() {
+  return (
+    <ProtectedRoute>
+      <AdminDashboardContent />
+    </ProtectedRoute>
+  );
+}
+
+function AdminDashboardContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

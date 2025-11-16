@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
@@ -14,6 +15,7 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
  */
 contract LendingPool is Ownable, ReentrancyGuard {
     IERC721 public nftContract;
+    IERC20 public usdcToken;
 
     struct Loan {
         address borrower;
@@ -56,8 +58,9 @@ contract LendingPool is Ownable, ReentrancyGuard {
         uint256 indexed tokenId
     );
 
-    constructor(address _nftContract) Ownable(msg.sender) {
+    constructor(address _nftContract, address _usdcToken) Ownable(msg.sender) {
         nftContract = IERC721(_nftContract);
+        usdcToken = IERC20(_usdcToken);
         loanCounter = 0;
     }
 
@@ -105,8 +108,9 @@ contract LendingPool is Ownable, ReentrancyGuard {
 
         emit LoanRequested(loanId, msg.sender, tokenId, amount, duration);
 
-        // In a real implementation, transfer USDC to borrower here
-        // USDC.transfer(msg.sender, amount);
+        // Transfer USDC to borrower
+        require(usdcToken.balanceOf(address(this)) >= amount, "Insufficient pool liquidity");
+        require(usdcToken.transfer(msg.sender, amount), "USDC transfer failed");
 
         return loanId;
     }
@@ -115,7 +119,7 @@ contract LendingPool is Ownable, ReentrancyGuard {
      * @dev Repay a loan and get NFT back
      * @param loanId The loan ID to repay
      */
-    function repayLoan(uint256 loanId) external payable nonReentrant {
+    function repayLoan(uint256 loanId) external nonReentrant {
         Loan storage loan = loans[loanId];
 
         require(loan.isActive, "Loan is not active");
@@ -124,9 +128,9 @@ contract LendingPool is Ownable, ReentrancyGuard {
 
         uint256 totalRepayment = calculateTotalRepayment(loanId);
 
-        // In a real implementation, check USDC balance and transfer
-        // require(USDC.balanceOf(msg.sender) >= totalRepayment, "Insufficient balance");
-        // USDC.transferFrom(msg.sender, address(this), totalRepayment);
+        // Transfer USDC from borrower to pool
+        require(usdcToken.balanceOf(msg.sender) >= totalRepayment, "Insufficient USDC balance");
+        require(usdcToken.transferFrom(msg.sender, address(this), totalRepayment), "USDC transfer failed");
 
         // Mark loan as repaid
         loan.isRepaid = true;

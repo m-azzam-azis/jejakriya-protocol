@@ -214,13 +214,19 @@ const useApprovedNFTs = () => {
               }
             }
 
+            // Parse estimated price - it's already in USDC format (not in 6 decimals)
+            const rawPrice = metadata.attributes?.find((a: any) => a.trait_type === "Estimated Price")?.value || 
+                           metadata.properties?.estimatedPrice || 
+                           "1000";
+            const collateralValue = parseInt(String(rawPrice));
+
             assets.push({
               id: requestId,
               tokenId,
               name: metadata.name || `NFT #${tokenId}`,
               image: imageUrl,
               curator: "Ibu Wati",
-              collateralValue: parseInt(String(metadata.attributes?.find((a: any) => a.trait_type === "Estimated Price")?.value || metadata.properties?.estimatedPrice || "1000")),
+              collateralValue,
               artisan: requestEvent.args?.artisan || "Unknown Artisan",
               description: metadata.description || metadata.ceritaProduk || "",
               isLocked: false, // Will be updated separately
