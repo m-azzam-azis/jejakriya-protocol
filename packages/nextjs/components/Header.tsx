@@ -43,6 +43,10 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Admin",
     href: "/admin",
   },
+  {
+    label: "Profile",
+    href: "/profile",
+  },
 ];
 
 export const HeaderMenuLinks = () => {

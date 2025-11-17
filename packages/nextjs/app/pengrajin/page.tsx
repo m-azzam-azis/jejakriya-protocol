@@ -28,11 +28,11 @@ const PemilikDashboard: NextPage = () => {
     {
       id: 1,
       tokenId: "ICAS-001",
-      name: "Kain Tenun Sumba Motif Mamuli",
+      name: "Topeng Cirebon 'Panji'",
       creator: "Ibu Lastri",
       creatorHandle: "@ibu_lastri",
       region: "SUMBA-TIMUR",
-      image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800&auto=format&fit=crop",
+      image: "panji.png",
       views: 35456,
       likes: 892,
       price: "21.765 ETH",
@@ -50,7 +50,7 @@ const PemilikDashboard: NextPage = () => {
       creator: "Ibu Siti",
       creatorHandle: "@batik_siti",
       region: "YOGYAKARTA",
-      image: "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=800&auto=format&fit=crop",
+      image: "parangrusak.png",
       views: 28341,
       likes: 654,
       price: "18.5 ETH",
@@ -64,11 +64,11 @@ const PemilikDashboard: NextPage = () => {
     {
       id: 3,
       tokenId: "ICAS-003",
-      name: "Tas Anyaman Rotan Natural",
+      name: "Songket Palembang 'Lepan'",
       creator: "Pak Wayan",
       creatorHandle: "@wayan_craft",
       region: "BALI-UBUD",
-      image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&auto=format&fit=crop",
+      image: "songket.png",
       views: 19823,
       likes: 421,
       price: "8.2 ETH",
@@ -82,11 +82,11 @@ const PemilikDashboard: NextPage = () => {
     {
       id: 4,
       tokenId: "ICAS-004",
-      name: "Ukiran Kayu Jepara Naga",
+      name: "Ukiran Asmat 'Wuramon'",
       creator: "Pak Ahmad",
       creatorHandle: "@jepara_carving",
       region: "JEPARA",
-      image: "https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=800&auto=format&fit=crop",
+      image: "asmat.png",
       views: 42190,
       likes: 1203,
       price: "32.8 ETH",
@@ -109,10 +109,11 @@ const PemilikDashboard: NextPage = () => {
     <>
       <style jsx global>{`
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+        @import url("https://fonts.cdnfonts.com/css/mileast");
       `}</style>
 
       <div
-        className="min-h-screen relative"
+        className="min-h-screen relative pt-[100px]"
         style={{
           background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)",
           fontFamily: "'Poppins', sans-serif",
@@ -136,18 +137,6 @@ const PemilikDashboard: NextPage = () => {
           <div className="bg-white/5 backdrop-blur-sm border-b border-white/10 px-6 py-4">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
               <div className="flex items-center gap-8">
-                <Link href="/" className="flex items-center gap-2">
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xl"
-                    style={{
-                      background: "linear-gradient(135deg, #C48A04 0%, #E9A507 100%)",
-                      color: "#060606",
-                    }}
-                  >
-                    JK
-                  </div>
-                </Link>
-
                 <div className="flex gap-2">
                   <button
                     className="px-6 py-2 rounded-lg font-semibold text-black"
@@ -203,7 +192,7 @@ const PemilikDashboard: NextPage = () => {
                 <h1
                   className="text-5xl font-bold mb-4"
                   style={{
-                    fontFamily: "'Aldo', sans-serif",
+                    fontFamily: "'Mileast', sans-serif",
                     background:
                       "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
                     WebkitBackgroundClip: "text",
@@ -211,7 +200,7 @@ const PemilikDashboard: NextPage = () => {
                     backgroundClip: "text",
                   }}
                 >
-                  RECENT COLLECTIONS
+                  Recent Collection
                 </h1>
                 <div className="flex items-center gap-2">
                   <Address address={connectedAddress} />
@@ -318,14 +307,14 @@ const PemilikDashboard: NextPage = () => {
               <h2
                 className="text-4xl font-bold mb-6"
                 style={{
-                  fontFamily: "'Aldo', sans-serif",
+                  fontFamily: "'Mileast', sans-serif",
                   background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                 }}
               >
-                HISTORY
+                History
               </h2>
 
               <div className="flex gap-2 mb-6">

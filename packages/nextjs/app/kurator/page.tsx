@@ -364,13 +364,6 @@ const KuratorContent = () => {
             </div>
           </div>
 
-          {/* ... (Media Badges) ... */}
-          <div className="flex gap-2 mb-4">
-            <div className="bg-blue-500/20 px-3 py-1 rounded-full text-blue-300 text-xs">{product.photos} Foto</div>
-            {product.hasVideo && (
-              <div className="bg-green-500/20 px-3 py-1 rounded-full text-green-300 text-xs">✓ Video</div>
-            )}
-          </div>
         </div>
 
         {/* --- ACTIONS (TOMBOL BARU) --- */}
@@ -814,21 +807,21 @@ const KuratorContent = () => {
 
 const KuratorDashboard: NextPage = () => {
   return (
-    <ErrorBoundary>
-      <Suspense
-        fallback={
-          <div
-            className="flex flex-col min-h-screen relative text-white items-center justify-center"
-            style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%" }}
-          >
-            <span className="loading loading-spinner loading-lg text-yellow-400"></span>
-            <p className="text-white/70 mt-4 text-lg">Memuat Dashboard Kurator...</p>
-          </div>
-        }
-      >
-        <KuratorContent />
-      </Suspense>
-    </ErrorBoundary>
+      <ErrorBoundary>
+        <Suspense
+          fallback={
+            <div
+              className="flex flex-col min-h-screen relative text-white items-center justify-center"
+              style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%" }}
+            >
+              <span className="loading loading-spinner loading-lg text-yellow-400"></span>
+              <p className="text-white/70 mt-4 text-lg">Memuat Dashboard Kurator...</p>
+            </div>
+          }
+        >
+          <KuratorContent />
+        </Suspense>
+      </ErrorBoundary>
   );
 };
 
