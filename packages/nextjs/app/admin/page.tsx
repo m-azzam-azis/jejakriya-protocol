@@ -31,13 +31,19 @@ const AdminSidebar = () => (
   <aside className="w-64 bg-black/20 backdrop-blur-lg border-r border-white/10 flex-shrink-0 p-4 hidden md:block">
     <ul className="menu space-y-2">
       <li>
-        <a className="active bg-white/10 text-white" style={{ fontFamily: "'Mileast', sans-serif" }}>Dashboard</a>
+        <a className="active bg-white/10 text-white" style={{ fontFamily: "'Mileast', sans-serif" }}>
+          Dashboard
+        </a>
       </li>
       <li>
-        <a className="bg-transparent text-white/80" style={{ fontFamily: "'Mileast', sans-serif" }}>Manajemen Kurator</a>
+        <a className="bg-transparent text-white/80" style={{ fontFamily: "'Mileast', sans-serif" }}>
+          Manajemen Kurator
+        </a>
       </li>
       <li>
-        <a className="bg-transparent text-white/80" style={{ fontFamily: "'Mileast', sans-serif" }}>Parameter Protokol</a>
+        <a className="bg-transparent text-white/80" style={{ fontFamily: "'Mileast', sans-serif" }}>
+          Parameter Protokol
+        </a>
       </li>
     </ul>
   </aside>
@@ -59,8 +65,10 @@ export default function AdminDashboardPage() {
 
   return (
     <>
-      <style jsx global>{importFonts}</style>
-      
+      <style jsx global>
+        {importFonts}
+      </style>
+
       <div
         className="flex h-screen text-white pt-[96px]"
         style={{
@@ -85,8 +93,8 @@ export default function AdminDashboardPage() {
 
         <main className="flex-1 p-4 md:p-8 overflow-y-auto relative z-10 pt-[150px]">
           <header className="mb-8">
-            <h1 
-              className="text-4xl md:text-5xl font-bold" 
+            <h1
+              className="text-4xl md:text-5xl font-bold"
               style={{ ...goldGradientText, fontFamily: "'Mileast', sans-serif" }}
             >
               Admin Dashboard
@@ -104,7 +112,10 @@ export default function AdminDashboardPage() {
                   className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10 transition-all duration-300 hover:bg-white/10"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-base font-semibold text-white/70" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                    <h3
+                      className="text-base font-semibold text-white/70"
+                      style={{ fontFamily: "'Poppins', sans-serif" }}
+                    >
                       {s.title}
                     </h3>
                     <div className="text-yellow-400 text-lg">★</div>
@@ -143,8 +154,8 @@ export default function AdminDashboardPage() {
 
           <section className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10">
-              <h3 
-                className="text-2xl mb-4 font-bold" 
+              <h3
+                className="text-2xl mb-4 font-bold"
                 style={{ ...goldGradientText, fontFamily: "'Mileast', sans-serif" }}
               >
                 Manajemen Risiko
@@ -154,9 +165,15 @@ export default function AdminDashboardPage() {
                 <table className="w-full text-left">
                   <thead>
                     <tr className="border-b border-white/10">
-                      <th className="p-2" style={{ fontFamily: "'Poppins', sans-serif" }}>Peminjam</th>
-                      <th className="p-2" style={{ fontFamily: "'Poppins', sans-serif" }}>Health Factor</th>
-                      <th className="p-2" style={{ fontFamily: "'Poppins', sans-serif" }}>Status</th>
+                      <th className="p-2" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                        Peminjam
+                      </th>
+                      <th className="p-2" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                        Health Factor
+                      </th>
+                      <th className="p-2" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                        Status
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -212,19 +229,24 @@ export default function AdminDashboardPage() {
 
             <div className="space-y-6">
               <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10">
-                <h3 
-                  className="text-2xl mb-4 font-bold" 
+                <h3
+                  className="text-2xl mb-4 font-bold"
                   style={{ ...goldGradientText, fontFamily: "'Mileast', sans-serif" }}
                 >
                   Parameter Protokol
                 </h3>
-                <div className="border border-yellow-500/30 bg-yellow-500/10 text-yellow-300 text-sm rounded-lg p-3" style={{ fontFamily: "'Mileast', sans-serif" }}>
+                <div
+                  className="border border-yellow-500/30 bg-yellow-500/10 text-yellow-300 text-sm rounded-lg p-3"
+                  style={{ fontFamily: "'Mileast', sans-serif" }}
+                >
                   Perubahan di sini harus melalui proses Multi-Sig.
                 </div>
 
                 <div className="form-control mt-4">
                   <label className="label">
-                    <span className="text-white/70" style={{ fontFamily: "'Poppins', sans-serif" }}>Ubah Loan-to-Value (LTV)</span>
+                    <span className="text-white/70" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                      Ubah Loan-to-Value (LTV)
+                    </span>
                   </label>
                   <div className="flex gap-2">
                     <input
@@ -232,7 +254,10 @@ export default function AdminDashboardPage() {
                       className="input bg-transparent border-white/20 w-full"
                       placeholder="Contoh: 35"
                     />
-                    <button className="btn border-0 font-bold" style={{ ...goldGradientButton, fontFamily: "'Mileast', sans-serif" }}>
+                    <button
+                      className="btn border-0 font-bold"
+                      style={{ ...goldGradientButton, fontFamily: "'Mileast', sans-serif" }}
+                    >
                       Ajukan
                     </button>
                   </div>
@@ -240,21 +265,29 @@ export default function AdminDashboardPage() {
               </div>
 
               <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/10">
-                <h3 
-                  className="text-2xl mb-4 font-bold" 
+                <h3
+                  className="text-2xl mb-4 font-bold"
                   style={{ ...goldGradientText, fontFamily: "'Mileast', sans-serif" }}
                 >
                   Manajemen Kurator
                 </h3>
                 <label className="label">
-                  <span className="text-white/70" style={{ fontFamily: "'Poppins', sans-serif" }}>Alamat Wallet Kurator</span>
+                  <span className="text-white/70" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                    Alamat Wallet Kurator
+                  </span>
                 </label>
                 <input type="text" className="input bg-transparent border-white/20 w-full" placeholder="0x..." />
                 <div className="flex gap-2 mt-3">
-                  <button className="btn border-0 font-bold" style={{ ...goldGradientButton, fontFamily: "'Mileast', sans-serif" }}>
+                  <button
+                    className="btn border-0 font-bold"
+                    style={{ ...goldGradientButton, fontFamily: "'Mileast', sans-serif" }}
+                  >
                     Tambah
                   </button>
-                  <button className="btn btn-outline border-white/30 text-white" style={{ fontFamily: "'Mileast', sans-serif" }}>
+                  <button
+                    className="btn btn-outline border-white/30 text-white"
+                    style={{ fontFamily: "'Mileast', sans-serif" }}
+                  >
                     Hapus
                   </button>
                 </div>
