@@ -19,6 +19,10 @@ const footerLinks = [
     href: "/lending",
   },
   {
+    label: "Profile",
+    href: "/profile",
+  },
+  {
     label: "Ekraf",
     href: "/ekraf",
   },

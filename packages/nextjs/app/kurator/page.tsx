@@ -807,21 +807,21 @@ const KuratorContent = () => {
 
 const KuratorDashboard: NextPage = () => {
   return (
-    <ErrorBoundary>
-      <Suspense
-        fallback={
-          <div
-            className="flex flex-col min-h-screen relative text-white items-center justify-center"
-            style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%" }}
-          >
-            <span className="loading loading-spinner loading-lg text-yellow-400"></span>
-            <p className="text-white/70 mt-4 text-lg">Memuat Dashboard Kurator...</p>
-          </div>
-        }
-      >
-        <KuratorContent />
-      </Suspense>
-    </ErrorBoundary>
+      <ErrorBoundary>
+        <Suspense
+          fallback={
+            <div
+              className="flex flex-col min-h-screen relative text-white items-center justify-center"
+              style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%" }}
+            >
+              <span className="loading loading-spinner loading-lg text-yellow-400"></span>
+              <p className="text-white/70 mt-4 text-lg">Memuat Dashboard Kurator...</p>
+            </div>
+          }
+        >
+          <KuratorContent />
+        </Suspense>
+      </ErrorBoundary>
   );
 };
 

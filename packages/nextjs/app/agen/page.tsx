@@ -13,6 +13,12 @@ import {
 import { useProductStore } from "~~/services/store/productStore";
 
 const AgenDashboard: NextPage = () => {
+  return (
+      <AgenDashboardContent />
+  );
+};
+
+const AgenDashboardContent = () => {
   const [activeTab, setActiveTab] = useState<"pengrajin" | "produk">("pengrajin");
 
   // Use product store for real data

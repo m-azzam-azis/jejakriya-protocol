@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowRightIcon,
   BanknotesIcon,
@@ -9,7 +10,10 @@ import {
   MagnifyingGlassIcon,
   ShieldCheckIcon,
   Squares2X2Icon,
+  LockClosedIcon,
 } from "@heroicons/react/24/outline";
+import { useScaffoldEventHistory, useScaffoldReadContract } from "~~/hooks/scaffold-eth";
+import { fetchFromIPFS } from "~~/utils/ipfs";
 
 // Global styles dipindah ke komponen Style
 const GlobalStyles = () => (
@@ -66,94 +70,216 @@ const TableRowShimmer = () => {
   );
 };
 
-// --- DATA DIPERBANYAK ---
-const nftAssets = [
+// --- DATA STATIC (Fallback data) ---
+const staticNftAssets = [
   {
-    id: 1,
+    id: "1",
+    tokenId: "1",
     name: "Keris Pusaka Naga Sasra",
-    image: "keris.png",
+    image: "/keris.png",
     curator: "Ibu Wati",
     collateralValue: 5000,
+    artisan: "Pak Suryono",
+    description: "Keris pusaka warisan leluhur"
   },
   {
-    id: 2,
-    name: "Batik Tulis Sido Asih",
-    image: "sidhoasih.png",
-    curator: "Kriya",
-    collateralValue: 1200,
-  },
-  {
-    id: 3,
-    name: "Wayang Golek Cepot",
-    image: "cepot.png",
-    curator: "Karsa",
-    collateralValue: 850,
-  },
-  {
-    id: 4,
+    id: "4",
+    tokenId: "4",
     name: "Ukiran Asmat 'Wuramon'",
-    image: "asmat.png",
+    image: "/asmat.png",
     curator: "Ibu Wati",
     collateralValue: 3100,
+    artisan: "Suku Asmat",
+    description: "Ukiran kayu khas Papua"
   },
   {
-    id: 5,
-    name: "Songket Palembang 'Lepan'",
-    image: "songket.png",
-    curator: "Kriya",
-    collateralValue: 2200,
-  },
-  {
-    id: 6,
-    name: "Topeng Cirebon 'Panji'",
-    image: "panji.png",
-    curator: "Karsa",
-    collateralValue: 600,
-  },
-  {
-    id: 7,
-    name: "Tenun Ikat Sumba",
-    image: "ikatsumba.png",
-    curator: "Kriya",
-    collateralValue: 1800,
-  },
-  {
-    id: 8,
+    id: "8",
+    tokenId: "8",
     name: "Patung Gading Gajah",
-    image: "gading.png",
+    image: "/gading.png",
     curator: "Ibu Wati",
     collateralValue: 7500,
-  },
-  {
-    id: 9,
-    name: "Batik Parang Rusak",
-    image: "parangrusak.png",
-    curator: "Karsa",
-    collateralValue: 950,
-  },
-  {
-    id: 10,
-    name: "Noken Papua 'Anggrek'",
-    image: "noken.png",
-    curator: "Kriya",
-    collateralValue: 300,
+    artisan: "Pak Agung",
+    description: "Patung ukir gading"
   },
 ];
+
+// Type for NFT Asset
+type NFTAsset = {
+  id: string;
+  tokenId: string;
+  name: string;
+  image: string;
+  curator: string;
+  collateralValue: number;
+  artisan: string;
+  description?: string;
+  isLocked?: boolean;
+};
 
 // --- Data untuk Filter Koleksi ---
 const collectionFilters = [
-  { name: "Ibu Wati", by: "Wati LABS", value: "Ibu Wati", image: "keris.png", floorPrice: 1.27, volume: 41.8 },
-  { name: "Kriya Nusantara", by: "Kriya LABS", value: "Kriya", image: "noken.png", floorPrice: 0.8, volume: 20.1 },
-  { name: "Cipta Karsa", by: "Karsa LABS", value: "Karsa", image: "cepot.png", floorPrice: 30.5, volume: 1500.0 },
+  { name: "Semua Koleksi", by: "All Curators", value: "all", image: "/keris.png", floorPrice: 1.27, volume: 41.8 },
+  { name: "Ibu Wati", by: "Wati LABS", value: "Ibu Wati", image: "/keris.png", floorPrice: 1.27, volume: 41.8 },
+  { name: "Kriya Nusantara", by: "Kriya LABS", value: "Kriya", image: "/noken.png", floorPrice: 0.8, volume: 20.1 },
+  { name: "Cipta Karsa", by: "Karsa LABS", value: "Karsa", image: "/cepot.png", floorPrice: 30.5, volume: 1500.0 },
 ];
 
-const LendingPage = () => {
-  const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState("list");
-  const [selectedCollection, setSelectedCollection] = useState(collectionFilters[0].value);
+// Hook to fetch approved NFTs from blockchain
+const useApprovedNFTs = () => {
+  const [nftAssets, setNftAssets] = useState<NFTAsset[]>(staticNftAssets);
+  const [isLoading, setIsLoading] = useState(false);
+  const [processedIds, setProcessedIds] = useState<Set<string>>(new Set());
+
+  const { data: approvedEvents } = useScaffoldEventHistory({
+    contractName: "ICAS721",
+    eventName: "MintApproved",
+    fromBlock: 0n,
+  });
+
+  const { data: requestEvents } = useScaffoldEventHistory({
+    contractName: "ICAS721",
+    eventName: "MintRequested",
+    fromBlock: 0n,
+  });
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
+    let mounted = true;
+
+    const fetchApprovedNFTs = async () => {
+      // If no events, just use static data
+      if (!approvedEvents?.length || !requestEvents?.length) {
+        return;
+      }
+
+      try {
+        const assets: NFTAsset[] = [];
+
+        // Create map of requestId to MintRequested event
+        const requestMap = new Map();
+        requestEvents.forEach((event: any) => {
+          const requestId = event.args?.requestId;
+          if (requestId) {
+            requestMap.set(requestId, event);
+          }
+        });
+
+        // Process only new approved events
+        for (const event of approvedEvents) {
+          if (!mounted) break;
+
+          try {
+            const requestId = event.args?.requestId;
+            
+            // Skip if already processed
+            if (!requestId || processedIds.has(requestId)) {
+              continue;
+            }
+
+            const tokenId = event.args?.tokenId?.toString();
+            if (!tokenId) continue;
+
+            const requestEvent = requestMap.get(requestId);
+            if (!requestEvent) continue;
+
+            const ipfsHash = requestEvent.args?.ipfsHash;
+            if (!ipfsHash) continue;
+
+            console.log(`Fetching metadata for new NFT ${requestId}`);
+
+            // Fetch metadata
+            const metadata = await fetchFromIPFS(ipfsHash);
+            if (!metadata) continue;
+
+            // Extract image - convert IPFS URL if needed
+            let imageUrl = "/keris.png";
+            if (metadata.properties?.images?.[0]) {
+              const img = metadata.properties.images[0];
+              // Convert ipfs:// to HTTP gateway URL
+              if (img.startsWith('ipfs://')) {
+                imageUrl = img.replace('ipfs://', 'https://ipfs.io/ipfs/');
+              } else if (img.startsWith('Qm') || img.startsWith('bafy')) {
+                imageUrl = `https://ipfs.io/ipfs/${img}`;
+              } else {
+                imageUrl = img;
+              }
+            } else if (metadata.image) {
+              const img = metadata.image;
+              if (img.startsWith('ipfs://')) {
+                imageUrl = img.replace('ipfs://', 'https://ipfs.io/ipfs/');
+              } else if (img.startsWith('Qm') || img.startsWith('bafy')) {
+                imageUrl = `https://ipfs.io/ipfs/${img}`;
+              } else {
+                imageUrl = img;
+              }
+            }
+
+            // Parse estimated price - it's already in USDC format (not in 6 decimals)
+            const rawPrice = metadata.attributes?.find((a: any) => a.trait_type === "Estimated Price")?.value || 
+                           metadata.properties?.estimatedPrice || 
+                           "1000";
+            const collateralValue = parseInt(String(rawPrice));
+
+            assets.push({
+              id: requestId,
+              tokenId,
+              name: metadata.name || `NFT #${tokenId}`,
+              image: imageUrl,
+              curator: "Ibu Wati",
+              collateralValue,
+              artisan: requestEvent.args?.artisan || "Unknown Artisan",
+              description: metadata.description || metadata.ceritaProduk || "",
+              isLocked: false, // Will be updated separately
+            });
+
+            // Mark as processed
+            setProcessedIds(prev => new Set([...prev, requestId]));
+            console.log(`✅ Added NFT: ${metadata.name}`);
+
+            // Small delay to prevent UI freeze
+            await new Promise(resolve => setTimeout(resolve, 100));
+          } catch (error) {
+            console.error("Error processing NFT:", error);
+          }
+        }
+
+        if (mounted && assets.length > 0) {
+          // Add new assets to existing list
+          setNftAssets(prev => {
+            const combined = [...prev, ...assets];
+            // Remove duplicates
+            const unique = combined.filter((item, index, self) =>
+              index === self.findIndex((t) => t.id === item.id)
+            );
+            return unique;
+          });
+          console.log(`✅ Added ${assets.length} new NFTs to lending page`);
+        }
+      } catch (error) {
+        console.error("Error loading approved NFTs:", error);
+      }
+    };
+
+    fetchApprovedNFTs();
+
+    return () => {
+      mounted = false;
+    };
+  }, [approvedEvents?.length, requestEvents?.length]); // Only re-run when event count changes
+
+  return { nftAssets, isLoading };
+};
+
+const LendingPage = () => {
+  const router = useRouter();
+  const { nftAssets, isLoading: loadingNFTs } = useApprovedNFTs();
+  const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("list");
+  const [selectedCollection, setSelectedCollection] = useState("Ibu Wati");
+
+  useEffect(() => {
+    // Set loading to false after a short delay
+    const timer = setTimeout(() => setLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
@@ -172,7 +298,7 @@ const LendingPage = () => {
 
   // Logika filter aset berdasarkan koleksi terpilih
   const filteredAssets =
-    selectedCollection === "all" ? nftAssets : nftAssets.filter(asset => asset.curator === selectedCollection);
+    selectedCollection === "all" ? nftAssets : nftAssets.filter((asset: NFTAsset) => asset.curator === selectedCollection);
 
   // --- Komponen Grid (Kartu Aset) ---
   const AssetGrid = () => (
@@ -189,12 +315,18 @@ const LendingPage = () => {
               <ShimmerPlaceholder className="h-10 w-full mt-4" />
             </div>
           ))
-        : filteredAssets.map(asset => (
+        : filteredAssets.map((asset: NFTAsset) => (
             <div
               key={asset.id}
-              className="bg-purple-950/20 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border border-purple-800/50 transition-all duration-300 hover:bg-purple-900/30 hover:border-purple-700"
+              className={`bg-purple-950/20 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border transition-all duration-300 ${asset.isLocked ? 'border-red-500/50 opacity-75' : 'border-purple-800/50 hover:bg-purple-900/30 hover:border-purple-700'}`}
             >
               <div className="relative h-48 w-full">
+                {asset.isLocked && (
+                  <div className="absolute top-2 right-2 z-10 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                    <LockClosedIcon className="h-3 w-3" />
+                    Terkunci
+                  </div>
+                )}
                 <img src={asset.image} alt={asset.name} className="absolute inset-0 w-full h-full object-cover" />
               </div>
               <div className="p-4">
@@ -211,8 +343,13 @@ const LendingPage = () => {
                     <strong>Nilai:</strong> {asset.collateralValue.toLocaleString()} USDC
                   </p>
                 </div>
-                <button className="w-full mt-4 py-2 rounded-lg border-0 font-bold" style={goldGradientButton}>
-                  Ajukan Pinjaman
+                <button 
+                  onClick={() => router.push(`/lending/${asset.tokenId}`)}
+                  disabled={asset.isLocked}
+                  className="w-full mt-4 py-2 rounded-lg border-0 font-bold transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100" 
+                  style={goldGradientButton}
+                >
+                  {asset.isLocked ? 'Sedang Dipinjam' : 'Ajukan Pinjaman'}
                 </button>
               </div>
             </div>
@@ -251,28 +388,48 @@ const LendingPage = () => {
           {loading ? (
             <TableRowShimmer />
           ) : (
-            filteredAssets.map(asset => (
-              <tr key={asset.id} className="border-b border-purple-900/30 hover:bg-purple-900/20 transition-colors">
+            filteredAssets.map((asset: NFTAsset) => (
+              <tr key={asset.id} className={`border-b border-purple-900/30 transition-colors ${asset.isLocked ? 'opacity-60' : 'hover:bg-purple-900/20'}`}>
                 <td className="p-4">
-                  <input type="checkbox" className="bg-transparent border-white/30 rounded" />
+                  <input type="checkbox" className="bg-transparent border-white/30 rounded" disabled={asset.isLocked} />
                 </td>
                 <td className="p-4">
                   <div className="flex items-center gap-3">
-                    <img
-                      src={asset.image}
-                      alt={asset.name}
-                      width={48}
-                      height={48}
-                      className="rounded-md w-12 h-12 object-cover"
-                    />
-                    <span className="font-semibold whitespace-nowrap">{asset.name}</span>
+                    <div className="relative">
+                      <img
+                        src={asset.image}
+                        alt={asset.name}
+                        width={48}
+                        height={48}
+                        className="rounded-md w-12 h-12 object-cover"
+                      />
+                      {asset.isLocked && (
+                        <div className="absolute inset-0 bg-black/50 rounded-md flex items-center justify-center">
+                          <LockClosedIcon className="h-5 w-5 text-red-400" />
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <span className="font-semibold whitespace-nowrap block">{asset.name}</span>
+                      {asset.isLocked && (
+                        <span className="text-xs text-red-400 flex items-center gap-1 mt-1">
+                          <LockClosedIcon className="h-3 w-3" />
+                          Sedang dipinjam
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </td>
                 <td className="p-4 text-white/70 whitespace-nowrap">{asset.curator}</td>
                 <td className="p-4 font-semibold whitespace-nowrap">{asset.collateralValue.toLocaleString()} USDC</td>
                 <td className="p-4">
-                  <button className="w-full py-2 rounded-lg border-0 font-bold text-sm" style={goldGradientButton}>
-                    Ajukan Pinjaman
+                  <button 
+                    onClick={() => router.push(`/lending/${asset.tokenId}`)}
+                    disabled={asset.isLocked}
+                    className="w-full py-2 rounded-lg border-0 font-bold text-sm transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100" 
+                    style={goldGradientButton}
+                  >
+                    {asset.isLocked ? 'Sedang Dipinjam' : 'Ajukan Pinjaman'}
                   </button>
                 </td>
               </tr>

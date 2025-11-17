@@ -6,7 +6,7 @@ import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { Address, AddressInput, Balance, EtherInput } from "~~/components/scaffold-eth";
-import { useTransactor } from "~~/hooks/scaffold-eth";
+import { useTransactor, useScaffoldWriteContract, useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
 // Account index to use from generated hardhat accounts.
@@ -22,13 +22,22 @@ const localWalletClient = createWalletClient({
  */
 export const Faucet = () => {
   const [loading, setLoading] = useState(false);
+  const [loadingUSDC, setLoadingUSDC] = useState(false);
   const [inputAddress, setInputAddress] = useState<AddressType>();
   const [faucetAddress, setFaucetAddress] = useState<AddressType>();
   const [sendValue, setSendValue] = useState("");
 
-  const { chain: ConnectedChain } = useAccount();
+  const { chain: ConnectedChain, address: connectedAddress } = useAccount();
 
   const faucetTxn = useTransactor(localWalletClient);
+  const { writeContractAsync: writeUSDC } = useScaffoldWriteContract("MockUSDC");
+
+  // Get user's USDC balance
+  const { data: usdcBalance, refetch: refetchUSDC } = useScaffoldReadContract({
+    contractName: "MockUSDC",
+    functionName: "balanceOf",
+    args: [connectedAddress],
+  });
 
   useEffect(() => {
     const getFaucetAddress = async () => {
@@ -74,6 +83,29 @@ export const Faucet = () => {
     }
   };
 
+  const getUSDC = async () => {
+    if (!connectedAddress) {
+      notification.error("Please connect your wallet");
+      return;
+    }
+
+    try {
+      setLoadingUSDC(true);
+      await writeUSDC({
+        functionName: "faucet",
+      });
+      notification.success("You received 10,000 USDC!");
+      setTimeout(() => {
+        refetchUSDC();
+      }, 2000);
+    } catch (error: any) {
+      console.error("⚡️ ~ file: Faucet.tsx:getUSDC ~ error", error);
+      notification.error(error?.message || "Failed to get USDC");
+    } finally {
+      setLoadingUSDC(false);
+    }
+  };
+
   // Render only on local chain
   if (ConnectedChain?.id !== hardhat.id) {
     return null;
@@ -86,15 +118,47 @@ export const Faucet = () => {
         <span>Faucet</span>
       </label>
       <input type="checkbox" id="faucet-modal" className="modal-toggle" />
-      <label htmlFor="faucet-modal" className="modal cursor-pointer">
-        <label className="modal-box relative">
+      <label htmlFor="faucet-modal" className="modal cursor-pointer" style={{ zIndex: 9999 }}>
+        <label className="modal-box relative" style={{ marginTop: '120px' }}>
           {/* dummy input to capture event onclick on modal box */}
           <input className="h-0 w-0 absolute top-0 left-0" />
           <h3 className="text-xl font-bold mb-3">Local Faucet</h3>
           <label htmlFor="faucet-modal" className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
             ✕
           </label>
+          
+          {/* USDC Faucet Section */}
+          <div className="mb-6 p-4 bg-blue-500/10 rounded-lg border border-blue-500/30">
+            <h4 className="font-bold mb-2 flex items-center gap-2">
+              <BanknotesIcon className="h-5 w-5 text-blue-400" />
+              USDC Faucet (Test Tokens)
+            </h4>
+            <div className="space-y-2">
+              <div className="text-sm">
+                <span className="font-bold">Your Balance:</span>{" "}
+                <span className="text-blue-400">
+                  {usdcBalance ? (Number(usdcBalance) / 1_000_000).toLocaleString("en-US", { minimumFractionDigits: 2 }) : "0.00"} USDC
+                </span>
+              </div>
+              <button 
+                className="btn btn-primary btn-sm w-full" 
+                onClick={getUSDC}
+                disabled={loadingUSDC}
+              >
+                {loadingUSDC ? (
+                  <span className="loading loading-spinner loading-sm"></span>
+                ) : (
+                  <BanknotesIcon className="h-5 w-5" />
+                )}
+                <span>Get 10,000 USDC</span>
+              </button>
+              <p className="text-xs text-gray-500">Click to receive test USDC tokens instantly</p>
+            </div>
+          </div>
+
+          {/* ETH Faucet Section */}
           <div className="space-y-3">
+            <h4 className="font-bold">ETH Faucet</h4>
             <div className="flex space-x-4">
               <div>
                 <span className="text-sm font-bold">From:</span>
