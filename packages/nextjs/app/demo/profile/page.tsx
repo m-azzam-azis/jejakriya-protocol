@@ -14,6 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 const DemoProfile: NextPage = () => {
+  const USDC_TO_IDR = 16000; // 1 USDC = Rp 16.000
   const [product, setProduct] = useState<any>(null);
   const [showQRIS, setShowQRIS] = useState(false);
   const [showUSDCPayment, setShowUSDCPayment] = useState(false);
@@ -240,7 +241,8 @@ const DemoProfile: NextPage = () => {
               <div className="text-5xl font-bold mb-2" style={{ ...goldGradientText }}>
                 {usdcBalance.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USDC
               </div>
-              <p className="text-white/60 text-sm mb-4">Available for loan repayment</p>
+              <p className="text-white/60 text-sm mb-2">≈ Rp {(usdcBalance * USDC_TO_IDR).toLocaleString("id-ID")}</p>
+              <p className="text-white/60 text-xs">Available for loan repayment</p>
             </div>
 
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
@@ -399,7 +401,7 @@ const DemoProfile: NextPage = () => {
                         style={goldGradientButton}
                       >
                         <BanknotesIcon className="h-5 w-5" />
-                        Bayar dengan USDC ({nftData.price.toLocaleString("id-ID")})
+                        Bayar dengan USDC ({nftData.price.toLocaleString("id-ID")} USDC)
                       </button>
                       <button
                         onClick={handlePayWithQRIS}
@@ -459,22 +461,24 @@ const DemoProfile: NextPage = () => {
                   Scan QRIS untuk Bayar
                 </h3>
                 
-                {/* QR Code Placeholder */}
+                {/* QR Code Image */}
                 <div 
-                  className="bg-gray-100 rounded-xl p-8 mb-4 cursor-pointer hover:bg-gray-200 transition-colors"
+                  className="bg-white rounded-xl p-4 mb-4 cursor-pointer hover:opacity-90 transition-opacity"
                   onClick={handleQRISClick}
                 >
-                  <div className="aspect-square bg-white rounded-lg flex items-center justify-center border-4 border-gray-300">
-                    <QrCodeIcon className="h-48 w-48 text-gray-400" />
-                  </div>
+                  <img
+                    src="/JejaKriyaQris.png"
+                    alt="QRIS Payment"
+                    className="w-full h-auto rounded-lg"
+                  />
                 </div>
 
                 <div className="bg-blue-50 rounded-lg p-4 mb-4">
                   <p className="text-blue-900 font-bold text-center text-xl">
-                    {nftData.price.toLocaleString("id-ID")} USDC
+                    Rp {(nftData.price * USDC_TO_IDR).toLocaleString("id-ID")}
                   </p>
                   <p className="text-blue-700 text-sm text-center">
-                    Pembayaran Produk - JejaKriya
+                    Pembayaran Produk - JejaKriya ({nftData.price.toLocaleString("id-ID")} USDC)
                   </p>
                 </div>
 
@@ -484,7 +488,7 @@ const DemoProfile: NextPage = () => {
 
                 <button
                   onClick={() => setShowQRIS(false)}
-                  className="w-full btn btn-outline"
+                  className="w-full btn bg-red-600 hover:bg-red-700 text-white border-none"
                 >
                   Batal
                 </button>
@@ -501,19 +505,28 @@ const DemoProfile: NextPage = () => {
                 </h3>
                 
                 <div className="bg-gray-50 rounded-lg p-6 mb-6">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-2">
                     <span className="text-gray-600">Harga NFT:</span>
-                    <span className="text-gray-900 font-bold text-xl">{nftData.price.toLocaleString("id-ID")} USDC</span>
+                    <div className="text-right">
+                      <p className="text-gray-900 font-bold text-xl">{nftData.price.toLocaleString("id-ID")} USDC</p>
+                      <p className="text-gray-500 text-sm">≈ Rp {(nftData.price * USDC_TO_IDR).toLocaleString("id-ID")}</p>
+                    </div>
                   </div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-gray-600">Saldo Anda:</span>
-                    <span className="text-gray-900 font-bold">{usdcBalance.toLocaleString("id-ID")} USDC</span>
+                    <div className="text-right">
+                      <p className="text-gray-900 font-bold">{usdcBalance.toLocaleString("id-ID")} USDC</p>
+                      <p className="text-gray-500 text-sm">≈ Rp {(usdcBalance * USDC_TO_IDR).toLocaleString("id-ID")}</p>
+                    </div>
                   </div>
                   <div className="border-t border-gray-300 pt-4 flex items-center justify-between">
                     <span className="text-gray-600">Sisa Saldo:</span>
-                    <span className="text-green-600 font-bold text-xl">
-                      {(usdcBalance - nftData.price).toLocaleString("id-ID")} USDC
-                    </span>
+                    <div className="text-right">
+                      <p className="text-green-600 font-bold text-xl">
+                        {(usdcBalance - nftData.price).toLocaleString("id-ID")} USDC
+                      </p>
+                      <p className="text-green-600 text-sm">≈ Rp {((usdcBalance - nftData.price) * USDC_TO_IDR).toLocaleString("id-ID")}</p>
+                    </div>
                   </div>
                 </div>
 
