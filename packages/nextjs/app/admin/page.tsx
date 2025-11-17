@@ -92,7 +92,7 @@ export default function AdminDashboardPage() {
               Admin Dashboard
             </h1>
             <p className="text-white/70 mt-1" style={{ fontFamily: "'Poppins', sans-serif" }}>
-              Monitoring kesehatan Lending Pool dan manajemen protokol JejakKriya.
+              Monitoring kesehatan Lending Pool dan manajemen protokol JejaKriya.
             </p>
           </header>
 

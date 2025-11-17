@@ -174,7 +174,7 @@ const EkrafDashboardPage = () => {
             Dashboard EKRAF
           </h1>
           <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto mt-5">
-            Pandangan makro dan wawasan strategis dari data on-chain JejakKriya.
+            Pandangan makro dan wawasan strategis dari data on-chain JejaKriya.
           </p>
         </header>
 

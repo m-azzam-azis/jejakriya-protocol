@@ -54,7 +54,7 @@ const Home: NextPage = () => {
                   backgroundClip: "text",
                 }}
               >
-                JejakKriya
+                JejaKriya
               </h1>
             </div>
 
@@ -226,7 +226,7 @@ const Home: NextPage = () => {
         backgroundClip: "text",
       }}
     >
-      Perjalanan di JejakKriya
+      Perjalanan di JejaKriya
     </h2>
     <p className="text-xl text-white/80 text-center mb-16 max-w-3xl mx-auto">
       Dari pendataan hingga pemanfaatan ekonomi — ikuti langkah demi langkah bagaimana karya kriya
@@ -346,7 +346,7 @@ const Home: NextPage = () => {
                 backgroundClip: "text",
               }}
             >
-              Ekosistem JejakKriya
+              Ekosistem JejaKriya
             </h2>
 
             {/* Section 0 - Pengrajin */}
@@ -579,7 +579,7 @@ const Home: NextPage = () => {
                 backgroundClip: "text",
               }}
             >
-              Siap Bergabung dengan Ekosistem JejakKriya?
+              Siap Bergabung dengan Ekosistem JejaKriya?
             </h2>
             <p className="text-xl text-white/80 mb-8">
               Daftarkan karya kreatif Anda, verifikasi keasliannya, dan akses pembiayaan untuk mengembangkan usaha
