@@ -22,6 +22,13 @@ import {
 const DemoPage: NextPage = () => {
   const [selectedNFT, setSelectedNFT] = useState<number | null>(null);
 
+  const goldGradientText = {
+    background: "linear-gradient(90deg, #C48A04 0%, #E9A507 25%, #F2C14D 50%, #E9A507 75%, #C48A04 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+  };
+
   // Mock stats data
   const demoStats = [
     {
@@ -126,21 +133,27 @@ const DemoPage: NextPage = () => {
   const timelineEvents = generateNFTTimeline(mockTimelineData);
 
   return (
-    <div className="min-h-screen bg-base-200">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary via-secondary to-accent text-primary-content py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 mb-4">
-            <SparklesIcon className="h-12 w-12" />
-            <h1 className="text-5xl font-bold">JejaKriya Protocol Demo</h1>
-          </div>
-          <p className="text-xl text-primary-content/90 max-w-3xl">
-            Fundamental Protocol untuk Aset Kreatif Indonesia - Showcasing Quick Win Features untuk Demo yang Impressive
-          </p>
-        </div>
-      </div>
+    <>
+      <style jsx global>{`
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+        @import url("https://fonts.cdnfonts.com/css/mileast");
+      `}</style>
 
-      <div className="max-w-7xl mx-auto px-4 py-12 space-y-16">
+      <div className="min-h-screen bg-base-200">
+        <div className="container mx-auto px-4 py-16 pt-24 space-y-16">
+          {/* Hero Section */}
+          <div className="bg-gradient-to-r from-primary via-secondary to-accent text-primary-content py-16 px-4 rounded-xl">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex items-center gap-3 mb-4">
+                <SparklesIcon className="h-12 w-12" />
+                <h1 className="text-5xl font-bold" style={{ fontFamily: "'Mileast', sans-serif" }}>JejaKriya Protocol Demo</h1>
+              </div>
+              <p className="text-xl text-primary-content/90 max-w-3xl">
+                Fundamental Protocol untuk Aset Kreatif Indonesia - Showcasing Quick Win Features untuk Demo yang Impressive
+              </p>
+            </div>
+          </div>
+
         {/* Feature 1: Animated Stats */}
         <section>
           <div className="flex items-center gap-3 mb-6">
@@ -330,8 +343,9 @@ const DemoPage: NextPage = () => {
             </a>
           </div>
         </section>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
