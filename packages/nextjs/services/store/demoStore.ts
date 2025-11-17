@@ -221,7 +221,9 @@ export const useDemoStore = create<DemoState>()(
 
       getNFTById: id => {
         const state = get();
-        return state.ownedNFTs.find(nft => nft.id === id) || (state.pendingNFT.id === id ? state.pendingNFT : undefined);
+        return (
+          state.ownedNFTs.find(nft => nft.id === id) || (state.pendingNFT.id === id ? state.pendingNFT : undefined)
+        );
       },
     }),
     {

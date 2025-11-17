@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 // Import font Mileast langsung di komponen
 const importFonts = `
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
@@ -49,9 +50,7 @@ const AdminSidebar = () => (
 );
 
 export default function AdminDashboardPage() {
-  return (
-      <AdminDashboardContent />
-  );
+  return <AdminDashboardContent />;
 }
 
 function AdminDashboardContent() {

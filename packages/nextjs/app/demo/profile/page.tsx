@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatEther, parseEther } from "viem";
 import { hardhat } from "viem/chains";
@@ -13,18 +13,18 @@ import {
   CheckCircleIcon,
   ClockIcon,
   ExclamationTriangleIcon,
-  LockClosedIcon,
-  UserCircleIcon,
   EyeIcon,
+  LockClosedIcon,
   QrCodeIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { CheckBadgeIcon } from "@heroicons/react/24/solid";
 import { Address } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/contracts/deployedContracts";
 import { useScaffoldEventHistory, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useDemoStore } from "~~/services/store/demoStore";
 import { fetchFromIPFS } from "~~/utils/ipfs";
 import { notification } from "~~/utils/scaffold-eth";
-import { useDemoStore } from "~~/services/store/demoStore";
 
 type LoanInfo = {
   loanId: string;
@@ -106,7 +106,7 @@ const CombinedProfilePage = () => {
     if (storedProduct) {
       const prod = JSON.parse(storedProduct);
       setProduct(prod);
-      
+
       // Always create NFT data (either pending payment or minted)
       const baseNftData = {
         tokenId: "1",
@@ -266,7 +266,7 @@ const CombinedProfilePage = () => {
 
   const processPayment = async () => {
     if (!product) return;
-    
+
     setIsPaying(true);
     setShowQRIS(false);
     setShowUSDCPayment(false);
@@ -386,7 +386,7 @@ const CombinedProfilePage = () => {
     if (!product) return;
 
     const newStatus = nftData?.status === "pending_payment" ? "minted" : "pending_payment";
-    
+
     const updatedProduct = {
       ...product,
       status: newStatus,
@@ -478,9 +478,7 @@ const CombinedProfilePage = () => {
                 Profile Saya
               </h1>
             </div>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto mb-6">
-              Kelola dana, NFT, dan pinjaman Anda
-            </p>
+            <p className="text-xl text-white/80 max-w-2xl mx-auto mb-6">Kelola dana, NFT, dan pinjaman Anda</p>
 
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 max-w-md mx-auto">
               <p className="text-white/70 text-sm mb-2">Wallet Address:</p>
@@ -497,21 +495,20 @@ const CombinedProfilePage = () => {
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
               <div className="flex items-center gap-3 mb-4">
                 <BanknotesIcon className="h-8 w-8" style={{ color: "#E9A507" }} />
-                <h2
-                  className="text-2xl font-bold"
-                  style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
-                >
+                <h2 className="text-2xl font-bold" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
                   Saldo Dana
                 </h2>
               </div>
-              
+
               {/* Show both demo and real balance */}
               <div className="space-y-4">
                 <div>
                   <div className="text-3xl font-bold mb-1" style={{ ...goldGradientText }}>
                     {usdcBalance.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USDC
                   </div>
-                  <p className="text-white/60 text-sm mb-2">≈ Rp {(usdcBalance * USDC_TO_IDR).toLocaleString("id-ID")}</p>
+                  <p className="text-white/60 text-sm mb-2">
+                    ≈ Rp {(usdcBalance * USDC_TO_IDR).toLocaleString("id-ID")}
+                  </p>
                   <p className="text-white/60 text-xs">Demo Balance</p>
                 </div>
 
@@ -519,11 +516,15 @@ const CombinedProfilePage = () => {
                   <div className="border-t border-white/20 pt-4">
                     <div className="text-xl font-bold mb-1 text-blue-400">
                       {connectedAddress
-                        ? (Number(userBalance) / 1_000_000).toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                        : "0.00"} USDC
+                        ? (Number(userBalance) / 1_000_000).toLocaleString("id-ID", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })
+                        : "0.00"}{" "}
+                      USDC
                     </div>
                     <p className="text-white/60 text-xs">On-chain Balance</p>
-                    
+
                     {/* Tombol Get USDC - hanya muncul di localhost */}
                     {chain?.id === hardhat.id && (
                       <button
@@ -556,10 +557,7 @@ const CombinedProfilePage = () => {
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
               <div className="flex items-center gap-3 mb-4">
                 <LockClosedIcon className="h-8 w-8 text-blue-400" />
-                <h2
-                  className="text-2xl font-bold"
-                  style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
-                >
+                <h2 className="text-2xl font-bold" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
                   Statistik
                 </h2>
               </div>
@@ -570,7 +568,9 @@ const CombinedProfilePage = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-white/70">Sudah Minted:</span>
-                  <span className="font-bold text-green-400">{(nftData?.status === "minted" ? 1 : 0) + ownedNFTs.length}</span>
+                  <span className="font-bold text-green-400">
+                    {(nftData?.status === "minted" ? 1 : 0) + ownedNFTs.length}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-white/70">Menunggu Pembayaran:</span>
@@ -588,13 +588,13 @@ const CombinedProfilePage = () => {
           {ownedNFTs.length > 0 && (
             <div className="mb-8">
               <div className="flex items-center justify-between mb-6">
-                <h2
-                  className="text-3xl font-bold"
-                  style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
-                >
+                <h2 className="text-3xl font-bold" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
                   NFT yang Dimiliki ({ownedNFTs.length})
                 </h2>
-                <button onClick={resetDemo} className="btn btn-outline btn-sm text-white border-white/30 hover:bg-white/10">
+                <button
+                  onClick={resetDemo}
+                  className="btn btn-outline btn-sm text-white border-white/30 hover:bg-white/10"
+                >
                   <ArrowPathIcon className="h-4 w-4" />
                   Reset Demo
                 </button>
@@ -655,9 +655,7 @@ const CombinedProfilePage = () => {
                   <div className="flex flex-col items-center gap-4">
                     <div className="loading loading-spinner loading-lg text-blue-400"></div>
                     <h3 className="text-2xl font-bold text-white">Memproses Pembayaran...</h3>
-                    <p className="text-white/70 text-center">
-                      Produk Anda sedang di-mint menjadi NFT
-                    </p>
+                    <p className="text-white/70 text-center">Produk Anda sedang di-mint menjadi NFT</p>
                   </div>
                 </div>
               )}
@@ -668,9 +666,7 @@ const CombinedProfilePage = () => {
                     <CheckCircleIcon className="h-12 w-12 text-green-400" />
                     <div>
                       <h3 className="text-xl font-bold text-white mb-1">Pembayaran Berhasil!</h3>
-                      <p className="text-green-300">
-                        Produk Anda telah berhasil di-mint menjadi NFT
-                      </p>
+                      <p className="text-green-300">Produk Anda telah berhasil di-mint menjadi NFT</p>
                     </div>
                   </div>
                 </div>
@@ -685,15 +681,15 @@ const CombinedProfilePage = () => {
                       src={nftData.image}
                       alt={nftData.name}
                       className="w-full h-48 object-cover rounded-xl"
-                      onError={(e) => {
+                      onError={e => {
                         (e.target as HTMLImageElement).src = "/keris.png";
                       }}
                     />
-                    <div className={`absolute top-2 right-2 px-3 py-1 rounded-full ${
-                      nftData.status === "minted" 
-                        ? "bg-green-500" 
-                        : "bg-yellow-500"
-                    }`}>
+                    <div
+                      className={`absolute top-2 right-2 px-3 py-1 rounded-full ${
+                        nftData.status === "minted" ? "bg-green-500" : "bg-yellow-500"
+                      }`}
+                    >
                       <span className="text-white text-xs font-bold">
                         {nftData.status === "minted" ? "MINTED" : "PENDING"}
                       </span>
@@ -721,7 +717,9 @@ const CombinedProfilePage = () => {
                       <>
                         <div className="flex justify-between text-sm">
                           <span className="text-white/60">Nilai Kolateral (70%):</span>
-                          <span className="text-white font-semibold">{nftData.collateralValue.toLocaleString("id-ID")} USDC</span>
+                          <span className="text-white font-semibold">
+                            {nftData.collateralValue.toLocaleString("id-ID")} USDC
+                          </span>
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-white/60">Minted At:</span>
@@ -782,12 +780,11 @@ const CombinedProfilePage = () => {
               {/* Demo Testing Controls */}
               <div className="mt-6 text-center">
                 <p className="text-white/50 text-sm mb-4">
-                  {nftData.status === "pending_payment" 
-                    ? "💡 Demo: Bayar dengan USDC atau QRIS untuk mint NFT" 
-                    : "💡 Demo: NFT berhasil di-mint dan siap digunakan untuk pinjaman"
-                  }
+                  {nftData.status === "pending_payment"
+                    ? "💡 Demo: Bayar dengan USDC atau QRIS untuk mint NFT"
+                    : "💡 Demo: NFT berhasil di-mint dan siap digunakan untuk pinjaman"}
                 </p>
-                
+
                 {/* Demo Testing Button */}
                 <div className="flex gap-2 justify-center">
                   <button
@@ -796,7 +793,7 @@ const CombinedProfilePage = () => {
                   >
                     🔄 Toggle Status (Testing)
                   </button>
-                  
+
                   {!product && (
                     <button
                       onClick={() => {
@@ -804,7 +801,7 @@ const CombinedProfilePage = () => {
                           name: "Keris Majapahit Kuno",
                           images: ["/keris.png"],
                           price: 100,
-                          status: "pending_payment"
+                          status: "pending_payment",
                         };
                         localStorage.setItem("demoProduct", JSON.stringify(demoProduct));
                         setProduct(demoProduct);
@@ -839,7 +836,10 @@ const CombinedProfilePage = () => {
             {!connectedAddress ? (
               <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-12 text-center border border-white/10">
                 <UserCircleIcon className="h-16 w-16 mx-auto mb-4" style={{ color: "#E9A507" }} />
-                <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
+                <h3
+                  className="text-2xl font-bold mb-2"
+                  style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
+                >
                   Silakan Connect Wallet
                 </h3>
                 <p className="text-white/70">Connect wallet Anda untuk melihat status pinjaman dan mengelola NFT.</p>
@@ -852,7 +852,10 @@ const CombinedProfilePage = () => {
             ) : activeLoans.length === 0 ? (
               <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-12 text-center border border-white/10">
                 <CheckCircleIcon className="h-16 w-16 mx-auto mb-4" style={{ color: "#E9A507" }} />
-                <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
+                <h3
+                  className="text-2xl font-bold mb-2"
+                  style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
+                >
                   Tidak Ada Pinjaman Aktif
                 </h3>
                 <p className="text-white/70 mb-6">
@@ -890,7 +893,7 @@ const CombinedProfilePage = () => {
                         src={loan.nftImage}
                         alt={loan.nftName}
                         className="w-12 h-12 object-cover rounded-lg"
-                        onError={(e) => {
+                        onError={e => {
                           (e.target as HTMLImageElement).src = "/placeholder-nft.png";
                         }}
                       />
@@ -977,7 +980,10 @@ const CombinedProfilePage = () => {
           {/* Repaid Loans History */}
           {repaidLoans.length > 0 && (
             <div>
-              <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
+              <h2
+                className="text-3xl font-bold mb-6"
+                style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
+              >
                 Riwayat Pinjaman Selesai
               </h2>
 
@@ -997,7 +1003,7 @@ const CombinedProfilePage = () => {
                         src={loan.nftImage}
                         alt={loan.nftName}
                         className="w-12 h-12 object-cover rounded-lg"
-                        onError={(e) => {
+                        onError={e => {
                           (e.target as HTMLImageElement).src = "/placeholder-nft.png";
                         }}
                       />
@@ -1029,20 +1035,14 @@ const CombinedProfilePage = () => {
           {showQRIS && (
             <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl p-8 max-w-md w-full">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-                  Scan QRIS untuk Bayar
-                </h3>
-                
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">Scan QRIS untuk Bayar</h3>
+
                 {/* QR Code Image */}
-                <div 
+                <div
                   className="bg-white rounded-xl p-4 mb-4 cursor-pointer hover:opacity-90 transition-opacity"
                   onClick={handleQRISClick}
                 >
-                  <img
-                    src="/JejaKriyaQris.png"
-                    alt="QRIS Payment"
-                    className="w-full h-auto rounded-lg"
-                  />
+                  <img src="/JejaKriyaQris.png" alt="QRIS Payment" className="w-full h-auto rounded-lg" />
                 </div>
 
                 <div className="bg-blue-50 rounded-lg p-4 mb-4">
@@ -1072,23 +1072,27 @@ const CombinedProfilePage = () => {
           {showUSDCPayment && (
             <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl p-8 max-w-md w-full">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-                  Konfirmasi Pembayaran USDC
-                </h3>
-                
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">Konfirmasi Pembayaran USDC</h3>
+
                 <div className="bg-gray-50 rounded-lg p-6 mb-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-gray-600">Harga NFT:</span>
                     <div className="text-right">
-                      <p className="text-gray-900 font-bold text-xl">{(nftData?.price || 100).toLocaleString("id-ID")} USDC</p>
-                      <p className="text-gray-500 text-sm">≈ Rp {((nftData?.price || 100) * USDC_TO_IDR).toLocaleString("id-ID")}</p>
+                      <p className="text-gray-900 font-bold text-xl">
+                        {(nftData?.price || 100).toLocaleString("id-ID")} USDC
+                      </p>
+                      <p className="text-gray-500 text-sm">
+                        ≈ Rp {((nftData?.price || 100) * USDC_TO_IDR).toLocaleString("id-ID")}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-gray-600">Saldo Anda:</span>
                     <div className="text-right">
                       <p className="text-gray-900 font-bold">{usdcBalance.toLocaleString("id-ID")} USDC</p>
-                      <p className="text-gray-500 text-sm">≈ Rp {(usdcBalance * USDC_TO_IDR).toLocaleString("id-ID")}</p>
+                      <p className="text-gray-500 text-sm">
+                        ≈ Rp {(usdcBalance * USDC_TO_IDR).toLocaleString("id-ID")}
+                      </p>
                     </div>
                   </div>
                   <div className="border-t border-gray-300 pt-4 flex items-center justify-between">
@@ -1097,26 +1101,20 @@ const CombinedProfilePage = () => {
                       <p className="text-green-600 font-bold text-xl">
                         {(usdcBalance - (nftData?.price || 100)).toLocaleString("id-ID")} USDC
                       </p>
-                      <p className="text-green-600 text-sm">≈ Rp {((usdcBalance - (nftData?.price || 100)) * USDC_TO_IDR).toLocaleString("id-ID")}</p>
+                      <p className="text-green-600 text-sm">
+                        ≈ Rp {((usdcBalance - (nftData?.price || 100)) * USDC_TO_IDR).toLocaleString("id-ID")}
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                <p className="text-gray-600 text-sm text-center mb-6">
-                  Apakah Anda yakin ingin membayar dengan USDC?
-                </p>
+                <p className="text-gray-600 text-sm text-center mb-6">Apakah Anda yakin ingin membayar dengan USDC?</p>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <button
-                    onClick={() => setShowUSDCPayment(false)}
-                    className="btn btn-outline"
-                  >
+                  <button onClick={() => setShowUSDCPayment(false)} className="btn btn-outline">
                     Batal
                   </button>
-                  <button
-                    onClick={handleUSDCPayment}
-                    className="btn bg-blue-600 hover:bg-blue-700 text-white border-0"
-                  >
+                  <button onClick={handleUSDCPayment} className="btn bg-blue-600 hover:bg-blue-700 text-white border-0">
                     Bayar Sekarang
                   </button>
                 </div>

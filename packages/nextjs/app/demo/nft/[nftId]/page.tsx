@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useDemoStore } from "~~/services/store/demoStore";
-import { ArrowLeftIcon, ClockIcon, UserIcon, TagIcon, CalendarIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
+import { ArrowLeftIcon, CalendarIcon, ClockIcon, TagIcon, UserIcon } from "@heroicons/react/24/outline";
 import { CheckBadgeIcon } from "@heroicons/react/24/solid";
+import { useDemoStore } from "~~/services/store/demoStore";
 
 export default function DemoNFTDetailPage({ params }: { params: { nftId: string } }) {
   const router = useRouter();
@@ -25,7 +25,10 @@ export default function DemoNFTDetailPage({ params }: { params: { nftId: string 
 
   if (!nft) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)" }}>
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)" }}
+      >
         <div className="loading loading-spinner loading-lg" style={{ color: "#E9A507" }}></div>
       </div>
     );
@@ -192,7 +195,10 @@ export default function DemoNFTDetailPage({ params }: { params: { nftId: string 
                       {index + 1}
                     </div>
                     {index < nft.ownershipHistory.length - 1 && (
-                      <div className="w-1 h-full bg-gradient-to-b from-[#E9A507] to-transparent mt-2" style={{ minHeight: "40px" }}></div>
+                      <div
+                        className="w-1 h-full bg-gradient-to-b from-[#E9A507] to-transparent mt-2"
+                        style={{ minHeight: "40px" }}
+                      ></div>
                     )}
                   </div>
 

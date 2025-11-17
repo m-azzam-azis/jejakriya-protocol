@@ -77,7 +77,13 @@ export const Footer = () => {
 
   return (
     <div className="min-h-0">
-      <footer className="w-full text-white border-t" style={{ background: "linear-gradient(180deg, #3D2C88 0%, #0D0D0D 100%)", borderColor: "rgba(233, 165, 7, 0.3)" }}>
+      <footer
+        className="w-full text-white border-t"
+        style={{
+          background: "linear-gradient(180deg, #3D2C88 0%, #0D0D0D 100%)",
+          borderColor: "rgba(233, 165, 7, 0.3)",
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 py-12">
           {/* Main Footer Content */}
           <div className="grid md:grid-cols-4 gap-8 mb-8">
@@ -94,13 +100,17 @@ export const Footer = () => {
                 Jejak{"\n"}Kriya
               </h1>
               <p className="text-white/70 text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                Memberdayakan pengrajin Indonesia melalui teknologi blockchain. Verifikasi keaslian karya seni dan kerajinan tradisional dengan NFT.
+                Memberdayakan pengrajin Indonesia melalui teknologi blockchain. Verifikasi keaslian karya seni dan
+                kerajinan tradisional dengan NFT.
               </p>
             </div>
 
             {/* Platform Section */}
             <div>
-              <h3 className="font-bold text-lg mb-4" style={{ ...goldGradientText, fontFamily: "'Mileast', sans-serif" }}>
+              <h3
+                className="font-bold text-lg mb-4"
+                style={{ ...goldGradientText, fontFamily: "'Mileast', sans-serif" }}
+              >
                 Navigate
               </h3>
               <ul className="space-y-2" style={{ fontFamily: "'Poppins', sans-serif" }}>
@@ -116,7 +126,10 @@ export const Footer = () => {
 
             {/* Company Section */}
             <div>
-              <h3 className="font-bold text-lg mb-4" style={{ ...goldGradientText, fontFamily: "'Mileast', sans-serif" }}>
+              <h3
+                className="font-bold text-lg mb-4"
+                style={{ ...goldGradientText, fontFamily: "'Mileast', sans-serif" }}
+              >
                 About
               </h3>
               <ul className="space-y-2" style={{ fontFamily: "'Poppins', sans-serif" }}>
@@ -132,7 +145,10 @@ export const Footer = () => {
 
             {/* Legal Section */}
             <div>
-              <h3 className="font-bold text-lg mb-4" style={{ ...goldGradientText, fontFamily: "'Mileast', sans-serif" }}>
+              <h3
+                className="font-bold text-lg mb-4"
+                style={{ ...goldGradientText, fontFamily: "'Mileast', sans-serif" }}
+              >
                 Follow Us
               </h3>
               <ul className="space-y-2" style={{ fontFamily: "'Poppins', sans-serif" }}>
@@ -148,8 +164,13 @@ export const Footer = () => {
           </div>
 
           {/* Bottom Section */}
-          <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4" style={{ borderColor: "rgba(233, 165, 7, 0.2)" }}>
-            <p className="text-white/50 text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>© 2025 JejaKriya. All rights reserved.</p>
+          <div
+            className="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+            style={{ borderColor: "rgba(233, 165, 7, 0.2)" }}
+          >
+            <p className="text-white/50 text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              © 2025 JejaKriya. All rights reserved.
+            </p>
 
             <div className="flex items-center gap-4">
               <a

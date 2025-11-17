@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useDemoStore } from "~~/services/store/demoStore";
+import { useRouter } from "next/navigation";
 import { ArrowRightIcon, ClockIcon, UserIcon } from "@heroicons/react/24/outline";
+import { useDemoStore } from "~~/services/store/demoStore";
 
 export default function DemoVerifyPage({ params }: { params: { productId: string } }) {
   const router = useRouter();
@@ -132,7 +132,9 @@ export default function DemoVerifyPage({ params }: { params: { productId: string
 
                     <div className="flex-1 bg-white/5 rounded-lg p-3 border border-white/10">
                       <p className="text-white font-semibold">{history.ownerName}</p>
-                      {history.ownerAddress && <p className="text-white/50 text-xs font-mono">{history.ownerAddress}</p>}
+                      {history.ownerAddress && (
+                        <p className="text-white/50 text-xs font-mono">{history.ownerAddress}</p>
+                      )}
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-xs text-white/60">
                           {new Date(history.transferredAt).toLocaleDateString("id-ID", {
