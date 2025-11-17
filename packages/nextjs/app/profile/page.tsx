@@ -18,7 +18,6 @@ import { useScaffoldReadContract, useScaffoldWriteContract, useScaffoldEventHist
 import { notification } from "~~/utils/scaffold-eth";
 import { formatEther, parseEther } from "viem";
 import { fetchFromIPFS } from "~~/utils/ipfs";
-import { useAuth } from "~~/contexts/AuthContext";
 import deployedContracts from "~~/contracts/deployedContracts";
 import { hardhat } from "viem/chains";
 
@@ -41,7 +40,6 @@ type LoanInfo = {
 const ProfilePage = () => {
   const router = useRouter();
   const { address: connectedAddress, chain } = useAccount();
-  const { user } = useAuth();
   const [userLoans, setUserLoans] = useState<LoanInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRepaying, setIsRepaying] = useState<string | null>(null);
@@ -248,7 +246,15 @@ const ProfilePage = () => {
       }, 2000);
     } catch (error: any) {
       console.error("Error getting USDC:", error);
-      notification.error(error?.message || "Failed to get USDC");
+      
+      // Check if error is about insufficient funds for gas
+      if (error?.message?.includes("doesn't have enough funds") || 
+          error?.message?.includes("insufficient funds") ||
+          error?.details?.includes("doesn't have enough funds")) {
+        notification.error("Insufficient ETH for gas fee. Please get ETH first from the Faucet button in the header.");
+      } else {
+        notification.error(error?.message || "Failed to get USDC");
+      }
     } finally {
       setLoadingUSDC(false);
     }
@@ -382,7 +388,7 @@ const ProfilePage = () => {
             </div>
             
             <p className="text-xl text-white/80 max-w-2xl mx-auto mb-6">
-              {user ? `Selamat datang, ${user.name}!` : "Kelola dana dan pinjaman NFT Anda"}
+              Kelola dana dan pinjaman NFT Anda
             </p>
 
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 max-w-md mx-auto">
@@ -410,27 +416,32 @@ const ProfilePage = () => {
               
               {/* Tombol Get USDC - hanya muncul di localhost */}
               {chain?.id === hardhat.id && (
-                <button
-                  onClick={getUSDC}
-                  disabled={loadingUSDC}
-                  className="btn btn-sm w-full border-0 font-bold"
-                  style={{
-                    background: "linear-gradient(90deg, #2563eb 0%, #3b82f6 50%, #2563eb 100%)",
-                    color: "white",
-                  }}
-                >
-                  {loadingUSDC ? (
-                    <>
-                      <span className="loading loading-spinner loading-sm"></span>
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <BanknotesIcon className="h-5 w-5" />
-                      Get 10,000 USDC (Test)
-                    </>
-                  )}
-                </button>
+                <>
+                  <button
+                    onClick={getUSDC}
+                    disabled={loadingUSDC}
+                    className="btn btn-sm w-full border-0 font-bold"
+                    style={{
+                      background: "linear-gradient(90deg, #2563eb 0%, #3b82f6 50%, #2563eb 100%)",
+                      color: "white",
+                    }}
+                  >
+                    {loadingUSDC ? (
+                      <>
+                        <span className="loading loading-spinner loading-sm"></span>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <BanknotesIcon className="h-5 w-5" />
+                        Get 10,000 USDC (Test)
+                      </>
+                    )}
+                  </button>
+                  <p className="text-white/50 text-xs mt-2 text-center">
+                    💡 Need ETH for gas? Click "Faucet" button in header first
+                  </p>
+                </>
               )}
             </div>
 

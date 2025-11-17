@@ -13,7 +13,6 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 import ErrorBoundary from "~~/components/ErrorBoundary";
-import { ProtectedRoute } from "~~/components/ProtectedRoute";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldEventHistory, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { fetchFromIPFS } from "~~/utils/ipfs";
@@ -808,7 +807,6 @@ const KuratorContent = () => {
 
 const KuratorDashboard: NextPage = () => {
   return (
-    <ProtectedRoute>
       <ErrorBoundary>
         <Suspense
           fallback={
@@ -824,7 +822,6 @@ const KuratorDashboard: NextPage = () => {
           <KuratorContent />
         </Suspense>
       </ErrorBoundary>
-    </ProtectedRoute>
   );
 };
 

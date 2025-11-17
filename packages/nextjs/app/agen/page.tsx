@@ -10,14 +10,11 @@ import {
   PlusCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
-import { ProtectedRoute } from "~~/components/ProtectedRoute";
 import { useProductStore } from "~~/services/store/productStore";
 
 const AgenDashboard: NextPage = () => {
   return (
-    <ProtectedRoute>
       <AgenDashboardContent />
-    </ProtectedRoute>
   );
 };
 
