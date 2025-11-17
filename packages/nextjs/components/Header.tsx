@@ -20,6 +20,10 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/",
   },
   {
+    label: "Demo Flow",
+    href: "/demo/agen/produk/buat",
+  },
+  {
     label: "Lending",
     href: "/lending",
   },
