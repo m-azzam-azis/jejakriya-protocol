@@ -60,7 +60,7 @@ export default function DemoVerifyPage({ params }: { params: { productId: string
       `}</style>
 
       <div
-        className="min-h-screen flex items-center justify-center"
+        className="min-h-screen flex items-center justify-center pt-24"
         style={{
           background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)",
           fontFamily: "'Poppins', sans-serif",
@@ -223,6 +223,8 @@ export default function DemoVerifyPage({ params }: { params: { productId: string
             )}
           </div>
         </div>
+
+        <div className="mb-20"></div>
       </div>
     </>
   );

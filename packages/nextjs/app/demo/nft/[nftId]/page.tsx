@@ -46,7 +46,7 @@ export default function DemoNFTDetailPage({ params }: { params: { nftId: string 
       `}</style>
 
       <div
-        className="min-h-screen"
+        className="min-h-screen pt-24"
         style={{
           background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)",
           fontFamily: "'Poppins', sans-serif",

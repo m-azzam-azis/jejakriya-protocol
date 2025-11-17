@@ -47,7 +47,7 @@ export const useDemoStore = create<DemoState>()(
           id: "1",
           name: "Batik Tulis Megamendung",
           pengrajinName: "Ibu Siti Aminah",
-          imageUrl: "/batik-1.jpg",
+          imageUrl: "/Batik-Sido-Asih.jpg",
           category: "Batik",
           description:
             "Batik tulis dengan motif Megamendung khas Cirebon, dibuat dengan teknik tradisional menggunakan canting dan malam.",
@@ -78,7 +78,7 @@ export const useDemoStore = create<DemoState>()(
           id: "2",
           name: "Keramik Kasongan Vas Bunga",
           pengrajinName: "Bapak Sutrisno",
-          imageUrl: "/keramik-1.jpg",
+          imageUrl: "/gading.png",
           category: "Keramik",
           description:
             "Vas bunga keramik khas Kasongan Yogyakarta dengan detail ukiran tangan yang halus dan finishing glossy.",
@@ -103,7 +103,7 @@ export const useDemoStore = create<DemoState>()(
           id: "3",
           name: "Wayang Kulit Arjuna",
           pengrajinName: "Ki Dalang Suyanto",
-          imageUrl: "/wayang-1.jpg",
+          imageUrl: "/cepot.png",
           category: "Wayang",
           description:
             "Wayang kulit tokoh Arjuna dari kulit kerbau berkualitas premium dengan detail pahatan yang sangat halus.",
@@ -137,7 +137,7 @@ export const useDemoStore = create<DemoState>()(
         id: "4",
         name: "Tenun Ikat NTT",
         pengrajinName: "Mama Yohana",
-        imageUrl: "/tenun-1.jpg",
+        imageUrl: "/ikatsumba.png",
         category: "Tenun",
         description:
           "Kain tenun ikat khas Nusa Tenggara Timur dengan motif tradisional dan pewarnaan alami dari tumbuhan lokal.",
@@ -191,7 +191,7 @@ export const useDemoStore = create<DemoState>()(
             id: "4",
             name: "Tenun Ikat NTT",
             pengrajinName: "Mama Yohana",
-            imageUrl: "/tenun-1.jpg",
+            imageUrl: "/ikatsumba.png",
             category: "Tenun",
             description:
               "Kain tenun ikat khas Nusa Tenggara Timur dengan motif tradisional dan pewarnaan alami dari tumbuhan lokal.",

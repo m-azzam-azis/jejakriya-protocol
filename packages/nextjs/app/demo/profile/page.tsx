@@ -25,7 +25,6 @@ import { useScaffoldEventHistory, useScaffoldReadContract, useScaffoldWriteContr
 import { fetchFromIPFS } from "~~/utils/ipfs";
 import { notification } from "~~/utils/scaffold-eth";
 import { useDemoStore } from "~~/services/store/demoStore";
-import QRCode from "qrcode.react";
 
 type LoanInfo = {
   loanId: string;
@@ -309,7 +308,7 @@ const DemoProfilePage = () => {
       `}</style>
 
       <div
-        className="flex items-center flex-col min-h-screen relative"
+        className="flex items-center flex-col min-h-screen relative pt-24"
         style={{
           background: "linear-gradient(180deg, #060606 0%, #3D2C88 50%, #0D0D0D 100%)",
           fontFamily: "'Poppins', sans-serif",
@@ -329,87 +328,118 @@ const DemoProfilePage = () => {
           }}
         />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-8 space-y-12">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-8">
           {/* Header */}
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <UserCircleIcon className="h-12 w-12" style={{ color: "#E9A507" }} />
-                <div>
-                  <h1 className="text-4xl font-bold mb-2" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
-                    Profile Demo
-                  </h1>
-                  <p className="text-white/80 text-lg">Kelola NFT dan pinjaman Anda</p>
-                </div>
-              </div>
-
-              <button onClick={resetDemo} className="btn btn-outline btn-sm text-white border-white/30 hover:bg-white/10">
-                <ArrowPathIcon className="h-4 w-4" />
-                Reset Demo
-              </button>
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <UserCircleIcon className="h-16 w-16" style={{ color: "#E9A507" }} />
+              <h1
+                className="text-5xl md:text-6xl font-bold"
+                style={{
+                  fontFamily: "'Mileast', sans-serif",
+                  ...goldGradientText,
+                }}
+              >
+                Fadhil Nur
+              </h1>
             </div>
+            
+            <p className="text-xl text-white/80 max-w-2xl mx-auto mb-6">
+              Kelola NFT dan pinjaman Anda
+            </p>
 
-            {connectedAddress && (
-              <div className="mt-4 bg-white/5 rounded-lg p-4 border border-white/10">
-                <p className="text-white/70 text-sm mb-2">Your Wallet:</p>
-                <Address address={connectedAddress} />
-              </div>
-            )}
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 max-w-md mx-auto">
+              <p className="text-white/70 text-sm mb-2">Wallet Address:</p>
+              <Address address={connectedAddress} />
+            </div>
           </div>
 
-          {/* USDC Balance & Get Free USDC */}
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* USDC Balance */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+          {/* Balance & Stats */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
               <div className="flex items-center gap-3 mb-4">
                 <BanknotesIcon className="h-8 w-8" style={{ color: "#E9A507" }} />
-                <h2 className="text-xl font-bold text-white">Saldo USDC</h2>
+                <h2
+                  className="text-2xl font-bold"
+                  style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
+                >
+                  Saldo Dana
+                </h2>
               </div>
-
-              <div className="text-4xl font-bold mb-2" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
+              <div className="text-5xl font-bold mb-2" style={{ ...goldGradientText }}>
                 {connectedAddress
-                  ? (Number(userBalance) / 1_000_000).toLocaleString("id-ID", { minimumFractionDigits: 2 })
-                  : "0.00"}
+                  ? (Number(userBalance) / 1_000_000).toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                  : "0.00"} USDC
               </div>
-              <p className="text-white/60 text-sm">USDC</p>
+              <p className="text-white/60 text-sm mb-4">Available for loan repayment</p>
+              
+              {/* Tombol Get USDC - hanya muncul di localhost */}
+              {chain?.id === hardhat.id && (
+                <>
+                  <button
+                    onClick={handleGetFreeUSDC}
+                    disabled={loadingUSDC}
+                    className="btn btn-sm w-full border-0 font-bold"
+                    style={{
+                      background: "linear-gradient(90deg, #2563eb 0%, #3b82f6 50%, #2563eb 100%)",
+                      color: "white",
+                    }}
+                  >
+                    {loadingUSDC ? (
+                      <>
+                        <span className="loading loading-spinner loading-sm"></span>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <BanknotesIcon className="h-5 w-5" />
+                        Get 10,000 USDC
+                      </>
+                    )}
+                  </button>
+                </>
+              )}
             </div>
 
-            {/* Get Free USDC */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
               <div className="flex items-center gap-3 mb-4">
-                <BanknotesIcon className="h-8 w-8 text-green-400" />
-                <h2 className="text-xl font-bold text-white">Dapatkan USDC Gratis</h2>
+                <LockClosedIcon className="h-8 w-8 text-blue-400" />
+                <h2
+                  className="text-2xl font-bold"
+                  style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
+                >
+                  Statistik Pinjaman
+                </h2>
               </div>
-
-              <p className="text-white/70 text-sm mb-4">Untuk keperluan testing dan demo, Anda bisa mendapatkan 1000 USDC gratis.</p>
-
-              <button
-                onClick={handleGetFreeUSDC}
-                disabled={!connectedAddress || loadingUSDC}
-                className="btn w-full border-0 font-bold disabled:opacity-50"
-                style={goldGradientButton}
-              >
-                {loadingUSDC ? (
-                  <>
-                    <span className="loading loading-spinner loading-sm"></span>
-                    Memproses...
-                  </>
-                ) : (
-                  <>
-                    <BanknotesIcon className="h-5 w-5" />
-                    Dapatkan 1000 USDC
-                  </>
-                )}
-              </button>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-white/70">Total Pinjaman:</span>
+                  <span className="font-bold text-white">{userLoans.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/70">Aktif:</span>
+                  <span className="font-bold text-blue-400">{activeLoans.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/70">Selesai:</span>
+                  <span className="font-bold text-green-400">{repaidLoans.length}</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* NFT yang Dimiliki - NEW SECTION */}
-          <div>
+          {/* NFT yang Dimiliki */}
+          <div className="mb-8">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
+              <h2
+                className="text-3xl font-bold"
+                style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
+              >
                 NFT yang Dimiliki ({ownedNFTs.length})
               </h2>
+              <button onClick={resetDemo} className="btn btn-outline btn-sm text-white border-white/30 hover:bg-white/10">
+                <ArrowPathIcon className="h-4 w-4" />
+              </button>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -429,10 +459,7 @@ const DemoProfilePage = () => {
                       className="text-lg font-bold mb-1"
                       style={{
                         fontFamily: "'Mileast', sans-serif",
-                        background: "linear-gradient(90deg, #C48A04 0%, #E9A507 50%, #F2C14D 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
+                        ...goldGradientText,
                       }}
                     >
                       {nft.name}
@@ -453,107 +480,61 @@ const DemoProfilePage = () => {
             </div>
           </div>
 
-          {/* QR Code for Demo Transfer */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 text-center">
-            <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
-              QR Code untuk Demo Transfer
+          {/* Active Loans Section */}
+          <div className="mb-8">
+            <h2
+              className="text-3xl font-bold mb-6"
+              style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}
+            >
+              NFT yang Dipinjam (Aktif)
             </h2>
-            <p className="text-white/70 mb-6">
-              Scan QR Code ini untuk melakukan demo transfer NFT "Tenun Ikat NTT"
-            </p>
 
-            <div className="inline-block bg-white p-6 rounded-xl">
-              <QRCode value="https://jejakriya.vercel.app/demo/verify/4" size={256} level="H" />
-            </div>
-
-            <p className="text-white/60 text-sm mt-4">
-              URL: <span className="font-mono text-xs">https://jejakriya.vercel.app/demo/verify/4</span>
-            </p>
-          </div>
-
-          {/* Lending Statistics */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 text-center">
-              <LockClosedIcon className="h-10 w-10 mx-auto mb-3" style={{ color: "#E9A507" }} />
-              <div className="text-white/60 mb-2">Total Dipinjam</div>
-              <div className="text-3xl font-bold mb-1" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
-                {activeLoans.reduce((sum, loan) => sum + Number(loan.amount), 0).toLocaleString("id-ID")}
+            {!connectedAddress ? (
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-12 text-center border border-white/10">
+                <UserCircleIcon className="h-16 w-16 mx-auto mb-4" style={{ color: "#E9A507" }} />
+                <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
+                  Silakan Connect Wallet
+                </h3>
+                <p className="text-white/70">Connect wallet Anda untuk melihat status pinjaman dan mengelola NFT.</p>
               </div>
-              <div className="text-white/50 text-sm">USDC</div>
-            </div>
-
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 text-center">
-              <ClockIcon className="h-10 w-10 mx-auto mb-3 text-yellow-400" />
-              <div className="text-white/60 mb-2">Pinjaman Aktif</div>
-              <div className="text-3xl font-bold mb-1" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
-                {activeLoans.length}
+            ) : isLoading ? (
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-12 text-center border border-white/10">
+                <span className="loading loading-spinner loading-lg" style={{ color: "#E9A507" }}></span>
+                <p className="text-white/70 mt-4">Memuat data pinjaman...</p>
               </div>
-              <div className="text-white/50 text-sm">Loan</div>
-            </div>
-
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 text-center">
-              <CheckCircleIcon className="h-10 w-10 mx-auto mb-3 text-green-400" />
-              <div className="text-white/60 mb-2">Total Lunas</div>
-              <div className="text-3xl font-bold mb-1" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
-                {repaidLoans.length}
+            ) : activeLoans.length === 0 ? (
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-12 text-center border border-white/10">
+                <CheckCircleIcon className="h-16 w-16 mx-auto mb-4" style={{ color: "#E9A507" }} />
+                <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
+                  Tidak Ada Pinjaman Aktif
+                </h3>
+                <p className="text-white/70 mb-6">
+                  Anda belum memiliki pinjaman aktif. Gunakan NFT Anda sebagai jaminan untuk mendapatkan pinjaman.
+                </p>
+                <Link href="/lending" className="btn border-0 font-bold" style={goldGradientButton}>
+                  Ajukan Pinjaman
+                </Link>
               </div>
-              <div className="text-white/50 text-sm">Loan</div>
-            </div>
-          </div>
-
-          {/* Active Loans */}
-          {!connectedAddress ? (
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-12 text-center border border-white/10">
-              <UserCircleIcon className="h-16 w-16 mx-auto mb-4" style={{ color: "#E9A507" }} />
-              <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
-                Silakan Connect Wallet
-              </h3>
-              <p className="text-white/70">Connect wallet Anda untuk melihat status pinjaman dan mengelola NFT.</p>
-            </div>
-          ) : isLoading ? (
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-12 text-center border border-white/10">
-              <span className="loading loading-spinner loading-lg" style={{ color: "#E9A507" }}></span>
-              <p className="text-white/70 mt-4">Memuat data pinjaman...</p>
-            </div>
-          ) : (
-            <div>
-              <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
-                Status Lending ({activeLoans.length})
-              </h2>
-
-              {activeLoans.length === 0 ? (
-                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-12 text-center border border-white/10">
-                  <CheckCircleIcon className="h-16 w-16 mx-auto mb-4" style={{ color: "#E9A507" }} />
-                  <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: "'Mileast', sans-serif", ...goldGradientText }}>
-                    Tidak Ada Pinjaman Aktif
-                  </h3>
-                  <p className="text-white/70 mb-6">
-                    Anda belum memiliki pinjaman aktif. Gunakan NFT Anda sebagai jaminan untuk mendapatkan pinjaman.
-                  </p>
-                  <Link href="/lending" className="btn border-0 font-bold" style={goldGradientButton}>
-                    Ajukan Pinjaman
-                  </Link>
-                </div>
-              ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {activeLoans.map(loan => (
-                    <div
-                      key={loan.loanId}
-                      className={`bg-white/5 backdrop-blur-sm rounded-2xl p-6 border ${loan.isOverdue ? "border-red-500/50" : "border-white/10"}`}
-                    >
-                      {/* Status Badge */}
-                      <div className="flex items-center gap-2 mb-4">
-                        {loan.isOverdue ? (
-                          <>
-                            <ExclamationTriangleIcon className="h-6 w-6 text-red-400" />
-                            <span className="text-red-400 font-bold text-sm">TERLAMBAT</span>
-                          </>
-                        ) : (
-                          <>
-                            <ClockIcon className="h-6 w-6 text-yellow-400" />
-                            <span className="text-yellow-400 font-bold text-sm">AKTIF</span>
-                          </>
-                        )}
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {activeLoans.map(loan => (
+                  <div
+                    key={loan.loanId}
+                    className={`bg-white/5 backdrop-blur-sm rounded-2xl p-6 border ${loan.isOverdue ? "border-red-500/50" : "border-white/10"}`}
+                  >
+                    {/* Status Badge */}
+                    <div className="flex items-center gap-2 mb-4">
+                      {loan.isOverdue ? (
+                        <>
+                          <ExclamationTriangleIcon className="h-6 w-6 text-red-400" />
+                          <span className="text-red-400 font-bold text-sm">TERLAMBAT</span>
+                        </>
+                      ) : (
+                        <>
+                          <ClockIcon className="h-6 w-6 text-yellow-400" />
+                          <span className="text-yellow-400 font-bold text-sm">AKTIF</span>
+                        </>
+                      )}
                       </div>
 
                       {/* NFT Info */}
@@ -635,7 +616,6 @@ const DemoProfilePage = () => {
                 </div>
               )}
             </div>
-          )}
 
           {/* Repaid Loans History */}
           {repaidLoans.length > 0 && (
